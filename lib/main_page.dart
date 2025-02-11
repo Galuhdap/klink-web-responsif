@@ -11,7 +11,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Bank Sampah Rebuild',
+      title: 'SIM KLINIK C3',
       initialRoute: AppRoutes.main,
       theme: ThemeConfig.lightMode,
       debugShowCheckedModeBanner: false,
