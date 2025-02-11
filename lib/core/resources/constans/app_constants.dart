@@ -1,6 +1,7 @@
 class AppConstants {
   // Text Label
   static const String LABEL_EMAIL = "Email";
+  static const String LABEL_IN = "Masuk";
   static const String LABEL_NAME_PRODUK = "Nama Produk";
   static const String LABEL_INPUT_NAME_PRODUK = "Masukkan nama Produk";
   static const String LABEL_PRICE_PRODUK = "Harga";
@@ -56,7 +57,7 @@ class AppConstants {
 
 
   // Input Hint
-  static const String HINT_EMAIL = "Masukan Username";
+  static const String HINT_USERNAME = "Masukan Username";
   static const String HINT_PASSWORD = "Masukan Password";
   static const String HINT_PASSWORD_NEW = "Masukan Password Baru";
   static const String HINT_NAME = "Masukan Nama";
