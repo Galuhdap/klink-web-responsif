@@ -5,23 +5,23 @@ class AppColors {
   //Base
   static const colorBaseWhite = Color(0xFFFfafafa);
   static const colorBaseBlack = Color(0xFFF0a0b0a);
-  static const colorBasePrimary = Color(0xFFF4CAF50);
+  static const colorBasePrimary = Color(0xFFF3949AB);
   static const colorBaseSecondary = Color(0xFFFAAB9C5);
   static const colorBaseSuccess = Color(0xFFF5cb85c);
   static const colorBaseWarning = Color(0xFFFffc107);
   static const colorBaseError = Color(0xFFFdc3545);
 
   //Primary
-  static const colorPrimary1000 = Color(0xFFF1e4620);
-  static const colorPrimary900 = Color(0xFFF2a602c);
-  static const colorPrimary800 = Color(0xFFF357b38);
-  static const colorPrimary700 = Color(0xFFF419544);
-  static const colorPrimary600 = Color(0xFFF64bc68);
-  static const colorPrimary500 = Color(0xFFF7ec781);
-  static const colorPrimary400 = Color(0xFFF98d29a);
-  static const colorPrimary300 = Color(0xFFFb2ddb3);
-  static const colorPrimary200 = Color(0xFFFcbe9cd);
-  static const colorPrimary100 = Color(0xFFFe5f4e6);
+  static const colorPrimary1000 = Color(0xFFF2b3797);
+  static const colorPrimary900 = Color(0xFFF2f3d9e);
+  static const colorPrimary800 = Color(0xFFF3443a4);
+  static const colorPrimary700 = Color(0xFFF3949ab);
+  static const colorPrimary600 = Color(0xFFF3e4fb2);
+  static const colorPrimary500 = Color(0xFFF4355b8);
+  static const colorPrimary400 = Color(0xFFF485bbf);
+  static const colorPrimary300 = Color(0xFFF4d61c6);
+  static const colorPrimary200 = Color(0xFFF5367cc);
+  static const colorPrimary100 = Color(0xFFF586ed3);
 
   //Secondary
   static const colorSecondary1000 = Color(0xFFF323F49);
