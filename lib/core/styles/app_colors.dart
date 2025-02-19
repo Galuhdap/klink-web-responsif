@@ -48,6 +48,8 @@ class AppColors {
   static const colorNeutrals100 = Color(0xFFFe3e3e3);
   static const colorNeutrals0 = Color(0xFFFF2F2F2);
 
+  static const colorBackground = Color(0xFFFFF8F8F8);
+
   //Success
   static const colorSuccess400 = Color(0xFFF3a863a);
   static const colorSuccess300 = Color(0xFFF15B097);
