@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:klinik_web_responsif/core/config/responsive.dart';
+//import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/config/theme_config.dart';
 import 'package:klinik_web_responsif/routes/app_routes.dart';
 
