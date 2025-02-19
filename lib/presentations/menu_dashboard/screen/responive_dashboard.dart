@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:klinik_web_responsif/core/config/responsive.dart';
+import 'package:klinik_web_responsif/presentations/menu_dashboard/screen/dashboard_mobile_screen.dart';
+import 'package:klinik_web_responsif/presentations/menu_dashboard/screen/dashboard_web_screen.dart';
+
+class ResponsiveDashboard extends StatelessWidget {
+  const ResponsiveDashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (Responsive.isMobile(context)) {
+          // Jika layar kecil (mobile)
+          return const DashboardMobileScreen();
+        } else {
+          // Jika layar besar (web atau tablet)
+          return const DashboardScreen();
+        }
+      },
+    );
+  }
+}
