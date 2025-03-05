@@ -1,4 +1,30 @@
 class AppConstants {
+
+  //Antrian
+  static const String LABEL_DAFTAR_ANTRIAN = "Daftar Antrian Pasien";
+  static const String LABEL_NO_ANTRIAN = "No Antrian";
+  static const String LABEL_NAMA_PASIEN = "Nama Pasien";
+  static const String LABEL_STATUS = "Status";
+  static const String LABEL_WAKTU_TUNGGU = "Waktu Tunggu";
+  static const String LABEL_ACTION = "Action";
+
+
+  static const String LABEL_CARI = "Cari";
+
+  static const String LABEL_PASIEN_BULAN_INI = "Pasien Baru Bulan ini";
+  static const String LABEL_PASIEN_TERDAFTAR = "Pasien Terdaftar";
+  static const String LABEL_PASIEN_ANTRIAN_SAAT_INI = "Antrian Saat ini";
+  static const String LABEL_PASIEN_ANTRIAN_SELANJUTNYA = "Antrian Selanjutnya";
+
+
+  //LABEL STATUS
+  static const String LABEL_MENUNGGU = "Menunggu";
+  static const String LABEL_PROSES = "Proses";
+  static const String LABEL_PENDING = "Pending";
+  static const String LABEL_SELESAI = "Selesai";
+  static const String LABEL_DIBATALKAN = "Dibatalkan";
+
+
   // Text Label
   static const String LABEL_EMAIL = "Email";
   static const String LABEL_IN = "Masuk";
@@ -106,7 +132,7 @@ class AppConstants {
   static const String LABEL_BERANDA = "Beranda";
 
   //Status
-  static const String LABEL_PENDING = "Pending";
+
   static const String LABEL_COMPLETE = "Complete";
 
   //Profile

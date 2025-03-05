@@ -43,7 +43,8 @@ dependencies:
   hive_flutter: ^1.1.0
   shared_preferences: ^2.5.2
   dartz: ^0.10.1
-  iconsax_flutter: ^1.0.0
+  iconsax: ^0.0.8
+  flutter_timer_countdown: ^1.0.7
   
 
 dev_dependencies:
@@ -113,10 +114,10 @@ flutter:
   fonts:
     - family: PlusJakartaSans
       fonts:
-        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
-        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+        - asset: assets/fonts/Inter-reguler.ttf
+        - asset: assets/fonts/Inter-reguler.ttf
           weight: 500
-        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+        - asset: assets/fonts/Inter-reguler.ttf
           weight: 600
-        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+        - asset: assets/fonts/Inter-reguler.ttf
           weight: 700

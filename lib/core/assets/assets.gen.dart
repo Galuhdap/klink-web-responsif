@@ -15,6 +15,12 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
+  /// File path: assets/fonts/Inter-Italic.ttf
+  String get interItalic => 'assets/fonts/Inter-Italic.ttf';
+
+  /// File path: assets/fonts/Inter-reguler.ttf
+  String get interReguler => 'assets/fonts/Inter-reguler.ttf';
+
   /// File path: assets/fonts/PlusJakartaSans-Bold.ttf
   String get plusJakartaSansBold => 'assets/fonts/PlusJakartaSans-Bold.ttf';
 
@@ -31,6 +37,8 @@ class $AssetsFontsGen {
 
   /// List of all assets
   List<String> get values => [
+    interItalic,
+    interReguler,
     plusJakartaSansBold,
     plusJakartaSansMedium,
     plusJakartaSansRegular,
@@ -53,6 +61,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/delete.svg
   SvgGenImage get delete => const SvgGenImage('assets/icons/delete.svg');
 
+  /// File path: assets/icons/doctor.svg
+  SvgGenImage get doctor => const SvgGenImage('assets/icons/doctor.svg');
+
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
 
@@ -60,8 +71,28 @@ class $AssetsIconsGen {
   SvgGenImage get folderOpen =>
       const SvgGenImage('assets/icons/folder-open.svg');
 
+  /// File path: assets/icons/folder.svg
+  SvgGenImage get folder => const SvgGenImage('assets/icons/folder.svg');
+
   /// File path: assets/icons/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/icons/logo.svg');
+
+  /// File path: assets/icons/logout.svg
+  SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
+
+  /// File path: assets/icons/obat.svg
+  SvgGenImage get obat => const SvgGenImage('assets/icons/obat.svg');
+
+  /// File path: assets/icons/pasien.svg
+  SvgGenImage get pasien => const SvgGenImage('assets/icons/pasien.svg');
+
+  /// File path: assets/icons/pasien_icon.svg
+  SvgGenImage get pasienIcon =>
+      const SvgGenImage('assets/icons/pasien_icon.svg');
+
+  /// File path: assets/icons/rs-dashboard.svg
+  SvgGenImage get rsDashboard =>
+      const SvgGenImage('assets/icons/rs-dashboard.svg');
 
   /// File path: assets/icons/setting.svg
   SvgGenImage get setting => const SvgGenImage('assets/icons/setting.svg');
@@ -76,19 +107,30 @@ class $AssetsIconsGen {
   /// File path: assets/icons/success.svg
   SvgGenImage get success => const SvgGenImage('assets/icons/success.svg');
 
+  /// File path: assets/icons/transaksi.svg
+  SvgGenImage get transaksi => const SvgGenImage('assets/icons/transaksi.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
     logOut,
     calendar,
     chartPie,
     delete,
+    doctor,
     filter,
     folderOpen,
+    folder,
     logo,
+    logout,
+    obat,
+    pasien,
+    pasienIcon,
+    rsDashboard,
     setting,
     shoppingBagProduct,
     sort,
     success,
+    transaksi,
   ];
 }
 
