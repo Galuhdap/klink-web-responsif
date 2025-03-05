@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:klinik_web_responsif/core/components/search_input.dart';
 import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
@@ -14,7 +13,7 @@ class BuildAppBar extends StatelessWidget {
   final void Function(String)? searchChanged;
   final String searchHint;
   final Widget? trailing;
-
+  final bool isMake;
   const BuildAppBar({
     super.key,
     required this.title,
@@ -23,17 +22,15 @@ class BuildAppBar extends StatelessWidget {
     this.searchChanged,
     this.searchHint = 'Cari di sini',
     this.trailing,
+    this.isMake = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Responsive.isMobile(context)
         ? Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(27),
             decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: AppColors.colorBaseSecondary),
-              ),
               color: AppColors.colorBaseWhite,
             ),
             child: Column(
@@ -43,82 +40,29 @@ class BuildAppBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'KLINIK CHANIA CARE CENTER',
-                      style: TextStyle(
-                        fontSize: Responsive.isMobile(context) ? 20 : 25,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.colorBasePrimary,
+                        title,
+                        style: TextStyle(
+                          fontSize: Responsive.isMobile(context) ? 20 : 25,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.colorBaseBlack,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Senin, 12 Februari 2024',
-                      style: TextStyle(
-                        fontSize: Responsive.isMobile(context) ? 14 : 16,
-                        color: AppColors.colorBaseBlack,
+                      Text(
+                        'Senin, 12 Februari 2024',
+                        style: TextStyle(
+                          fontSize: Responsive.isMobile(context) ? 8 : 16,
+                          color: AppColors.colorBaseBlack,
+                        ),
                       ),
-                    ),
                   ],
                 ),
-                // AppSizes.s20.height,
-                // if (withSearchInput)
-                //   Flexible(
-                //     flex: 4,
-                //     child: SearchInput(
-                //       controller: searchController!,
-                //       onChanged: searchChanged,
-                //       hintText: searchHint,
-                //     ),
-                //   ),
-                // if (withSearchInput)
-                //   const Flexible(flex: 1, child: SizedBox.shrink()),
-                // trailing ?? const SizedBox.shrink(),
-                // AppSizes.s20.height,
-                // InkWell(
-                //   onTap: () {
-                //     showModalCenter(
-                //       context,
-                //       Column(
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: [
-                //           Center(
-                //             child: Text(
-                //               'asdass',
-                //               style: Get.textTheme.labelMedium!.copyWith(
-                //                   fontWeight: FontWeight.w500,
-                //                   fontSize: AppSizes.s16),
-                //             ),
-                //           ),
-                //           AppSizes.s12.height,
-                //           Divider(),
-                //         ],
-                //       ),
-                //     );
-                //   },
-                //   child: Container(
-                //     width: 137,
-                //     height: 45,
-                //     decoration: BoxDecoration(
-                //       color: AppColors.colorBasePrimary,
-                //       borderRadius: BorderRadius.circular(AppSizes.s10),
-                //     ),
-                //     child: Center(
-                //       child: Text(
-                //         'Daftar Pasien',
-                //         style: Get.textTheme.bodyMedium!.copyWith(
-                //             fontSize: AppSizes.s16,
-                //             color: AppColors.colorBaseWhite),
-                //       ),
-                //     ),
-                //   ),
-                // )
               ],
             ),
           )
         : Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(27),
             decoration: const BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(color: AppColors.colorBaseSecondary)),
+              color: AppColors.colorBaseWhite,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,7 +77,7 @@ class BuildAppBar extends StatelessWidget {
                         style: TextStyle(
                           fontSize: Responsive.isMobile(context) ? 20 : 25,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.colorBasePrimary,
+                          color: AppColors.colorBaseBlack,
                         ),
                       ),
                       Text(
@@ -146,56 +90,46 @@ class BuildAppBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (withSearchInput)
-                  Flexible(
-                    flex: 4,
-                    child: SearchInput(
-                      controller: searchController!,
-                      onChanged: searchChanged,
-                      hintText: searchHint,
-                    ),
-                  ),
-                if (withSearchInput)
-                  const Flexible(flex: 1, child: SizedBox.shrink()),
-                trailing ?? const SizedBox.shrink(),
-                InkWell(
-                  onTap: () {
-                    showModalCenter(
-                      context,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
+                isMake
+                    ? InkWell(
+                        onTap: () {
+                          showModalCenter(
+                            context,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'asdass',
+                                    style: Get.textTheme.labelMedium!.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AppSizes.s16),
+                                  ),
+                                ),
+                                AppSizes.s12.height,
+                                Divider(),
+                              ],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 137,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: AppColors.colorBasePrimary,
+                            borderRadius: BorderRadius.circular(AppSizes.s10),
+                          ),
+                          child: Center(
                             child: Text(
-                              'asdass',
-                              style: Get.textTheme.labelMedium!.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AppSizes.s16),
+                              'Daftar Pasien',
+                              style: Get.textTheme.bodyMedium!.copyWith(
+                                  fontSize: AppSizes.s16,
+                                  color: AppColors.colorBaseWhite),
                             ),
                           ),
-                          AppSizes.s12.height,
-                          Divider(),
-                        ],
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: 137,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: AppColors.colorBasePrimary,
-                      borderRadius: BorderRadius.circular(AppSizes.s10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Daftar Pasien',
-                        style: Get.textTheme.bodyMedium!.copyWith(
-                            fontSize: AppSizes.s16,
-                            color: AppColors.colorBaseWhite),
-                      ),
-                    ),
-                  ),
-                )
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           );

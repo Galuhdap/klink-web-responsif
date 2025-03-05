@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors {
 
   //Base
-  static const colorBaseWhite = Color(0xFFFfafafa);
-  static const colorBaseBlack = Color(0xFFF0a0b0a);
+  static const colorBaseWhite = Color(0xFFFFFFFFF);
+  static const colorBaseBlack = Color(0xFFF000000);
   static const colorBasePrimary = Color(0xFFF3949AB);
   static const colorBaseSecondary = Color(0xFFFAAB9C5);
   static const colorBaseSuccess = Color(0xFFF5cb85c);
@@ -22,6 +22,7 @@ class AppColors {
   static const colorPrimary300 = Color(0xFFF4d61c6);
   static const colorPrimary200 = Color(0xFFF5367cc);
   static const colorPrimary100 = Color(0xFFF586ed3);
+  static const colorPrimary50 = Color(0xFFF4E6CB2);
 
   //Secondary
   static const colorSecondary1000 = Color(0xFFF323F49);
@@ -34,6 +35,7 @@ class AppColors {
   static const colorSecondary300 = Color(0xFFFCED7DE);
   static const colorSecondary200 = Color(0xFFFDAE1E7);
   static const colorSecondary100 = Color(0xFFFE7EBEF);
+  static const colorSecondary50 = Color(0xFFFF0F0F0);
 
   //Neuturals
   static const colorNeutrals1000 = Color(0xFFF151413);
@@ -66,5 +68,19 @@ class AppColors {
   static const colorError300 = Color(0xFFFa21c29);
   static const colorError200 = Color(0xFFFe87883);
   static const colorError100 = Color(0xFFFf3bcc1);
+
+  //StatusFill
+  static const colorMenungguFill = Color(0xFFFCDE8F5);
+  static const colorProsesFill = Color(0xFFFD9CDF5);
+  static const colorPendingFill = Color(0xFFFF8E6D6);
+  static const colorSelesaiFill = Color(0xFFFC5E9E4);
+  static const colorDibatalkanFill = Color(0xFFFF5D0CD);
+
+  //StatusText
+  static const colorMenungguText = Color(0xFFF26AFEF);
+  static const colorProsesText = Color(0xFFF6226EF);
+  static const colorPendingText = Color(0xFFFFFA756);
+  static const colorSelesaiText = Color(0xFFF00B69B);
+  static const colorDibatalkanText = Color(0xFFFEF3826);
 
 }

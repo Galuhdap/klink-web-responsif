@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:klinik_web_responsif/core/components/button_component.dart';
 import 'package:klinik_web_responsif/core/components/search_input.dart';
 import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
@@ -328,7 +328,7 @@ class DataPatientScreen extends StatelessWidget {
                                                   IconButton(
                                                     onPressed: () {},
                                                     icon: Icon(Iconsax
-                                                        .more_circle_copy),
+                                                        .more),
                                                   ),
                                                   //Icon(Iconsax.more_circle_copy),
                                                 ],
