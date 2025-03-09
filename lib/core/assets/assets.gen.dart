@@ -107,6 +107,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/success.svg
   SvgGenImage get success => const SvgGenImage('assets/icons/success.svg');
 
+  /// File path: assets/icons/tanda_tanya.svg
+  SvgGenImage get tandaTanya =>
+      const SvgGenImage('assets/icons/tanda_tanya.svg');
+
   /// File path: assets/icons/transaksi.svg
   SvgGenImage get transaksi => const SvgGenImage('assets/icons/transaksi.svg');
 
@@ -130,6 +134,7 @@ class $AssetsIconsGen {
     shoppingBagProduct,
     sort,
     success,
+    tandaTanya,
     transaksi,
   ];
 }

@@ -7,8 +7,8 @@ Future<dynamic> showModalBottom(BuildContext context, Widget widget) {
     backgroundColor: Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadiusDirectional.only(
-        topEnd: Radius.circular(25),
-        topStart: Radius.circular(25),
+        topEnd: Radius.circular(16),
+        topStart: Radius.circular(16),
       ),
     ),
     builder: (context) {

@@ -10,11 +10,25 @@ class AppConstants {
 
 
   static const String LABEL_CARI = "Cari";
+  static const String LABEL_NO = "No";
+  static const String LABEL_NO_REKAM_MEDIS = "No Rekam Medis";
+  static const String LABEL_NIK = "NIK";
+  static const String LABEL_UMUR = "Umur";
+  static const String LABEL_JENIS_KELAMIN = "Jenis Kelamin";
+  static const String LABEL_TGL_LAHIR = "Tgl Lahir";
 
   static const String LABEL_PASIEN_BULAN_INI = "Pasien Baru Bulan ini";
   static const String LABEL_PASIEN_TERDAFTAR = "Pasien Terdaftar";
   static const String LABEL_PASIEN_ANTRIAN_SAAT_INI = "Antrian Saat ini";
   static const String LABEL_PASIEN_ANTRIAN_SELANJUTNYA = "Antrian Selanjutnya";
+
+  static const String LABEL_DATA_PASIEN = "Data Pasien";
+  
+  static const String LABEL_DAFTAR_REKAM_MEDIS = "Daftar Rekam Medis";
+  static const String LABEL_JADWAL_PERIKSA = "Jadwal Periksa";
+  static const String LABEL_KELUHAN = "Keluhan";
+  static const String LABEL_TERAPI_TINDAKAN = "Terapi / Tindakan";
+  static const String LABEL_DX = "Dx";
 
 
   //LABEL STATUS
@@ -59,7 +73,7 @@ class AppConstants {
   static const String LABEL_WEIGHT_TRASH = "Berat Sampah";
   static const String LABEL_PRICEs_TRASH = "Harga Sampah";
   static const String LABEL_BACK = "Kembali";
-  static const String LABEL_NO = "Tidak";
+  static const String LABEL_NOs = "Tidak";
   static const String LABEL_YES = "Ya";
 
   static const String LABEL_WITHDRAW_FUNDS= "Penarikan Dana";
