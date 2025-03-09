@@ -38,6 +38,11 @@ class AppConstants {
   static const String LABEL_SELESAI = "Selesai";
   static const String LABEL_DIBATALKAN = "Dibatalkan";
 
+  //LABEL DAFTAR DOKTER
+  static const String LABEL_DAFTAR_DATA_DOKTER = "Daftar Data Dokter";
+  static const String LABEL_NAMA_DOKTER = "Nama Dokter";
+  static const String LABEL_NO_TELP = "No Telp";
+
 
   // Text Label
   static const String LABEL_EMAIL = "Email";
