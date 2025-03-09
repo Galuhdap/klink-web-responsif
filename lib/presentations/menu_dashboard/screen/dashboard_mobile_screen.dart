@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
+import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/nav_item.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
@@ -25,9 +26,7 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
         return [
           const StaffScreen(),
           const DataPatientScreen(),
-          const Center(
-            child: Text('This is page 3'),
-          )
+          const DocterScreen(),
         ];
       case UserRole.dokter:
         return [

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/screen/responive_dashboard.dart';
 import 'package:klinik_web_responsif/presentations/login/screen/login_screen.dart';
@@ -16,6 +17,7 @@ class AppRoutes {
   static const String responsiveDashboard = "/responsiveDashboard";
   static const String staffHome = "/staf-home";
   static const String rekamMedis = "/rekam-medis";
+  static const String docter = "/docter";
   
 
   static final routes = [
@@ -26,6 +28,7 @@ class AppRoutes {
     GetPage(name: responsiveDashboard, page: () => ResponsiveDashboard()),
     GetPage(name: staffHome, page: () => StaffScreen()),
     GetPage(name: rekamMedis, page: () => RekamMedisScreen()),
+    GetPage(name: docter, page: () => DocterScreen()),
     //cara menggunakan Binding
     //GetPage(name: login, page : () => LoginScreen(), binding: LoginBinding()),
   ];

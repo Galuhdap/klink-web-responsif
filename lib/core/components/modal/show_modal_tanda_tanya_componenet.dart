@@ -57,7 +57,7 @@ class ShowModalTandaTanyaComponent extends StatelessWidget {
           ),
         ).paddingSymmetric(
           horizontal:
-              Responsive.isMobile(context) ? AppSizes.s0 : AppSizes.s300,
+              Responsive.isMobile(context) ? AppSizes.s0 : AppSizes.s200,
         ),
       ],
     );
