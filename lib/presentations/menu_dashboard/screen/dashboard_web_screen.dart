@@ -6,6 +6,7 @@ import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
+import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
 
 import '../widget/nav_item.dart';
 
@@ -26,9 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case UserRole.admin:
         return [
           const StaffScreen(),
-          const Center(
-            child: Text('This is page 2'),
-          ),
+          const DataPatientScreen(),
           const Center(
             child: Text('This is page 3'),
           )
@@ -76,44 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: _buildNavItems(),
                       )
-                      // Column(
-                      //   children: [
-                      //     NavItem(
-                      //       iconPath: Assets.icons.rsDashboard.path,
-                      //       isActive: _selectedIndex == 0,
-                      //       onTap: () => _onItemTapped(0),
-                      //     ),
-                      //     NavItem(
-                      //       iconPath: Assets.icons.folderOpen.path,
-                      //       isActive: _selectedIndex == 1,
-                      //       onTap: () => _onItemTapped(1),
-                      //     ),
-                      //     NavItem(
-                      //       iconPath: Assets.icons.chartPie.path,
-                      //       isActive: _selectedIndex == 2,
-                      //       onTap: () => _onItemTapped(2),
-                      //     ),
-                      //     NavItem(
-                      //       iconPath: Assets.icons.shoppingBagProduct.path,
-                      //       isActive: _selectedIndex == 3,
-                      //       onTap: () => _onItemTapped(3),
-                      //     ),
-                      //     NavItem(
-                      //       iconPath: Assets.icons.setting.path,
-                      //       isActive: _selectedIndex == 4,
-                      //       onTap: () => _onItemTapped(4),
-                      //     ),
-                      //     NavItem(
-                      //       iconPath: Assets.icons.logOut.path,
-                      //       isActive: false,
-                      //       onTap: () {
-                      //         // context
-                      //         //     .read<LogoutBloc>()
-                      //         //     .add(const LogoutEvent.logout());
-                      //       },
-                      //     ),
-                      //   ],
-                      // ),
+                      
                       ),
                 ),
               ),

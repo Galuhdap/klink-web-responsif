@@ -45,6 +45,7 @@ dependencies:
   dartz: ^0.10.1
   iconsax: ^0.0.8
   flutter_timer_countdown: ^1.0.7
+  dropdown_search: ^6.0.2
   
 
 dev_dependencies:
