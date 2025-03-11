@@ -10,12 +10,17 @@ class InputDataComponent extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final bool readOnly;
+  final TextInputType textInputType;
+  final int maxLines;
   const InputDataComponent({
     super.key,
     required this.label,
     required this.hintText,
     required this.controller,
     this.readOnly = false,
+    this.textInputType = TextInputType.name,
+    this.maxLines = 1,
+    
   });
 
   @override
@@ -32,10 +37,11 @@ class InputDataComponent extends StatelessWidget {
         ),
         AppSizes.s12.height,
         InputWidget(
+          maxLines: maxLines,
           label: '',
           hintText: hintText,
           controller: controller,
-          textInputType: TextInputType.name,
+          textInputType: textInputType,
           readOnly: readOnly,
           // validator: emptyValidation,
         ),

@@ -1,7 +1,9 @@
+import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:klinik_web_responsif/core/components/button_component.dart';
+import 'package:klinik_web_responsif/core/components/input_component.dart';
 import 'package:klinik_web_responsif/core/components/input_data_component.dart';
 import 'package:klinik_web_responsif/core/components/popup_menu_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
@@ -61,39 +63,449 @@ class RekamMedisScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Responsive.isMobile(context)
-                            ? IconButton(
-                                onPressed: () {
-                                  Get.back();
-                                  Get.back();
+                        Row(
+                          children: [
+                            Responsive.isMobile(context)
+                                ? IconButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      Get.back();
+                                    },
+                                    icon: Icon(Icons.arrow_back_ios),
+                                  )
+                                : IconButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    icon: Icon(Icons.arrow_back_ios),
+                                  ),
+                            AppSizes.s20.width,
+                            Text(
+                              AppConstants.LABEL_DAFTAR_REKAM_MEDIS,
+                              style: Get.textTheme.labelMedium!.copyWith(
+                                  fontSize: AppSizes.s20,
+                                  color: AppColors.colorBaseBlack,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            AppSizes.s5.width,
+                            Icon(Icons.arrow_forward),
+                            AppSizes.s5.width,
+                            Text(
+                              'Farhan',
+                              style: Get.textTheme.labelMedium!.copyWith(
+                                  fontSize: AppSizes.s20,
+                                  color: AppColors.colorBaseBlack,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Responsive.isDesktop(context)
+                            ? InkWell(
+                                onTap: () {
+                                  showRightModal(
+                                    context,
+                                    Row(
+                                      children: [
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.arrow_back,
+                                                      size: 24,
+                                                      color: AppColors
+                                                          .colorBaseBlack,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Rekam Medis',
+                                                    style: Get
+                                                        .textTheme.labelMedium!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                AppSizes.s24),
+                                                  ),
+                                                ],
+                                              ),
+                                              Divider(),
+                                              AppSizes.s48.height,
+                                              InputDataComponent(
+                                                label: 'No Rekam Medis',
+                                                hintText: 'No Rekam Medis',
+                                                controller:
+                                                    TextEditingController(),
+                                              ),
+                                              InputDataComponent(
+                                                label: 'Nama Pasien',
+                                                hintText: 'Nama Pasien',
+                                                controller:
+                                                    TextEditingController(),
+                                              ),
+                                              InputDataComponent(
+                                                label: 'Jadwal Periksa',
+                                                hintText: '12/09/2019',
+                                                controller:
+                                                    TextEditingController(),
+                                                readOnly: true,
+                                              ),
+                                              InputDataComponent(
+                                                label: 'Keluhan',
+                                                hintText: 'Keluhan',
+                                                controller:
+                                                    TextEditingController(),
+                                              ),
+                                              InputDataComponent(
+                                                label: 'Dx',
+                                                hintText: 'Dx',
+                                                controller:
+                                                    TextEditingController(),
+                                              ),
+                                              AppSizes.s20.height,
+                                              Row(
+                                                spacing: AppSizes.s10,
+                                                children: [
+                                                  Flexible(
+                                                    child: Button.outlined(
+                                                        onPressed: () {
+                                                          Get.back();
+                                                        },
+                                                        label: 'Batal'),
+                                                  ),
+                                                  Flexible(
+                                                    child: Button.filled(
+                                                        onPressed: () {},
+                                                        label: 'Simpan'),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        AppSizes.s46.width,
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              105.height,
+                                              InputDataComponent(
+                                                maxLines: 10,
+                                                label: AppConstants
+                                                    .LABEL_TERAPI_TINDAKAN,
+                                                hintText: 'Tindakan',
+                                                controller:
+                                                    TextEditingController(),
+                                                textInputType:
+                                                    TextInputType.multiline,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    AppConstants
+                                                        .LABEL_TERAPI_TINDAKAN,
+                                                    style: Get
+                                                        .textTheme.bodyMedium!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize:
+                                                                AppSizes.s14,
+                                                            color: AppColors
+                                                                .colorBaseBlack),
+                                                  ),
+                                                  AppSizes.s12.height,
+                                                  DropDownSearchFormField(
+                                                    textFieldConfiguration:
+                                                        TextFieldConfiguration(
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            'Pilih Jenis Obat',
+                                                        suffixIcon: Icon(Iconsax
+                                                            .arrow_down_1),
+                                                        hintStyle: Get.textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                          fontSize:
+                                                              AppSizes.s14,
+                                                          color: AppColors
+                                                              .colorNeutrals400,
+                                                        ),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      AppSizes
+                                                                          .s4),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: AppColors
+                                                                .colorSecondary400,
+                                                            width: AppSizes.s1,
+                                                          ),
+                                                        ),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      AppSizes
+                                                                          .s10),
+                                                          borderSide: BorderSide(
+                                                              color: AppColors
+                                                                  .colorSecondary400,
+                                                              width:
+                                                                  AppSizes.s2),
+                                                        ),
+                                                      ),
+                                                      style: TextStyle(
+                                                        fontSize: AppSizes.s16,
+                                                        color: Colors.black,
+                                                      ),
+                                                      controller: controller
+                                                          .dropdownObatController,
+                                                    ),
+                                                    suggestionsCallback:
+                                                        (pattern) {
+                                                      return controller
+                                                          .getTrashSuggestions(
+                                                              pattern);
+                                                    },
+                                                    itemBuilder: (context,
+                                                        GroupObat suggestion) {
+                                                      return ListTile(
+                                                        title: Text(
+                                                          suggestion.nama,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                AppSizes.s16,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    itemSeparatorBuilder:
+                                                        (context, index) {
+                                                      return const Divider();
+                                                    },
+                                                    transitionBuilder: (context,
+                                                        suggestionsBox,
+                                                        controller) {
+                                                      return suggestionsBox;
+                                                    },
+                                                    onSuggestionSelected:
+                                                        (GroupObat
+                                                            suggestion) {},
+                                                    suggestionsBoxController:
+                                                        controller
+                                                            .suggestionBoxController,
+                                                    validator: (value) =>
+                                                        value!.isEmpty
+                                                            ? ''
+                                                            : null,
+                                                    onSaved: (value) {},
+                                                    displayAllSuggestionWhenTap:
+                                                        true,
+                                                  ),
+                                                ],
+                                              ),
+                                              AppSizes.s31.height,
+                                              SizedBox(
+                                                width: double.infinity,
+                                                height: AppSizes
+                                                        .setResponsiveHeight(
+                                                            context) *
+                                                    0.23,
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount: controller
+                                                      .dummySuggestions.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    // var obat = controller
+                                                    //         .dummySuggestions[
+                                                    //     index];
+                                                    return Flexible(
+                                                      child: Container(
+                                                        margin: AppSizes
+                                                            .symmetricPadding(
+                                                                vertical:
+                                                                    AppSizes
+                                                                        .s5),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  'Farsevin 400mg',
+                                                                  style: Get
+                                                                      .textTheme
+                                                                      .labelLarge!
+                                                                      .copyWith(
+                                                                    fontSize:
+                                                                        AppSizes
+                                                                            .s14,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Container(
+                                                                  width: 60,
+                                                                  height: 50,
+                                                                  child:
+                                                                      CustomTextField(
+                                                                    hintText:
+                                                                        AppConstants
+                                                                            .LABEL_QTY,
+                                                                    controller:
+                                                                        TextEditingController(),
+                                                                    // controller
+                                                                    //         .weightControllers[
+                                                                    //     index],
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .number,
+                                                                    //textInputType: TextInputType.name,
+                                                                    hintStyle: Get
+                                                                        .textTheme
+                                                                        .titleMedium!
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppColors.colorSecondary600,
+                                                                            fontSize: AppSizes.s10),
+                                                                    onChanged:
+                                                                        (value) {},
+                                                                  ),
+                                                                ),
+                                                                AppSizes
+                                                                    .s15.width,
+                                                                Container(
+                                                                  padding: AppSizes
+                                                                      .allPadding(
+                                                                          AppSizes
+                                                                              .s1),
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(AppSizes
+                                                                              .s2),
+                                                                      color: AppColors
+                                                                          .colorBaseError),
+                                                                  child:
+                                                                      IconButton(
+                                                                    onPressed:
+                                                                        () {},
+                                                                    icon: Icon(
+                                                                      size: 20,
+                                                                      Icons
+                                                                          .delete_outline_rounded,
+                                                                      color: AppColors
+                                                                          .colorBaseWhite,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                                AppSizes.s10.height,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Total Biaya',
+                                                    style: Get
+                                                        .textTheme.bodyMedium!
+                                                        .copyWith(
+                                                      fontSize: AppSizes.s15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColors
+                                                          .colorBaseBlack,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 200,
+                                                    height: 50,
+                                                    child: CustomTextField(
+                                                      hintText: 'Masukan Biaya',
+                                                      controller:
+                                                          TextEditingController(),
+                                                      // controller
+                                                      //         .weightControllers[
+                                                      //     index],
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      //textInputType: TextInputType.name,
+                                                      hintStyle: Get.textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              color: AppColors
+                                                                  .colorSecondary600,
+                                                              fontSize:
+                                                                  AppSizes.s10),
+                                                      onChanged: (value) {},
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ).paddingSymmetric(
+                                      vertical: AppSizes.s53,
+                                      horizontal: AppSizes.s40,
+                                    ),
+                                  );
                                 },
-                                icon: Icon(Icons.arrow_back_ios),
+                                child: Container(
+                                  width: 180,
+                                  height: 41,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.colorBasePrimary,
+                                    borderRadius:
+                                        BorderRadius.circular(AppSizes.s4),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tambah Rekam Medis',
+                                      style: Get.textTheme.bodyMedium!.copyWith(
+                                          fontSize: AppSizes.s14,
+                                          color: AppColors.colorBaseWhite),
+                                    ),
+                                  ),
+                                ),
                               )
-                            : IconButton(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                icon: Icon(Icons.arrow_back_ios),
-                              ),
-                        AppSizes.s20.width,
-                        Text(
-                          AppConstants.LABEL_DAFTAR_REKAM_MEDIS,
-                          style: Get.textTheme.labelMedium!.copyWith(
-                              fontSize: AppSizes.s20,
-                              color: AppColors.colorBaseBlack,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        AppSizes.s5.width,
-                        Icon(Icons.arrow_forward),
-                        AppSizes.s5.width,
-                        Text(
-                          'Farhan',
-                          style: Get.textTheme.labelMedium!.copyWith(
-                              fontSize: AppSizes.s20,
-                              color: AppColors.colorBaseBlack,
-                              fontWeight: FontWeight.bold),
-                        ),
+                            : Container(),
                       ],
                     ),
                     AppSizes.s24.height,
@@ -186,7 +598,342 @@ class RekamMedisScreen extends StatelessWidget {
                       ],
                     ),
                     if (Responsive.isMobile(context)) ...[
-                      AppSizes.s17.height,
+                      AppSizes.s10.height,
+                      InkWell(
+                        onTap: () {
+                          showModalCenter(
+                            context,
+                            ListView(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            Get.back();
+                                            Get.back();
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_back,
+                                            size: 24,
+                                            color: AppColors.colorBaseBlack,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Rekam Medis',
+                                          style: Get.textTheme.labelMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: AppSizes.s24),
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(),
+                                    AppSizes.s30.height,
+                                    InputDataComponent(
+                                      label: 'No Rekam Medis',
+                                      hintText: 'No Rekam Medis',
+                                      controller: TextEditingController(),
+                                    ),
+                                    InputDataComponent(
+                                      label: 'Nama Pasien',
+                                      hintText: 'Nama Pasien',
+                                      controller: TextEditingController(),
+                                    ),
+                                    InputDataComponent(
+                                      label: 'Jadwal Periksa',
+                                      hintText: '12/09/2019',
+                                      controller: TextEditingController(),
+                                      readOnly: true,
+                                    ),
+                                    InputDataComponent(
+                                      label: 'Keluhan',
+                                      hintText: 'Keluhan',
+                                      controller: TextEditingController(),
+                                    ),
+                                    InputDataComponent(
+                                      label: 'Dx',
+                                      hintText: 'Dx',
+                                      controller: TextEditingController(),
+                                    ),
+                                    InputDataComponent(
+                                      maxLines: 10,
+                                      label: AppConstants.LABEL_TERAPI_TINDAKAN,
+                                      hintText: 'Tindakan',
+                                      controller: TextEditingController(),
+                                      textInputType: TextInputType.multiline,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          AppConstants.LABEL_TERAPI_TINDAKAN,
+                                          style: Get.textTheme.bodyMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: AppSizes.s14,
+                                                  color:
+                                                      AppColors.colorBaseBlack),
+                                        ),
+                                        AppSizes.s12.height,
+                                        DropDownSearchFormField(
+                                          textFieldConfiguration:
+                                              TextFieldConfiguration(
+                                            decoration: InputDecoration(
+                                              hintText: 'Pilih Jenis Obat',
+                                              suffixIcon:
+                                                  Icon(Iconsax.arrow_down_1),
+                                              hintStyle: Get
+                                                  .textTheme.bodySmall!
+                                                  .copyWith(
+                                                fontSize: AppSizes.s14,
+                                                color:
+                                                    AppColors.colorNeutrals400,
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppSizes.s4),
+                                                borderSide: BorderSide(
+                                                  color: AppColors
+                                                      .colorSecondary400,
+                                                  width: AppSizes.s1,
+                                                ),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppSizes.s10),
+                                                borderSide: BorderSide(
+                                                    color: AppColors
+                                                        .colorSecondary400,
+                                                    width: AppSizes.s2),
+                                              ),
+                                            ),
+                                            style: TextStyle(
+                                              fontSize: AppSizes.s16,
+                                              color: Colors.black,
+                                            ),
+                                            controller: controller
+                                                .dropdownObatController,
+                                          ),
+                                          suggestionsCallback: (pattern) {
+                                            return controller
+                                                .getTrashSuggestions(pattern);
+                                          },
+                                          itemBuilder:
+                                              (context, GroupObat suggestion) {
+                                            return ListTile(
+                                              title: Text(
+                                                suggestion.nama,
+                                                style: TextStyle(
+                                                  fontSize: AppSizes.s16,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          itemSeparatorBuilder:
+                                              (context, index) {
+                                            return const Divider();
+                                          },
+                                          transitionBuilder: (context,
+                                              suggestionsBox, controller) {
+                                            return suggestionsBox;
+                                          },
+                                          onSuggestionSelected:
+                                              (GroupObat suggestion) {},
+                                          suggestionsBoxController: controller
+                                              .suggestionBoxController,
+                                          validator: (value) =>
+                                              value!.isEmpty ? '' : null,
+                                          onSaved: (value) {},
+                                          displayAllSuggestionWhenTap: true,
+                                        ),
+                                      ],
+                                    ),
+                                    AppSizes.s31.height,
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: AppSizes.setResponsiveHeight(
+                                              context) *
+                                          0.25,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            controller.dummySuggestions.length,
+                                        itemBuilder: (context, index) {
+                                          // var obat = controller
+                                          //         .dummySuggestions[
+                                          //     index];
+                                          return Flexible(
+                                            child: Container(
+                                              margin: AppSizes.symmetricPadding(
+                                                  vertical: AppSizes.s5),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Farsevin 400mg',
+                                                        style: Get.textTheme
+                                                            .labelLarge!
+                                                            .copyWith(
+                                                          fontSize:
+                                                              AppSizes.s14,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        width: 60,
+                                                        height: 50,
+                                                        child: CustomTextField(
+                                                          hintText: AppConstants
+                                                              .LABEL_QTY,
+                                                          controller:
+                                                              TextEditingController(),
+                                                          // controller
+                                                          //         .weightControllers[
+                                                          //     index],
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          //textInputType: TextInputType.name,
+                                                          hintStyle: Get
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .colorSecondary600,
+                                                                  fontSize:
+                                                                      AppSizes
+                                                                          .s10),
+                                                          onChanged: (value) {},
+                                                        ),
+                                                      ),
+                                                      AppSizes.s15.width,
+                                                      Container(
+                                                        padding:
+                                                            AppSizes.allPadding(
+                                                                AppSizes.s1),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        AppSizes
+                                                                            .s2),
+                                                            color: AppColors
+                                                                .colorBaseError),
+                                                        child: IconButton(
+                                                          onPressed: () {},
+                                                          icon: Icon(
+                                                            size: 20,
+                                                            Icons
+                                                                .delete_outline_rounded,
+                                                            color: AppColors
+                                                                .colorBaseWhite,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    AppSizes.s10.height,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total Biaya',
+                                          style: Get.textTheme.bodyMedium!
+                                              .copyWith(
+                                            fontSize: AppSizes.s15,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.colorBaseBlack,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 200,
+                                          height: 50,
+                                          child: CustomTextField(
+                                            hintText: 'Masukan Biaya',
+                                            controller: TextEditingController(),
+                                            // controller
+                                            //         .weightControllers[
+                                            //     index],
+                                            keyboardType: TextInputType.number,
+                                            //textInputType: TextInputType.name,
+                                            hintStyle: Get
+                                                .textTheme.titleMedium!
+                                                .copyWith(
+                                                    color: AppColors
+                                                        .colorSecondary600,
+                                                    fontSize: AppSizes.s10),
+                                            onChanged: (value) {},
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    AppSizes.s15.height,
+                                    Row(
+                                      spacing: AppSizes.s10,
+                                      children: [
+                                        Flexible(
+                                          child: Button.outlined(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              label: 'Batal'),
+                                        ),
+                                        Flexible(
+                                          child: Button.filled(
+                                              onPressed: () {},
+                                              label: 'Simpan'),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 180,
+                          height: 41,
+                          decoration: BoxDecoration(
+                            color: AppColors.colorBasePrimary,
+                            borderRadius: BorderRadius.circular(AppSizes.s4),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Tambah Rekam Medis',
+                              style: Get.textTheme.bodyMedium!.copyWith(
+                                  fontSize: AppSizes.s14,
+                                  color: AppColors.colorBaseWhite),
+                            ),
+                          ),
+                        ),
+                      ),
+                      AppSizes.s10.height,
                       Container(
                         width: double.infinity,
                         height: 50,

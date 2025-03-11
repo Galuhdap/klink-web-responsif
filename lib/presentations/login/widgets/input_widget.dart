@@ -17,6 +17,7 @@ class InputWidget extends StatelessWidget {
   final TextStyle? hintStyle;
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
+  final int maxLines;
 
   const InputWidget({
     super.key,
@@ -31,6 +32,7 @@ class InputWidget extends StatelessWidget {
     this.hintStyle,
     this.onChanged,
     this.inputFormatters,
+    this.maxLines = 1,
   });
 
   @override
@@ -46,6 +48,7 @@ class InputWidget extends StatelessWidget {
         // ),
         // AppSizes.s10.height,
         CustomTextField(
+          maxLines: maxLines,
           hintText: hintText,
           controller: controller,
           keyboardType: textInputType,

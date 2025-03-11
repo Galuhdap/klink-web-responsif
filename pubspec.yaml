@@ -46,6 +46,7 @@ dependencies:
   iconsax: ^0.0.8
   flutter_timer_countdown: ^1.0.7
   dropdown_search: ^6.0.2
+  drop_down_search_field: ^1.1.2+2
   
 
 dev_dependencies:

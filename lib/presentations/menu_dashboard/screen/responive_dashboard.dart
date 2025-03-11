@@ -13,10 +13,10 @@ class ResponsiveDashboard extends StatelessWidget {
       builder: (context, constraints) {
         if (Responsive.isMobile(context)) {
           // Jika layar kecil (mobile)
-          return const DashboardMobileScreen(userRole: UserRole.admin,);
+          return const DashboardMobileScreen(userRole: UserRole.dokter,);
         } else {
           // Jika layar besar (web atau tablet)
-          return const DashboardScreen(userRole: UserRole.admin,);
+          return const DashboardScreen(userRole: UserRole.dokter,);
         }
       },
     );
