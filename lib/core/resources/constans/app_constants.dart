@@ -8,6 +8,8 @@ class AppConstants {
   static const String LABEL_WAKTU_TUNGGU = "Waktu Tunggu";
   static const String LABEL_ACTION = "Action";
 
+  static const String LABEL_QTY = "Qty";
+
 
   static const String LABEL_CARI = "Cari";
   static const String LABEL_NO = "No";
@@ -23,6 +25,7 @@ class AppConstants {
   static const String LABEL_PASIEN_ANTRIAN_SELANJUTNYA = "Antrian Selanjutnya";
 
   static const String LABEL_DATA_PASIEN = "Data Pasien";
+  static const String LABEL_DATA_ANTRIAN = "Data Antrian Pasien";
   
   static const String LABEL_DAFTAR_REKAM_MEDIS = "Daftar Rekam Medis";
   static const String LABEL_JADWAL_PERIKSA = "Jadwal Periksa";

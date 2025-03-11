@@ -23,6 +23,7 @@ class CustomTextField extends StatefulWidget {
   final double? enabledBorderWidth;
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
+  final int maxLines;
 
   const CustomTextField(
       {Key? key,
@@ -42,6 +43,7 @@ class CustomTextField extends StatefulWidget {
       this.enabledBorderWidth,
       this.onChanged,
       this.inputFormatters,
+      this.maxLines = 1,
       this.readOnly = false})
       : _controller = controller,
         super(key: key);
@@ -64,6 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: widget.maxLines,
       readOnly: widget.readOnly,
       controller: widget._controller,
       onTap: widget.onTap,

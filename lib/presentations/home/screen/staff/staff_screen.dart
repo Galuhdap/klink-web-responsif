@@ -15,6 +15,7 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
+import 'package:klinik_web_responsif/routes/app_routes.dart';
 
 class StaffScreen extends StatelessWidget {
   const StaffScreen({super.key});
@@ -434,36 +435,41 @@ class StaffScreen extends StatelessWidget {
                                                       value();
                                                     },
                                                     itemBuilder: (context) => [
-                                                      PopupMenuItem(
-                                                        child:
-                                                            StatusAntrianComponent(
-                                                          status: 'proses',
+                                                      if (controller
+                                                              .role.value ==
+                                                          'admin') ...[
+                                                        PopupMenuItem(
+                                                          child:
+                                                              StatusAntrianComponent(
+                                                            status: 'proses',
+                                                          ),
+                                                          value: () {
+                                                            debugPrint(
+                                                                'open Proses');
+                                                          },
                                                         ),
-                                                        value: () {
-                                                          debugPrint(
-                                                              'open Proses');
-                                                        },
-                                                      ),
-                                                      PopupMenuItem(
-                                                        child:
-                                                            StatusAntrianComponent(
-                                                          status: 'pending',
+                                                        PopupMenuItem(
+                                                          child:
+                                                              StatusAntrianComponent(
+                                                            status: 'pending',
+                                                          ),
+                                                          value: () {
+                                                            debugPrint(
+                                                                'open Pending');
+                                                          },
                                                         ),
-                                                        value: () {
-                                                          debugPrint(
-                                                              'open Pending');
-                                                        },
-                                                      ),
-                                                      PopupMenuItem(
-                                                        child:
-                                                            StatusAntrianComponent(
-                                                          status: 'dibatalkan',
+                                                        PopupMenuItem(
+                                                          child:
+                                                              StatusAntrianComponent(
+                                                            status:
+                                                                'dibatalkan',
+                                                          ),
+                                                          value: () {
+                                                            debugPrint(
+                                                                'open Dibatalkan');
+                                                          },
                                                         ),
-                                                        value: () {
-                                                          debugPrint(
-                                                              'open Dibatalkan');
-                                                        },
-                                                      ),
+                                                      ],
                                                       PopupMenuItem(
                                                         child: Center(
                                                           child: Text(
@@ -481,6 +487,33 @@ class StaffScreen extends StatelessWidget {
                                                               'open Detail');
                                                         },
                                                       ),
+                                                      if (controller
+                                                              .role.value ==
+                                                          'docter') ...[
+                                                        PopupMenuItem(
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Rekam Medis',
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .labelLarge!
+                                                                  .copyWith(
+                                                                fontSize:
+                                                                    AppSizes
+                                                                        .s14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          value: () {
+                                                            debugPrint(
+                                                                'open Detail');
+                                                          },
+                                                          onTap: () {
+                                                            Get.toNamed(AppRoutes
+                                                                .rekamMedis);
+                                                          },
+                                                        ),
+                                                      ],
                                                       PopupMenuItem(
                                                         child: Center(
                                                           child: Text(

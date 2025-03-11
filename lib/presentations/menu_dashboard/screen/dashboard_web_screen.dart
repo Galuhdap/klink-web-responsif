@@ -33,12 +33,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ];
       case UserRole.dokter:
         return [
-          const Center(
-            child: Text('This is page 1'),
-          ),
-          const Center(
-            child: Text('This is page 2'),
-          )
+          const StaffScreen(),
+          //const DataAntrianPasienDocterScreen(),
         ];
       case UserRole.apotek:
         return [
@@ -73,9 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: _buildNavItems(),
-                      )
-                      
-                      ),
+                      )),
                 ),
               ),
             ),
@@ -127,11 +121,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isActive: _selectedIndex == 0,
                 onTap: () => _onItemTapped(0),
               ),
-              NavItem(
-                iconPath: Assets.icons.pasien.path,
-                isActive: _selectedIndex == 1,
-                onTap: () => _onItemTapped(1),
-              ),
+              // NavItem(
+              //   iconPath: Assets.icons.pasien.path,
+              //   isActive: _selectedIndex == 1,
+              //   onTap: () => _onItemTapped(1),
+              // ),
             ],
           ),
           IconButton(

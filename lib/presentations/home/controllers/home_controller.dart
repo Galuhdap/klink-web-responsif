@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+
+  RxString role = 'docter'.obs;
+
   RxList patient = [
     {
       "nomor_antrian": "20",
