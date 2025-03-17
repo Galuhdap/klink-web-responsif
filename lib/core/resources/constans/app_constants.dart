@@ -54,6 +54,10 @@ class AppConstants {
   static const String LABEL_TGL_KADALUARSA = "Tgl Kadaluarsa";
   static const String LABEL_STOCK = "Stock";
 
+  static const String LABEL_NOMINAL = "Nominal";
+  static const String LABEL_TANGGAL_TRANSAKI = "Tanggal Transaksi";
+  static const String LABEL_INVOICE = "Invoice";
+
 
   // Text Label
   static const String LABEL_EMAIL = "Email";
@@ -146,7 +150,7 @@ class AppConstants {
   static const String ACTION_DETAIL_WITHDRAW_FUNDS = "Detail Pengajuan Dana";
 
   // History
-  static const String LABEL_RIWAYAT = "Riwayat";
+  static const String LABEL_RIWAYAT_TRANSAKSI = "Riwayat Transaksi";
   static const String LABEL_DEPOSIT_TRASH_SUCCES = "Setor Sampah Berhasil!";
   static const String LABEL_REGISTER_SUCCES = "Register Berhasil!";
   static const String LABEL_DELETE_DEPOSIT_TRASH_SUCCES = "Hapus Sampah Berhasil!";

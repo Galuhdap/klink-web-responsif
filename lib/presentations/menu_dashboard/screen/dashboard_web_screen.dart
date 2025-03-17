@@ -6,6 +6,7 @@ import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/obat_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/take_drug_screen.dart';
 import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
@@ -43,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const StaffScreen(),
           const ObatScreen(),
           const TakeDrugScreen(),
-          const Center(child: Text('This is page 4')),
+          const RiwayatTransaksiScreen(),
         ];
       case UserRole.pemilik:
         return [

@@ -82,4 +82,31 @@ class ApotikController extends GetxController {
       "status": "ambil_obat"
     },
   ].obs;
+
+  RxList riwayatTransaksi = [
+    {
+      "no": "1",
+      "norekamMedis": "333002",
+      "nama_pasien": "monaji",
+      "tanggal_transaksi": "12/09/2000",
+      "nominal": "Rp. 50.000",
+      "inovice": "INV-1223002121",
+    },
+    {
+      "no": "2",
+      "norekamMedis": "333002",
+      "nama_pasien": "monaji",
+      "tanggal_transaksi": "12/09/2000",
+      "nominal": "Rp. 5.000.000",
+      "inovice": "INV-122300",
+    },
+    {
+      "no": "3",
+      "norekamMedis": "333002",
+      "nama_pasien": "monaji",
+      "tanggal_transaksi": "12/09/2000",
+      "nominal": "Rp. 50.000",
+      "inovice": "INV-122300",
+    },
+  ].obs;
 }
