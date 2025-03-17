@@ -83,4 +83,8 @@ class AppColors {
   static const colorSelesaiText = Color(0xFFF00B69B);
   static const colorDibatalkanText = Color(0xFFFEF3826);
 
+
+  //ColorFillBorder
+  static const colorFillBorder = Color(0xFFFF6F7FB);
+
 }

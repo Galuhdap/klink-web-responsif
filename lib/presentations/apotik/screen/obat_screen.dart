@@ -83,7 +83,8 @@ class ObatScreen extends StatelessWidget {
                           AppSizes.s12.height,
                           InkWell(
                             onTap: () async {
-                              final DateTime? pickedDate = await showDatePicker(
+                              //final DateTime? pickedDate = 
+                              await showDatePicker(
                                 context: context,
                                 initialDate: DateTime(2021, 7, 25),
                                 firstDate: DateTime(2021),
@@ -217,8 +218,15 @@ class ObatScreen extends StatelessWidget {
                                             AppSizes.s12.height,
                                             InkWell(
                                               onTap: () async {
-                                                final DateTime? pickedDate =
-                                                    await showDatePicker(
+                                                // final DateTime? pickedDate =
+                                                //     await showDatePicker(
+                                                //   context: context,
+                                                //   initialDate:
+                                                //       DateTime(2021, 7, 25),
+                                                //   firstDate: DateTime(2021),
+                                                //   lastDate: DateTime(2022),
+                                                // );
+                                                await showDatePicker(
                                                   context: context,
                                                   initialDate:
                                                       DateTime(2021, 7, 25),

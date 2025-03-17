@@ -47,7 +47,9 @@ class AppConstants {
   static const String LABEL_NO_TELP = "No Telp";
 
   //LABEL OBAT
+  static const String LABEL_OBAT = "Obat";
   static const String LABEL_DATA_OBAT = "Data Obat";
+  static const String LABEL_AMBIL_OBAT = "Ambil Obat";
   static const String LABEL_NAMA_OBAT = "Nama Obat";
   static const String LABEL_TGL_KADALUARSA = "Tgl Kadaluarsa";
   static const String LABEL_STOCK = "Stock";
