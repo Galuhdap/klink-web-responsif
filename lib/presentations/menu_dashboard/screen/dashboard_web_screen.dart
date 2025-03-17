@@ -6,6 +6,7 @@ import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/obat_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/take_drug_screen.dart';
 import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
@@ -41,7 +42,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return [
           const StaffScreen(),
           const ObatScreen(),
-          const Center(child: Text('This is page 3')),
+          const TakeDrugScreen(),
+          const Center(child: Text('This is page 4')),
         ];
       case UserRole.pemilik:
         return [
@@ -154,6 +156,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 iconPath: Assets.icons.transaksi.path,
                 isActive: _selectedIndex == 2,
                 onTap: () => _onItemTapped(2),
+              ),
+              NavItem(
+                iconPath: Assets.icons.chartPie.path,
+                isActive: _selectedIndex == 3,
+                onTap: () => _onItemTapped(3),
               ),
             ],
           ),

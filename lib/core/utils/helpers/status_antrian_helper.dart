@@ -16,6 +16,8 @@ Color setStatusColorFill(LabelAntrianStatus labelAntrianStatus) {
       return AppColors.colorSelesaiFill;
     case LabelAntrianStatus.dibatalkan:
       return AppColors.colorDibatalkanFill;
+    case LabelAntrianStatus.ambil_obat:
+      return AppColors.colorMenungguFill;
   }
 }
 
@@ -61,6 +63,14 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
           color: AppColors.colorDibatalkanText,
         ),
       );
+    case LabelAntrianStatus.ambil_obat:
+      return Text(
+        'Ambil Obat',
+        style: Get.textTheme.labelLarge!.copyWith(
+          fontSize: AppSizes.s11,
+          color: AppColors.colorMenungguText,
+        ),
+      );
   }
 }
 
@@ -74,6 +84,8 @@ extension InflationExt on String {
       return LabelAntrianStatus.pending;
     } else if (this == 'selesai') {
       return LabelAntrianStatus.selesai;
+    } else if (this == 'ambil_obat') {
+      return LabelAntrianStatus.ambil_obat;
     } else {
       return LabelAntrianStatus.dibatalkan;
     }
