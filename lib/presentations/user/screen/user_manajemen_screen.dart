@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,16 +14,16 @@ import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart'
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
-import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
+import 'package:klinik_web_responsif/presentations/user/controller/user_manajemen_controller.dart';
 
-class RiwayatTransaksiScreen extends StatelessWidget {
-  const RiwayatTransaksiScreen({super.key});
+class UserManajemenScreen extends StatelessWidget {
+  const UserManajemenScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ApotikController>(
-      init: ApotikController(),
+    return GetBuilder<UserManajemenController>(
+      init: UserManajemenController(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: Color(0xfffF8F8F8),
@@ -46,6 +47,205 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                 //       .add(const DataPatientsEvent.getPatients());
                 // }
               },
+              isMake: true,
+              labelButton: 'Tambah Data',
+              onTapButton: () {
+                showModalCenter(
+                  context,
+                  ListView(
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Tambah Data User',
+                          style: Get.textTheme.labelMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: AppSizes.s16),
+                        ),
+                      ),
+                      AppSizes.s12.height,
+                      Divider(),
+                      InputDataComponent(
+                        label: 'NIK',
+                        hintText: 'NIK',
+                        controller: TextEditingController(),
+                      ),
+                      InputDataComponent(
+                        label: 'Nama',
+                        hintText: 'Nama',
+                        controller: TextEditingController(),
+                      ),
+                      InputDataComponent(
+                        label: 'Email',
+                        hintText: 'Email',
+                        controller: TextEditingController(),
+                      ),
+                      InputDataComponent(
+                        label: 'Password',
+                        hintText: 'Passwrod',
+                        controller: TextEditingController(),
+                      ),
+                      InputDataComponent(
+                        label: 'No Telp',
+                        hintText: 'No Telp',
+                        controller: TextEditingController(),
+                      ),
+                      InputDataComponent(
+                        label: 'Alamat',
+                        hintText: 'Alamat',
+                        controller: TextEditingController(),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tgl Lahir',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: AppSizes.s14,
+                                color: AppColors.colorBaseBlack),
+                          ),
+                          AppSizes.s12.height,
+                          InkWell(
+                            onTap: () async {
+                              //final DateTime? pickedDate =
+                              await showDatePicker(
+                                context: context,
+                                initialDate: DateTime(2021, 7, 25),
+                                firstDate: DateTime(2021),
+                                lastDate: DateTime(2022),
+                              );
+                            },
+                            child: Container(
+                                padding: AppSizes.symmetricPadding(
+                                    vertical: AppSizes.s5,
+                                    horizontal: AppSizes.s20),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColors.colorSecondary400,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.s4),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_month,
+                                      weight: AppSizes.s20,
+                                      size: AppSizes.s30,
+                                      color: AppColors.colorNeutrals100,
+                                    ),
+                                    AppSizes.s10.width,
+                                    Text(
+                                      '12/12/2020',
+                                      style: Get.textTheme.bodySmall!.copyWith(
+                                        fontSize: AppSizes.s14,
+                                        color: AppColors.colorNeutrals400,
+                                      ),
+                                    ),
+                                  ],
+                                ).paddingSymmetric(vertical: AppSizes.s5)),
+                          ),
+                          AppSizes.s12.height,
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Jenis Kelamin',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: AppSizes.s14,
+                                color: AppColors.colorBaseBlack),
+                          ),
+                          AppSizes.s12.height,
+                          DropdownSearch<String>(
+                            items: (f, cs) => [
+                              "Laki-Laki",
+                              'Perempuan',
+                            ],
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? "Jenis Kelamin",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: selectedItem == null
+                                      ? Colors.grey
+                                      : Colors.black,
+                                ),
+                              );
+                            },
+                            popupProps: PopupProps.menu(
+                                disabledItemFn: (item) => item == 'Item 3',
+                                fit: FlexFit.loose),
+                            onChanged: (String? selectedValue) {
+                              print("Selected: $selectedValue");
+                            },
+                          ),
+                          AppSizes.s12.height,
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Role',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: AppSizes.s14,
+                                color: AppColors.colorBaseBlack),
+                          ),
+                          AppSizes.s12.height,
+                          DropdownSearch<String>(
+                            items: (f, cs) => [
+                              "Admin",
+                              'Dokter',
+                              'Apotik',
+                            ],
+                            dropdownBuilder: (context, selectedItem) {
+                              return Text(
+                                selectedItem ?? "Role",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: selectedItem == null
+                                      ? Colors.grey
+                                      : Colors.black,
+                                ),
+                              );
+                            },
+                            popupProps: PopupProps.menu(
+                                disabledItemFn: (item) => item == 'Item 3',
+                                fit: FlexFit.loose),
+                            onChanged: (String? selectedValue) {
+                              print("Selected: $selectedValue");
+                            },
+                          ),
+                          AppSizes.s12.height,
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Button.outlined(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                label: 'Batal'),
+                          ),
+                          AppSizes.s12.width,
+                          Flexible(
+                            child: Button.filled(
+                                onPressed: () {}, label: 'Simpan'),
+                          ),
+                        ],
+                      )
+                    ],
+                  ).paddingSymmetric(horizontal: AppSizes.s100),
+                );
+              },
             ),
           ),
           body: ListView(
@@ -61,12 +261,271 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      AppConstants.LABEL_RIWAYAT_TRANSAKSI,
-                      style: Get.textTheme.labelMedium!.copyWith(
-                          fontSize: AppSizes.s20,
-                          color: AppColors.colorBaseBlack,
-                          fontWeight: FontWeight.bold),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppConstants.LABEL_DATA_USER,
+                          style: Get.textTheme.labelMedium!.copyWith(
+                              fontSize: AppSizes.s20,
+                              color: AppColors.colorBaseBlack,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Responsive.isMobile(context)
+                            ? InkWell(
+                                onTap: () {
+                                  showModalCenter(
+                                    context,
+                                    ListView(
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.start,
+
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            'Tambah Data',
+                                            style: Get.textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: AppSizes.s16),
+                                          ),
+                                        ),
+                                        AppSizes.s12.height,
+                                        Divider(),
+                                        InputDataComponent(
+                                          label: 'NIK',
+                                          hintText: 'NIK',
+                                          controller: TextEditingController(),
+                                        ),
+                                        InputDataComponent(
+                                          label: 'Nama',
+                                          hintText: 'Nama',
+                                          controller: TextEditingController(),
+                                        ),
+                                        InputDataComponent(
+                                          label: 'Email',
+                                          hintText: 'Email',
+                                          controller: TextEditingController(),
+                                        ),
+                                        InputDataComponent(
+                                          label: 'Password',
+                                          hintText: 'Passwrod',
+                                          controller: TextEditingController(),
+                                        ),
+                                        InputDataComponent(
+                                          label: 'No Telp',
+                                          hintText: 'No Telp',
+                                          controller: TextEditingController(),
+                                        ),
+                                        InputDataComponent(
+                                          label: 'Alamat',
+                                          hintText: 'Alamat',
+                                          controller: TextEditingController(),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Tgl Lahir',
+                                              style: Get.textTheme.bodyMedium!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: AppSizes.s14,
+                                                      color: AppColors
+                                                          .colorBaseBlack),
+                                            ),
+                                            AppSizes.s12.height,
+                                            InkWell(
+                                              onTap: () async {
+                                                //final DateTime? pickedDate =
+                                                await showDatePicker(
+                                                  context: context,
+                                                  initialDate:
+                                                      DateTime(2021, 7, 25),
+                                                  firstDate: DateTime(2021),
+                                                  lastDate: DateTime(2022),
+                                                );
+                                              },
+                                              child: Container(
+                                                  padding:
+                                                      AppSizes.symmetricPadding(
+                                                          vertical: AppSizes.s5,
+                                                          horizontal:
+                                                              AppSizes.s20),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: AppColors
+                                                          .colorSecondary400,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            AppSizes.s4),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.calendar_month,
+                                                        weight: AppSizes.s20,
+                                                        size: AppSizes.s30,
+                                                        color: AppColors
+                                                            .colorNeutrals100,
+                                                      ),
+                                                      AppSizes.s10.width,
+                                                      Text(
+                                                        '12/12/2020',
+                                                        style: Get.textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                          fontSize:
+                                                              AppSizes.s14,
+                                                          color: AppColors
+                                                              .colorNeutrals400,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ).paddingSymmetric(
+                                                      vertical: AppSizes.s5)),
+                                            ),
+                                            AppSizes.s12.height,
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Jenis Kelamin',
+                                              style: Get.textTheme.bodyMedium!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: AppSizes.s14,
+                                                      color: AppColors
+                                                          .colorBaseBlack),
+                                            ),
+                                            AppSizes.s12.height,
+                                            DropdownSearch<String>(
+                                              items: (f, cs) => [
+                                                "Laki-Laki",
+                                                'Perempuan',
+                                              ],
+                                              dropdownBuilder:
+                                                  (context, selectedItem) {
+                                                return Text(
+                                                  selectedItem ??
+                                                      "Jenis Kelamin",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: selectedItem == null
+                                                        ? Colors.grey
+                                                        : Colors.black,
+                                                  ),
+                                                );
+                                              },
+                                              popupProps: PopupProps.menu(
+                                                  disabledItemFn: (item) =>
+                                                      item == 'Item 3',
+                                                  fit: FlexFit.loose),
+                                              onChanged:
+                                                  (String? selectedValue) {
+                                                print(
+                                                    "Selected: $selectedValue");
+                                              },
+                                            ),
+                                            AppSizes.s12.height,
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Role',
+                                              style: Get.textTheme.bodyMedium!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: AppSizes.s14,
+                                                      color: AppColors
+                                                          .colorBaseBlack),
+                                            ),
+                                            AppSizes.s12.height,
+                                            DropdownSearch<String>(
+                                              items: (f, cs) => [
+                                                "Admin",
+                                                'Dokter',
+                                                'Apotik',
+                                              ],
+                                              dropdownBuilder:
+                                                  (context, selectedItem) {
+                                                return Text(
+                                                  selectedItem ?? "Role",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: selectedItem == null
+                                                        ? Colors.grey
+                                                        : Colors.black,
+                                                  ),
+                                                );
+                                              },
+                                              popupProps: PopupProps.menu(
+                                                  disabledItemFn: (item) =>
+                                                      item == 'Item 3',
+                                                  fit: FlexFit.loose),
+                                              onChanged:
+                                                  (String? selectedValue) {
+                                                print(
+                                                    "Selected: $selectedValue");
+                                              },
+                                            ),
+                                            AppSizes.s12.height,
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Button.outlined(
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  },
+                                                  label: 'Batal'),
+                                            ),
+                                            AppSizes.s12.width,
+                                            Flexible(
+                                              child: Button.filled(
+                                                  onPressed: () {},
+                                                  label: 'Simpan'),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: 97,
+                                  height: 26,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.colorBasePrimary,
+                                    borderRadius:
+                                        BorderRadius.circular(AppSizes.s4),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tambah Data',
+                                      style: Get.textTheme.bodyMedium!.copyWith(
+                                          fontSize: AppSizes.s10,
+                                          color: AppColors.colorBaseWhite),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
                     ),
                     AppSizes.s24.height,
                     Row(
@@ -120,77 +579,8 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (Responsive.isDesktop(context)) ...[
-                          AppSizes.s17.width,
-                          Container(
-                            width: 281,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(AppSizes.s4),
-                              border: Border.all(color: Color(0xfffF0F0F0)),
-                              color: AppColors.colorBaseWhite,
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(0, 0),
-                                  blurRadius: 15,
-                                  spreadRadius: 0,
-                                  color:
-                                      AppColors.colorNeutrals300.withAlpha(40),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              spacing: 20,
-                              children: [
-                                AppSizes.s10.width,
-                                Icon(Icons.calendar_month_rounded),
-                                Text(
-                                  'Februari 2024',
-                                  style: Get.textTheme.labelMedium!.copyWith(
-                                    fontSize: AppSizes.s16,
-                                    color: AppColors.colorBaseBlack,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ],
                     ),
-                    if (Responsive.isMobile(context)) ...[
-                      AppSizes.s10.height,
-                      Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppSizes.s4),
-                          border: Border.all(color: Color(0xfffF0F0F0)),
-                          color: AppColors.colorBaseWhite,
-                          boxShadow: [
-                            BoxShadow(
-                              offset: const Offset(0, 0),
-                              blurRadius: 15,
-                              spreadRadius: 0,
-                              color: AppColors.colorNeutrals300.withAlpha(40),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          spacing: 20,
-                          children: [
-                            AppSizes.s10.width,
-                            Icon(Icons.calendar_month_rounded),
-                            Text(
-                              'Februari 2024',
-                              style: Get.textTheme.labelMedium!.copyWith(
-                                fontSize: AppSizes.s16,
-                                color: AppColors.colorBaseBlack,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ),
@@ -228,22 +618,6 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                   ),
                                 ),
                                 DataColumn(
-                                  label: Padding(
-                                    padding: EdgeInsets.only(
-                                      left: MediaQuery.of(context).size.width *
-                                          0.02,
-                                      right: MediaQuery.of(context).size.width *
-                                          0.04,
-                                    ),
-                                    child: Text(
-                                      AppConstants.LABEL_NO_REKAM_MEDIS,
-                                      style: Get.textTheme.labelLarge!.copyWith(
-                                          fontSize: AppSizes.s14,
-                                          color: AppColors.colorBaseBlack),
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
                                   label: Center(
                                     child: Padding(
                                       padding: EdgeInsets.only(
@@ -252,7 +626,7 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                 0.02,
                                       ),
                                       child: Text(
-                                        AppConstants.LABEL_NAMA_PASIEN,
+                                        AppConstants.LABEL_NAMA,
                                         style: Get.textTheme.labelLarge!
                                             .copyWith(
                                                 fontSize: AppSizes.s14,
@@ -267,9 +641,11 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                     padding: EdgeInsets.only(
                                       left: MediaQuery.of(context).size.width *
                                           0.02,
+                                      right: MediaQuery.of(context).size.width *
+                                          0.1,
                                     ),
                                     child: Text(
-                                      AppConstants.LABEL_NOMINAL,
+                                      AppConstants.LABEL_EMAIL,
                                       style: Get.textTheme.labelLarge!.copyWith(
                                           fontSize: AppSizes.s14,
                                           color: AppColors.colorBaseBlack),
@@ -282,11 +658,36 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                       left: MediaQuery.of(context).size.width *
                                           0.025,
                                     ),
-                                    child: Text(
-                                      AppConstants.LABEL_TANGGAL_TRANSAKI,
-                                      style: Get.textTheme.labelLarge!.copyWith(
-                                          fontSize: AppSizes.s14,
-                                          color: AppColors.colorBaseBlack),
+                                    child: Center(
+                                      child: Text(
+                                        AppConstants.LABEL_JENIS_KELAMIN,
+                                        style: Get.textTheme.labelLarge!
+                                            .copyWith(
+                                                fontSize: AppSizes.s14,
+                                                color:
+                                                    AppColors.colorBaseBlack),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Padding(
+                                    padding: EdgeInsets.only(
+                                      left: Responsive.isMobile(context)
+                                          ? MediaQuery.of(context).size.width *
+                                              0.09
+                                          : MediaQuery.of(context).size.width *
+                                              0.045,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        AppConstants.LABEL_NO_TELP,
+                                        style: Get.textTheme.labelLarge!
+                                            .copyWith(
+                                                fontSize: AppSizes.s14,
+                                                color:
+                                                    AppColors.colorBaseBlack),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -301,7 +702,7 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        AppConstants.LABEL_INVOICE,
+                                        AppConstants.LABEL_ROLE,
                                         style: Get.textTheme.labelLarge!
                                             .copyWith(
                                                 fontSize: AppSizes.s14,
@@ -387,10 +788,30 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                   left: MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.03,
+                                                      0.02,
+                                                  right: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.1,
                                                 ),
                                                 child: Text(
-                                                  patient["norekamMedis"],
+                                                  patient["nama"],
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                  left: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.02,
+                                                ),
+                                                child: Text(
+                                                  patient["email"],
                                                   style: Get
                                                       .textTheme.labelLarge!
                                                       .copyWith(
@@ -406,32 +827,14 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                           .size
                                                           .width *
                                                       0.02,
-                                                  right: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.1,
                                                 ),
-                                                child: Text(
-                                                  patient["nama_pasien"],
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ),
-                                            DataCell(
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.02,
-                                                ),
-                                                child: Text(
-                                                  patient["nominal"],
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                child: Center(
+                                                  child: Text(
+                                                    patient["jenis_kelamin"],
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -449,25 +852,33 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                               .width *
                                                           0.04,
                                                 ),
-                                                child: Text(
-                                                  patient["tanggal_transaksi"],
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                child: Center(
+                                                  child: Text(
+                                                    patient["no_telp"],
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                             DataCell(
                                               Padding(
                                                 padding: EdgeInsets.only(
-                                                  left: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.02,
+                                                  left: Responsive.isMobile(
+                                                          context)
+                                                      ? MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.075
+                                                      : MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.035,
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    patient["inovice"],
+                                                    patient["role"],
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
@@ -546,7 +957,7 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                                               ),
                                                                                             ),
                                                                                             Text(
-                                                                                              'Detail Riwayat Transaksi',
+                                                                                              'Detail User',
                                                                                               style: Get.textTheme.labelMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: AppSizes.s24),
                                                                                             ),
                                                                                           ],
@@ -554,20 +965,20 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                                         Divider(),
                                                                                         AppSizes.s30.height,
                                                                                         InputDataComponent(
-                                                                                          label: 'Invoice',
-                                                                                          hintText: 'INV-122300',
+                                                                                          label: 'Nama',
+                                                                                          hintText: 'Husmi',
                                                                                           controller: TextEditingController(),
                                                                                           readOnly: true,
                                                                                         ),
                                                                                         InputDataComponent(
-                                                                                          label: 'No Rekam Medis',
-                                                                                          hintText: '4608',
+                                                                                          label: 'Email',
+                                                                                          hintText: 'galuhdap7@gmail.com',
                                                                                           controller: TextEditingController(),
                                                                                           readOnly: true,
                                                                                         ),
                                                                                         InputDataComponent(
-                                                                                          label: 'Nama Pasien',
-                                                                                          hintText: 'Farhan',
+                                                                                          label: 'No telp',
+                                                                                          hintText: '089514599818',
                                                                                           controller: TextEditingController(),
                                                                                           readOnly: true,
                                                                                         ),
@@ -578,119 +989,29 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                                           readOnly: true,
                                                                                         ),
                                                                                         InputDataComponent(
-                                                                                          label: 'Tanggal Transaksi',
-                                                                                          hintText: '12/09/2019',
+                                                                                          label: 'Jenis Kelamin',
+                                                                                          hintText: 'Laki-Laki',
                                                                                           controller: TextEditingController(),
                                                                                           readOnly: true,
                                                                                         ),
                                                                                         InputDataComponent(
-                                                                                          label: 'Keluhan',
-                                                                                          hintText: 'Sakit Gigi',
+                                                                                          label: 'NIK',
+                                                                                          hintText: '1389024710947',
                                                                                           controller: TextEditingController(),
                                                                                           readOnly: true,
                                                                                         ),
-                                                                                        Column(
-                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                          children: [
-                                                                                            Text(
-                                                                                              AppConstants.LABEL_TERAPI_TINDAKAN,
-                                                                                              style: Get.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700, fontSize: AppSizes.s14, color: AppColors.colorBaseBlack),
-                                                                                            ),
-                                                                                            AppSizes.s12.height,
-                                                                                            Container(
-                                                                                              padding: AppSizes.symmetricPadding(
-                                                                                                vertical: AppSizes.s20,
-                                                                                                horizontal: AppSizes.s12,
-                                                                                              ),
-                                                                                              width: double.infinity,
-                                                                                              decoration: BoxDecoration(
-                                                                                                color: Color(0xfffF6F7FB),
-                                                                                                borderRadius: BorderRadius.circular(AppSizes.s4),
-                                                                                              ),
-                                                                                              child: Text(
-                                                                                                'Paracetamol 2x sehari\nUltraflu 2x Sehari',
-                                                                                                style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                  fontSize: AppSizes.s14,
-                                                                                                  color: AppColors.colorBaseBlack,
-                                                                                                ),
-                                                                                              ),
-                                                                                            )
-                                                                                          ],
+                                                                                        InputDataComponent(
+                                                                                          label: 'Tgl Lahir',
+                                                                                          hintText: '12/12/2020',
+                                                                                          controller: TextEditingController(),
+                                                                                          readOnly: true,
                                                                                         ),
-                                                                                        AppSizes.s31.height,
-                                                                                        Column(
-                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                          children: [
-                                                                                            Text(
-                                                                                              AppConstants.LABEL_OBAT,
-                                                                                              style: Get.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700, fontSize: AppSizes.s14, color: AppColors.colorBaseBlack),
-                                                                                            ),
-                                                                                            AppSizes.s12.height,
-                                                                                            SizedBox(
-                                                                                              width: double.infinity,
-                                                                                              height: AppSizes.setResponsiveHeight(context) * 0.23,
-                                                                                              child: ListView.builder(
-                                                                                                itemCount: 3,
-                                                                                                itemBuilder: (BuildContext context, index) {
-                                                                                                  return Row(
-                                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                                    children: [
-                                                                                                      Text(
-                                                                                                        'Paracetamol',
-                                                                                                        style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                          fontSize: AppSizes.s15,
-                                                                                                          color: AppColors.colorBaseBlack,
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Row(
-                                                                                                        spacing: 10,
-                                                                                                        children: [
-                                                                                                          Text(
-                                                                                                            '1',
-                                                                                                            style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                              fontSize: AppSizes.s14,
-                                                                                                              fontWeight: FontWeight.w500,
-                                                                                                              color: AppColors.colorBaseBlack,
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Text(
-                                                                                                            'Tablet',
-                                                                                                            style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                              fontSize: AppSizes.s14,
-                                                                                                              fontWeight: FontWeight.w500,
-                                                                                                              color: AppColors.colorBaseBlack,
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      )
-                                                                                                    ],
-                                                                                                  ).paddingOnly(bottom: AppSizes.s10);
-                                                                                                },
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
+                                                                                        InputDataComponent(
+                                                                                          label: 'Role ',
+                                                                                          hintText: 'Dokter',
+                                                                                          controller: TextEditingController(),
+                                                                                          readOnly: true,
                                                                                         ),
-                                                                                        Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                          children: [
-                                                                                            Text(
-                                                                                              'Total',
-                                                                                              style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                fontSize: AppSizes.s20,
-                                                                                                fontWeight: FontWeight.bold,
-                                                                                                color: AppColors.colorBaseBlack,
-                                                                                              ),
-                                                                                            ),
-                                                                                            Text(
-                                                                                              'Rp 50.000',
-                                                                                              style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                fontSize: AppSizes.s20,
-                                                                                                fontWeight: FontWeight.bold,
-                                                                                                color: AppColors.colorBaseBlack,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        )
                                                                                       ],
                                                                                     ),
                                                                                   ],
@@ -772,7 +1093,7 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                                       ),
                                                                                     ),
                                                                                     Text(
-                                                                                      'Detail Riwayat Transaksi',
+                                                                                      'Detail User',
                                                                                       style: Get.textTheme.labelMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: AppSizes.s24),
                                                                                     ),
                                                                                   ],
@@ -780,20 +1101,20 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                                 Divider(),
                                                                                 AppSizes.s48.height,
                                                                                 InputDataComponent(
-                                                                                  label: 'Invoice',
-                                                                                  hintText: 'INV-122300',
+                                                                                  label: 'Nama',
+                                                                                  hintText: 'Husmi',
                                                                                   controller: TextEditingController(),
                                                                                   readOnly: true,
                                                                                 ),
                                                                                 InputDataComponent(
-                                                                                  label: 'No Rekam Medis',
-                                                                                  hintText: '4608',
+                                                                                  label: 'Email',
+                                                                                  hintText: 'galuhdap7@gmail.com',
                                                                                   controller: TextEditingController(),
                                                                                   readOnly: true,
                                                                                 ),
                                                                                 InputDataComponent(
-                                                                                  label: 'Nama Pasien',
-                                                                                  hintText: 'Farhan',
+                                                                                  label: 'No telp',
+                                                                                  hintText: '089514599818',
                                                                                   controller: TextEditingController(),
                                                                                   readOnly: true,
                                                                                 ),
@@ -804,14 +1125,8 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                                   readOnly: true,
                                                                                 ),
                                                                                 InputDataComponent(
-                                                                                  label: 'Tanggal Transaksi',
-                                                                                  hintText: '12/09/2019',
-                                                                                  controller: TextEditingController(),
-                                                                                  readOnly: true,
-                                                                                ),
-                                                                                InputDataComponent(
-                                                                                  label: 'Keluhan',
-                                                                                  hintText: 'Sakit Gigi',
+                                                                                  label: 'Jenis Kelamin',
+                                                                                  hintText: 'Laki-Laki',
                                                                                   controller: TextEditingController(),
                                                                                   readOnly: true,
                                                                                 ),
@@ -827,108 +1142,24 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                                               children: [
                                                                                 105.height,
-                                                                                Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      AppConstants.LABEL_TERAPI_TINDAKAN,
-                                                                                      style: Get.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700, fontSize: AppSizes.s14, color: AppColors.colorBaseBlack),
-                                                                                    ),
-                                                                                    AppSizes.s12.height,
-                                                                                    Container(
-                                                                                      padding: AppSizes.symmetricPadding(
-                                                                                        vertical: AppSizes.s20,
-                                                                                        horizontal: AppSizes.s12,
-                                                                                      ),
-                                                                                      width: double.infinity,
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Color(0xfffF6F7FB),
-                                                                                        borderRadius: BorderRadius.circular(AppSizes.s4),
-                                                                                      ),
-                                                                                      child: Text(
-                                                                                        'Paracetamol 2x sehari\nUltraflu 2x Sehari',
-                                                                                        style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                          fontSize: AppSizes.s14,
-                                                                                          color: AppColors.colorBaseBlack,
-                                                                                        ),
-                                                                                      ),
-                                                                                    )
-                                                                                  ],
+                                                                                InputDataComponent(
+                                                                                  label: 'NIK',
+                                                                                  hintText: '1389024710947',
+                                                                                  controller: TextEditingController(),
+                                                                                  readOnly: true,
                                                                                 ),
-                                                                                AppSizes.s31.height,
-                                                                                Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      AppConstants.LABEL_OBAT,
-                                                                                      style: Get.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700, fontSize: AppSizes.s14, color: AppColors.colorBaseBlack),
-                                                                                    ),
-                                                                                    AppSizes.s12.height,
-                                                                                    SizedBox(
-                                                                                      width: double.infinity,
-                                                                                      height: AppSizes.setResponsiveHeight(context) * 0.23,
-                                                                                      child: ListView.builder(
-                                                                                        itemCount: 3,
-                                                                                        itemBuilder: (BuildContext context, index) {
-                                                                                          return Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                            children: [
-                                                                                              Text(
-                                                                                                'Paracetamol',
-                                                                                                style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                  fontSize: AppSizes.s15,
-                                                                                                  color: AppColors.colorBaseBlack,
-                                                                                                ),
-                                                                                              ),
-                                                                                              Row(
-                                                                                                spacing: 10,
-                                                                                                children: [
-                                                                                                  Text(
-                                                                                                    '1',
-                                                                                                    style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                      fontSize: AppSizes.s14,
-                                                                                                      fontWeight: FontWeight.w500,
-                                                                                                      color: AppColors.colorBaseBlack,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    'Tablet',
-                                                                                                    style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                                      fontSize: AppSizes.s14,
-                                                                                                      fontWeight: FontWeight.w500,
-                                                                                                      color: AppColors.colorBaseBlack,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              )
-                                                                                            ],
-                                                                                          ).paddingOnly(bottom: AppSizes.s10);
-                                                                                        },
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
+                                                                                InputDataComponent(
+                                                                                  label: 'Tgl Lahir',
+                                                                                  hintText: '12/12/2020',
+                                                                                  controller: TextEditingController(),
+                                                                                  readOnly: true,
                                                                                 ),
-                                                                                Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      'Total',
-                                                                                      style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                        fontSize: AppSizes.s20,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                        color: AppColors.colorBaseBlack,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Text(
-                                                                                      'Rp 50.000',
-                                                                                      style: Get.textTheme.bodyMedium!.copyWith(
-                                                                                        fontSize: AppSizes.s20,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                        color: AppColors.colorBaseBlack,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                )
+                                                                                InputDataComponent(
+                                                                                  label: 'Role ',
+                                                                                  hintText: 'Dokter',
+                                                                                  controller: TextEditingController(),
+                                                                                  readOnly: true,
+                                                                                ),
                                                                               ],
                                                                             ),
                                                                           ),
