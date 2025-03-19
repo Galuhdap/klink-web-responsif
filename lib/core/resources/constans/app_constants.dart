@@ -4,6 +4,7 @@ class AppConstants {
   static const String LABEL_DAFTAR_ANTRIAN = "Daftar Antrian Pasien";
   static const String LABEL_NO_ANTRIAN = "No Antrian";
   static const String LABEL_NAMA_PASIEN = "Nama Pasien";
+  static const String LABEL_NAMA = "Nama";
   static const String LABEL_STATUS = "Status";
   static const String LABEL_WAKTU_TUNGGU = "Waktu Tunggu";
   static const String LABEL_ACTION = "Action";
@@ -45,6 +46,7 @@ class AppConstants {
   static const String LABEL_DAFTAR_DATA_DOKTER = "Daftar Data Dokter";
   static const String LABEL_NAMA_DOKTER = "Nama Dokter";
   static const String LABEL_NO_TELP = "No Telp";
+  static const String LABEL_ROLE = "Role";
 
   //LABEL OBAT
   static const String LABEL_OBAT = "Obat";
@@ -57,6 +59,8 @@ class AppConstants {
   static const String LABEL_NOMINAL = "Nominal";
   static const String LABEL_TANGGAL_TRANSAKI = "Tanggal Transaksi";
   static const String LABEL_INVOICE = "Invoice";
+
+  static const String LABEL_DATA_USER = "Data User";
 
 
   // Text Label

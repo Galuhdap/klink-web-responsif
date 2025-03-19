@@ -9,6 +9,7 @@ import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.d
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/nav_item.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
+import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
 
 import '../../../core/assets/assets.gen.dart';
 
@@ -46,8 +47,8 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
       case UserRole.pemilik:
         return [
           const Center(child: Text('This is page 1')),
-          const Center(child: Text('This is page 2')),
-          const Center(child: Text('This is page 3')),
+          const UserManajemenScreen(),
+          const RiwayatTransaksiScreen(),
         ];
     }
   }
