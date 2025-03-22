@@ -1,5 +1,4 @@
 class AppConstants {
-
   //Antrian
   static const String LABEL_DAFTAR_ANTRIAN = "Daftar Antrian Pasien";
   static const String LABEL_NO_ANTRIAN = "No Antrian";
@@ -10,7 +9,6 @@ class AppConstants {
   static const String LABEL_ACTION = "Action";
 
   static const String LABEL_QTY = "Qty";
-
 
   static const String LABEL_CARI = "Cari";
   static const String LABEL_NO = "No";
@@ -27,13 +25,18 @@ class AppConstants {
 
   static const String LABEL_DATA_PASIEN = "Data Pasien";
   static const String LABEL_DATA_ANTRIAN = "Data Antrian Pasien";
-  
+
   static const String LABEL_DAFTAR_REKAM_MEDIS = "Daftar Rekam Medis";
   static const String LABEL_JADWAL_PERIKSA = "Jadwal Periksa";
   static const String LABEL_KELUHAN = "Keluhan";
   static const String LABEL_TERAPI_TINDAKAN = "Terapi / Tindakan";
   static const String LABEL_DX = "Dx";
 
+  static const String LABEL_PEREMPUAN = "Perempuan";
+  static const String LABEL_LAKI_LAKI = "Laki-Laki";
+
+  static const String LABEL_STATISTIC = "Statistics";
+  static const String LABEL_TOTAL_PASIEN = "Total Pasien";
 
   //LABEL STATUS
   static const String LABEL_MENUNGGU = "Menunggu";
@@ -62,7 +65,6 @@ class AppConstants {
 
   static const String LABEL_DATA_USER = "Data User";
 
-
   // Text Label
   static const String LABEL_EMAIL = "Email";
   static const String LABEL_IN = "Masuk";
@@ -81,7 +83,7 @@ class AppConstants {
 
   static const String LABEL_KODE_NASABAH = "Kode Nasabah";
   static const String LABEL_TYPE_TRASH = "Jenis Sampah";
-  static const String LABEL_WEIGHT= "Berat";
+  static const String LABEL_WEIGHT = "Berat";
   static const String LABEL_PRICE = "*harga sampah yang dipilih";
   static const String LABEL_PRICE_TRASH = "Harga sampah";
   static const String LABEL_REGISTER_USER = "Register User";
@@ -89,7 +91,7 @@ class AppConstants {
   static const String LABEL_EDIT_REGISTER_USER = "Edit Tambah User";
   static const String LABEL_FORGOT_PASS = "Ubah Password";
   static const String LABEL_USERNAME = "Username";
-  
+
   static const String LABEL_DEPOSIT_TRASH = "Setor Sampah";
   static const String LABEL_GRAFIK_TRASH = "Grafik Sampah";
   static const String LABEL_EDIT_DEPOSIT_TRASH = "Edit Setor Sampah";
@@ -100,9 +102,8 @@ class AppConstants {
   static const String LABEL_NOs = "Tidak";
   static const String LABEL_YES = "Ya";
 
-  static const String LABEL_WITHDRAW_FUNDS= "Penarikan Dana";
-  static const String LABEL_WITHDRAW= "Pengajuan Penarikan Dana";
-
+  static const String LABEL_WITHDRAW_FUNDS = "Penarikan Dana";
+  static const String LABEL_WITHDRAW = "Pengajuan Penarikan Dana";
 
   static const String LABEL_WELCOME = "Selamat Datang!";
   static const String LABEL_MENU_CATEGORY = "Menu Category";
@@ -111,14 +112,12 @@ class AppConstants {
   static const String LABEL_CHECKOUT = "Checkout";
   static const String LABEL_BASKET = "Keranjang Saya";
 
-
   static const String LABEL_NAME_COORPT = "Nama Koprasi";
   static const String LABEL_NAME_ADMIN_COORPT = "Nama Admin Koprasi";
   static const String INPUT_NAME_ADMIN_COORPT = "Masukkan nama";
   static const String LABEL_FUNDS_WITHDRAW_COORPT = "Nominal Penarikan";
-  static const String INPUT_FUNDS_WITHDRAW_COORPT = "Masukkan Nominal yang akan ditarik";
-
-
+  static const String INPUT_FUNDS_WITHDRAW_COORPT =
+      "Masukkan Nominal yang akan ditarik";
 
   // Input Hint
   static const String HINT_USERNAME = "Masukan Username";
@@ -141,14 +140,15 @@ class AppConstants {
   static const String ACTION_NO = "Tidak";
   static const String ACTION_PENDING = "Pending";
   static const String ACTION_SUKSES = "Sukses";
-  static const String ACTION_FINISH = "Selesai";  
-  static const String ACTION_ACTIVE = "ACTIVE";  
-  static const String ACTION_CENCEL = "Batal";  
-  
+  static const String ACTION_FINISH = "Selesai";
+  static const String ACTION_ACTIVE = "ACTIVE";
+  static const String ACTION_CENCEL = "Batal";
+
   static const String ACTION_COOPERATIVE = "Koprasi";
   static const String ACTION_ORDER = "Pesanan";
   static const String ACTION_REPORT = "Laporan";
-  static const String ACTION_DETAIL_TIMBANGAN_SAMPAH = "Detail Timbangan Sampah";
+  static const String ACTION_DETAIL_TIMBANGAN_SAMPAH =
+      "Detail Timbangan Sampah";
 
   static const String ACTION_WITHDRAW_FUNDS = "Pengajuan Penarikan Dana";
   static const String ACTION_DETAIL_WITHDRAW_FUNDS = "Detail Pengajuan Dana";
@@ -157,10 +157,12 @@ class AppConstants {
   static const String LABEL_RIWAYAT_TRANSAKSI = "Riwayat Transaksi";
   static const String LABEL_DEPOSIT_TRASH_SUCCES = "Setor Sampah Berhasil!";
   static const String LABEL_REGISTER_SUCCES = "Register Berhasil!";
-  static const String LABEL_DELETE_DEPOSIT_TRASH_SUCCES = "Hapus Sampah Berhasil!";
+  static const String LABEL_DELETE_DEPOSIT_TRASH_SUCCES =
+      "Hapus Sampah Berhasil!";
   static const String LABEL_DELETE_QUESTION = "Apakah anda ingin menghapus?";
   static const String LABEL_PROCESS_ORDER = "Pesanan anda sedang diproses!";
-  static const String LABEL_WITHDRAW_FUNDS_QUESTION = "Apakah anda ingin menyetujuinya?";
+  static const String LABEL_WITHDRAW_FUNDS_QUESTION =
+      "Apakah anda ingin menyetujuinya?";
   static const String LABEL_SEE_HISTORY = "Lihat History";
   static const String LABEL_SEE_ORDER = "Lihat Pesanan";
 

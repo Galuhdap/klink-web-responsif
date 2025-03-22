@@ -9,6 +9,7 @@ import 'package:klinik_web_responsif/presentations/apotik/screen/obat_screen.dar
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/take_drug_screen.dart';
 import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
+import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stackholder_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
@@ -49,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ];
       case UserRole.pemilik:
         return [
-          const Center(child: Text('This is page 1')),
+          const StackholderScreen(),
           const UserManajemenScreen(),
           const RiwayatTransaksiScreen(),
         ];
