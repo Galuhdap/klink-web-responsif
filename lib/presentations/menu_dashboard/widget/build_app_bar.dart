@@ -1,13 +1,9 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:klinik_web_responsif/core/components/button_component.dart';
-import 'package:klinik_web_responsif/core/components/input_data_component.dart';
-import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
-import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 
 class BuildAppBar extends StatelessWidget {
   final String title;
@@ -19,24 +15,25 @@ class BuildAppBar extends StatelessWidget {
   final bool isMake;
   final VoidCallback? onTapButton;
   final String labelButton;
-  const BuildAppBar({
-    super.key,
-    required this.title,
-    this.withSearchInput = false,
-    this.searchController,
-    this.searchChanged,
-    this.searchHint = 'Cari di sini',
-    this.trailing,
-    this.isMake = false,
-    this.onTapButton,
-    this.labelButton = 'Daftar Pasien'
-  });
+
+  const BuildAppBar(
+      {super.key,
+      required this.title,
+      this.withSearchInput = false,
+      this.searchController,
+      this.searchChanged,
+      this.searchHint = 'Cari di sini',
+      this.trailing,
+      this.isMake = false,
+      this.onTapButton,
+      this.labelButton = 'Daftar Pasien'});
 
   @override
   Widget build(BuildContext context) {
     return Responsive.isMobile(context)
         ? Container(
-            padding: const EdgeInsets.all(27),
+            padding:
+                const EdgeInsets.only(left: 27, bottom: 21, right: 27, top: 27),
             decoration: const BoxDecoration(
               color: AppColors.colorBaseWhite,
             ),
@@ -55,9 +52,9 @@ class BuildAppBar extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Senin, 12 Februari 2024',
+                      DateTime.now().toDayDateeddmmmyyyyFormattedString(),
                       style: TextStyle(
-                        fontSize: Responsive.isMobile(context) ? 8 : 16,
+                        fontSize: Responsive.isMobile(context) ? 12 : 16,
                         color: AppColors.colorBaseBlack,
                       ),
                     ),
@@ -67,7 +64,8 @@ class BuildAppBar extends StatelessWidget {
             ),
           )
         : Container(
-            padding: const EdgeInsets.all(27),
+            padding:
+                const EdgeInsets.only(left: 27, bottom: 20, right: 27, top: 27),
             decoration: const BoxDecoration(
               color: AppColors.colorBaseWhite,
             ),
@@ -88,9 +86,9 @@ class BuildAppBar extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Senin, 12 Februari 2024',
+                        DateTime.now().toDayDateeddmmmyyyyFormattedString(),
                         style: TextStyle(
-                          fontSize: Responsive.isMobile(context) ? 8 : 16,
+                          fontSize: Responsive.isMobile(context) ? 8 : 13,
                           color: AppColors.colorBaseBlack,
                         ),
                       ),
@@ -99,7 +97,7 @@ class BuildAppBar extends StatelessWidget {
                 ),
                 isMake
                     ? InkWell(
-                        onTap:  onTapButton,
+                        onTap: onTapButton,
                         child: Container(
                           width: 134,
                           height: 41,

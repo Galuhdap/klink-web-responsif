@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesUtils {
-  static const SHARED_BOX = "BS";
+  static const SHARED_BOX = "SIM";
   static const SHARED_AUTH = "UserAuth";
   static const SHARED_AUTH_TOKEN = "AuthToken";
   static const SHARED_SETTING_ENUMERATOR = "SettingEnumerator";

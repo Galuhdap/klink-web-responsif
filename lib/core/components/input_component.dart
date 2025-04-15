@@ -24,6 +24,7 @@ class CustomTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
   final int maxLines;
+  final String? errorText;
 
   const CustomTextField(
       {Key? key,
@@ -44,6 +45,7 @@ class CustomTextField extends StatefulWidget {
       this.onChanged,
       this.inputFormatters,
       this.maxLines = 1,
+      this.errorText,
       this.readOnly = false})
       : _controller = controller,
         super(key: key);
@@ -80,6 +82,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         filled: true,
         fillColor: widget.fillColor,
         hintText: widget.hintText,
+        errorText: widget.errorText,
         //label: Text(label),
         hintStyle: widget.hintStyle ?? Get.textTheme.bodyMedium,
         prefixIcon: widget.prefixIcon,

@@ -12,6 +12,8 @@ class InputDataComponent extends StatelessWidget {
   final bool readOnly;
   final TextInputType textInputType;
   final int maxLines;
+  final String? Function(String?)? validator;
+  final String? errorText;
   const InputDataComponent({
     super.key,
     required this.label,
@@ -20,7 +22,8 @@ class InputDataComponent extends StatelessWidget {
     this.readOnly = false,
     this.textInputType = TextInputType.name,
     this.maxLines = 1,
-    
+    this.validator,
+    this.errorText,
   });
 
   @override
@@ -43,7 +46,8 @@ class InputDataComponent extends StatelessWidget {
           controller: controller,
           textInputType: textInputType,
           readOnly: readOnly,
-          // validator: emptyValidation,
+          validator: validator,
+          errorText: errorText,
         ),
         AppSizes.s12.height,
       ],

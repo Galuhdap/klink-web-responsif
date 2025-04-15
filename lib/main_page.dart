@@ -13,7 +13,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'SIM KLINIK C3',
-      initialRoute: AppRoutes.responsiveDashboard,
+      initialRoute: AppRoutes.splash,
       theme: ThemeConfig.lightMode,
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.routes,

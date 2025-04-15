@@ -1,3 +1,3 @@
 enum LabelDocterAktifStatus {
-  aktif, inaktif
+  ACTIVE, NON_ACTIVE
 }

@@ -6,16 +6,16 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 
 Color setStatusDoctorColorFill(LabelDocterAktifStatus labelDocterAktifStatus) {
   switch (labelDocterAktifStatus) {
-    case LabelDocterAktifStatus.aktif:
+    case LabelDocterAktifStatus.ACTIVE:
       return AppColors.colorMenungguFill;
-    case LabelDocterAktifStatus.inaktif:
+    case LabelDocterAktifStatus.NON_ACTIVE:
       return AppColors.colorDibatalkanFill;
   }
 }
 
 Widget setStatusNameDoctor(LabelDocterAktifStatus labelDocterAktifStatus) {
   switch (labelDocterAktifStatus) {
-    case LabelDocterAktifStatus.aktif:
+    case LabelDocterAktifStatus.ACTIVE:
       return Text(
         'Aktif',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -23,7 +23,7 @@ Widget setStatusNameDoctor(LabelDocterAktifStatus labelDocterAktifStatus) {
           color: AppColors.colorMenungguText,
         ),
       );
-    case LabelDocterAktifStatus.inaktif:
+    case LabelDocterAktifStatus.NON_ACTIVE:
       return Text(
         'Tidak Aktif',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -36,10 +36,10 @@ Widget setStatusNameDoctor(LabelDocterAktifStatus labelDocterAktifStatus) {
 
 extension InflationExt on String {
   LabelDocterAktifStatus get labelDocterAktifStatus {
-    if (this == 'aktif') {
-      return LabelDocterAktifStatus.aktif;
+    if (this == 'ACTIVE') {
+      return LabelDocterAktifStatus.ACTIVE;
     } else {
-      return LabelDocterAktifStatus.inaktif;
+      return LabelDocterAktifStatus.NON_ACTIVE;
     }
   }
 }

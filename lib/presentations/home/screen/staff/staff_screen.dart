@@ -437,7 +437,7 @@ class StaffScreen extends StatelessWidget {
                                                     itemBuilder: (context) => [
                                                       if (controller
                                                               .role.value ==
-                                                          'admin') ...[
+                                                          "ADMIN") ...[
                                                         PopupMenuItem(
                                                           child:
                                                               StatusAntrianComponent(
@@ -489,7 +489,7 @@ class StaffScreen extends StatelessWidget {
                                                       ),
                                                       if (controller
                                                               .role.value ==
-                                                          'docter') ...[
+                                                          "DOKTER") ...[
                                                         PopupMenuItem(
                                                           child: Center(
                                                             child: Text(

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/core/assets/assets.gen.dart';
 import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
+import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/obat_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/take_drug_screen.dart';
@@ -13,12 +14,12 @@ import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stack
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
+import 'package:klinik_web_responsif/routes/app_routes.dart';
 
 import '../widget/nav_item.dart';
 
 class DashboardScreen extends StatefulWidget {
   final UserRole userRole;
-
   const DashboardScreen({super.key, required this.userRole});
 
   @override
@@ -30,25 +31,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   List<Widget> get _pages {
     switch (widget.userRole) {
-      case UserRole.admin:
+      case UserRole.ADMIN:
         return [
           const StaffScreen(),
           const DataPatientScreen(),
           const DocterScreen(),
         ];
-      case UserRole.dokter:
+      case UserRole.DOKTER:
         return [
           const StaffScreen(),
           //const DataAntrianPasienDocterScreen(),
         ];
-      case UserRole.apotek:
+      case UserRole.APOTEKER:
         return [
           const StaffScreen(),
           const ObatScreen(),
           const TakeDrugScreen(),
           const RiwayatTransaksiScreen(),
         ];
-      case UserRole.pemilik:
+      case UserRole.PEMILIK:
         return [
           const StackholderScreen(),
           const UserManajemenScreen(),
@@ -90,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   List<Widget> _buildNavItems() {
     switch (widget.userRole) {
-      case UserRole.admin:
+      case UserRole.ADMIN:
         return [
           Column(
             children: [
@@ -112,13 +113,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
             bottom: 40,
           ),
         ];
-      case UserRole.dokter:
+      case UserRole.DOKTER:
         return [
           Column(
             children: [
@@ -135,13 +139,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
             bottom: 40,
           ),
         ];
-      case UserRole.apotek:
+      case UserRole.APOTEKER:
         return [
           Column(
             children: [
@@ -168,13 +175,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
             bottom: 40,
           ),
         ];
-      case UserRole.pemilik:
+      case UserRole.PEMILIK:
         return [
           Column(
             children: [
@@ -196,7 +206,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
             bottom: 40,

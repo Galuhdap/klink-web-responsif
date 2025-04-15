@@ -117,6 +117,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/transaksi.svg
   SvgGenImage get transaksi => const SvgGenImage('assets/icons/transaksi.svg');
 
+  /// File path: assets/icons/🦆 icon _security pass_.svg
+  SvgGenImage get aIconSecurityPass =>
+      const SvgGenImage('assets/icons/🦆 icon _security pass_.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
     logOut,
@@ -140,6 +144,7 @@ class $AssetsIconsGen {
     success,
     tandaTanya,
     transaksi,
+    aIconSecurityPass,
   ];
 }
 
@@ -184,12 +189,23 @@ class $AssetsImagesGen {
   ];
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/hospital.json
+  String get hospital => 'assets/lottie/hospital.json';
+
+  /// List of all assets
+  List<String> get values => [hospital];
+}
+
 class Assets {
   const Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
 }
 
 class AssetGenImage {

@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
         return Scaffold(
           body: Center(
               child: Container(
-            width: Responsive.isMobile(context) ? 400 : 400,
+            width: Responsive.isDesktop(context) ? 400 : 400,
             height: 300,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -54,14 +54,24 @@ class LoginScreen extends StatelessWidget {
                         suffixIcon: true,
                       ),
                       AppSizes.s36.height,
-                      Button.filled(
-                        onPressed: () {
-                          if (controller.formKey.currentState!.validate()) {
-                            // controller.userLogin();
-                          }
-                        },
-                        label: AppConstants.ACTION_LOGIN,
-                      ),
+                      Obx(() {
+                        return controller.isloadingLogin.value
+                            ? Center(
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : Button.filled(
+                                onPressed: () {
+                                  if (controller.formKey.currentState!
+                                      .validate()) {
+                                    controller.userLogin();
+                                  }
+                                },
+                                label: AppConstants.ACTION_LOGIN);
+                      }),
                     ],
                   ),
                 ),

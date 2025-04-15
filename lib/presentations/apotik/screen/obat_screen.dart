@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:klinik_web_responsif/core/components/button_component.dart';
 import 'package:klinik_web_responsif/core/components/input_data_component.dart';
-import 'package:klinik_web_responsif/core/components/modal/show_modal_tanda_tanya_componenet.dart';
+import 'package:klinik_web_responsif/core/components/modal/show_modal_tanda_tanya_component.dart';
 import 'package:klinik_web_responsif/core/components/popup_menu_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
 import 'package:klinik_web_responsif/core/components/show_bottom_dialog.dart';
@@ -47,8 +46,6 @@ class ObatScreen extends StatelessWidget {
                 //       .add(const DataPatientsEvent.getPatients());
                 // }
               },
-              isMake: true,
-              labelButton: 'Tambah Obat',
               onTapButton: () {
                 showModalCenter(
                   context,
@@ -83,7 +80,7 @@ class ObatScreen extends StatelessWidget {
                           AppSizes.s12.height,
                           InkWell(
                             onTap: () async {
-                              //final DateTime? pickedDate = 
+                              //final DateTime? pickedDate =
                               await showDatePicker(
                                 context: context,
                                 initialDate: DateTime(2021, 7, 25),
@@ -352,30 +349,30 @@ class ObatScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        AppSizes.s17.width,
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(AppSizes.s4),
-                            border: Border.all(color: Color(0xfffF0F0F0)),
-                            color: AppColors.colorBaseWhite,
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(0, 0),
-                                blurRadius: 15,
-                                spreadRadius: 0,
-                                color: AppColors.colorNeutrals300.withAlpha(40),
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Iconsax.filter,
-                              color: AppColors.colorSecondary500,
-                            ),
-                          ),
-                        ),
+                        // AppSizes.s17.width,
+                        // Container(
+                        //   width: 50,
+                        //   height: 50,
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(AppSizes.s4),
+                        //     border: Border.all(color: Color(0xfffF0F0F0)),
+                        //     color: AppColors.colorBaseWhite,
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //         offset: const Offset(0, 0),
+                        //         blurRadius: 15,
+                        //         spreadRadius: 0,
+                        //         color: AppColors.colorNeutrals300.withAlpha(40),
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   child: Center(
+                        //     child: Icon(
+                        //       Iconsax.filter,
+                        //       color: AppColors.colorSecondary500,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],

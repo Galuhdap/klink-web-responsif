@@ -2,7 +2,7 @@ name: klinik_web_responsif
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -48,7 +48,12 @@ dependencies:
   dropdown_search: ^6.0.2
   drop_down_search_field: ^1.1.2+2
   syncfusion_flutter_charts: ^28.2.12
-  
+  jwt_decoder: ^2.0.1
+  number_paginator: ^1.1.0
+  lottie: ^3.3.1
+  qr_flutter: ^4.1.0
+  whatsapp_unilink: ^2.1.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -73,7 +78,6 @@ flutter_gen:
     flutter_svg: true
 
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -113,6 +117,7 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/icons/
+    - assets/lottie/
 
   fonts:
     - family: PlusJakartaSans

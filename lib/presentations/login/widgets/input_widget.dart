@@ -18,6 +18,7 @@ class InputWidget extends StatelessWidget {
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
   final int maxLines;
+  final String? errorText;
 
   const InputWidget({
     super.key,
@@ -33,6 +34,7 @@ class InputWidget extends StatelessWidget {
     this.onChanged,
     this.inputFormatters,
     this.maxLines = 1,
+    this.errorText,
   });
 
   @override
@@ -56,6 +58,7 @@ class InputWidget extends StatelessWidget {
           isObscure: isObscure,
           suffixIcon: suffixIcon,
           readOnly: readOnly!,
+          errorText: errorText,
           hintStyle: Get.textTheme.bodySmall!.copyWith(
             fontSize: AppSizes.s14,
             color: AppColors.colorNeutrals400,

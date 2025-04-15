@@ -33,7 +33,7 @@ class SuccesPaymentWidget extends StatelessWidget {
       children: [
         AppSizes.s25.height,
         SvgPicture.asset(
-          Assets.icons.succes.path,
+          Assets.icons.success.path,
           width: Responsive.isMobile(context) ? AppSizes.s80 : AppSizes.s100,
         ),
         AppSizes.s20.height,

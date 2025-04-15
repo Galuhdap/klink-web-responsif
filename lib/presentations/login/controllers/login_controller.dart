@@ -1,66 +1,70 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:klinik_web_responsif/core/components/message_component.dart';
+import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
+import 'package:klinik_web_responsif/di/application_module.dart';
+import 'package:klinik_web_responsif/routes/app_routes.dart';
+import 'package:klinik_web_responsif/services/auth/auth_repository.dart';
+import 'package:klinik_web_responsif/services/auth/model/request/login_request.dart';
 
 class LoginController extends GetxController {
   var isBusy = false.obs;
 
-  //final AuthRepository authRepository = locator();
+  final AuthRepository authRepository = locator();
+
   final formKey = GlobalKey<FormState>();
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final userController = TextEditingController();
-  final newPasswordController = TextEditingController();
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController noKtpController = TextEditingController();
-  final TextEditingController alamatController = TextEditingController();
-  final TextEditingController usernamesController = TextEditingController();
-  final TextEditingController passwordsController = TextEditingController();
-  final TextEditingController telpController = TextEditingController();
-
   RxBool isloadingLogin = false.obs;
   RxBool isloadingForgotPassword = false.obs;
   RxBool isLoadingAddUser = false.obs;
 
-  // Future<void> userLogin() async {
-  //   isloadingLogin.value = true;
-  //   try {
-  //     FocusManager.instance.primaryFocus?.unfocus();
+    @override
+  void onInit() {
+    super.onInit();
+  }
 
-  //     final userData = LoginRequest(
-  //         username: usernameController.text, password: passwordController.text);
-  //     var response = await authRepository.loginUser(userData);
+  Future<void> userLogin() async {
+    isloadingLogin.value = true;
+    try {
+      FocusManager.instance.primaryFocus?.unfocus();
 
-  //     response.fold(
-  //       (failure) {
-  //         MessageComponent.snackbar(
-  //             title: '${failure.code}',
-  //             message: failure.message,
-  //             isError: true);
-  //       },
-  //       (response) async {
-  //         await SharedPreferencesUtils.addUser(jsonEncode(response.toJson()));
-  //         await SharedPreferencesUtils.addAuthToken(response.data.accessToken);
+      final userData = LoginRequest(
+          username: usernameController.text, password: passwordController.text);
+      var response = await authRepository.loginUser(userData);
 
-  //         Get.offAllNamed(AppRoutes.home);
-  //       },
-  //     );
+      response.fold(
+        (failure) {
+          MessageComponent.snackbar(
+              title: '${failure.code}',
+              message: '',
+              //message: failure.message,
+              isError: true);
+        },
+        (response) async {
+          await SharedPreferencesUtils.addUser(jsonEncode(response.toJson()));
+          await SharedPreferencesUtils.addAuthToken(response.data.token);
 
-  //     Future.delayed(
-  //       Duration(seconds: 1),
-  //       () {
-  //         isloadingLogin.value = false;
-  //       },
-  //     );
-  //   } catch (e) {
-  //     print('e:$e');
-  //     isloadingLogin.value = false;
-  //   }
-  // }
+          Get.offAllNamed(AppRoutes.responsiveDashboard);
+        },
+      );
+
+      Future.delayed(
+        Duration(seconds: 1),
+        () {
+          isloadingLogin.value = false;
+        },
+      );
+    } catch (e) {
+      print('e:$e');
+      isloadingLogin.value = false;
+    }
+  }
+
+
 
   // Future<void> forgotPassword() async {
   //   isloadingForgotPassword.value = true;

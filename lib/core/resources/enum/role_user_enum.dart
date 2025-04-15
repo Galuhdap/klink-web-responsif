@@ -1,1 +1,1 @@
-enum UserRole { admin, dokter, apotek, pemilik }
+enum UserRole { ADMIN, DOKTER, APOTEKER, PEMILIK }

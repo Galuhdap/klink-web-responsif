@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:klinik_web_responsif/core/components/button_component.dart';
 import 'package:klinik_web_responsif/core/components/input_data_component.dart';
 import 'package:klinik_web_responsif/core/components/popup_menu_component.dart';
@@ -62,7 +61,7 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppConstants.LABEL_RIWAYAT_TRANSAKSI,
+                      AppConstants.LABEL_RIWAYAT,
                       style: Get.textTheme.labelMedium!.copyWith(
                           fontSize: AppSizes.s20,
                           color: AppColors.colorBaseBlack,
@@ -96,30 +95,30 @@ class RiwayatTransaksiScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        AppSizes.s17.width,
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(AppSizes.s4),
-                            border: Border.all(color: Color(0xfffF0F0F0)),
-                            color: AppColors.colorBaseWhite,
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(0, 0),
-                                blurRadius: 15,
-                                spreadRadius: 0,
-                                color: AppColors.colorNeutrals300.withAlpha(40),
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Iconsax.filter,
-                              color: AppColors.colorSecondary500,
-                            ),
-                          ),
-                        ),
+                        // AppSizes.s17.width,
+                        // Container(
+                        //   width: 50,
+                        //   height: 50,
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(AppSizes.s4),
+                        //     border: Border.all(color: Color(0xfffF0F0F0)),
+                        //     color: AppColors.colorBaseWhite,
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //         offset: const Offset(0, 0),
+                        //         blurRadius: 15,
+                        //         spreadRadius: 0,
+                        //         color: AppColors.colorNeutrals300.withAlpha(40),
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   child: Center(
+                        //     child: Icon(
+                        //       Iconsax.filter,
+                        //       color: AppColors.colorSecondary500,
+                        //     ),
+                        //   ),
+                        // ),
                         if (Responsive.isDesktop(context)) ...[
                           AppSizes.s17.width,
                           Container(

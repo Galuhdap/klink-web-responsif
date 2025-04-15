@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
+import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/obat_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/take_drug_screen.dart';
@@ -11,6 +13,7 @@ import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_scree
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/nav_item.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
+import 'package:klinik_web_responsif/routes/app_routes.dart';
 
 import '../../../core/assets/assets.gen.dart';
 
@@ -27,25 +30,25 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
 
   List<Widget> get _pages {
     switch (widget.userRole) {
-      case UserRole.admin:
+      case UserRole.ADMIN:
         return [
           const StaffScreen(),
           const DataPatientScreen(),
           const DocterScreen(),
         ];
-      case UserRole.dokter:
+      case UserRole.DOKTER:
         return [
           const StaffScreen(),
           //const DataAntrianPasienDocterScreen(),
         ];
-      case UserRole.apotek:
+      case UserRole.APOTEKER:
         return [
           const StaffScreen(),
           const ObatScreen(),
           const TakeDrugScreen(),
           const RiwayatTransaksiScreen(),
         ];
-      case UserRole.pemilik:
+      case UserRole.PEMILIK:
         return [
           const StackholderScreen(),
           const UserManajemenScreen(),
@@ -88,7 +91,7 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
 
   List<Widget> _buildNavItems() {
     switch (widget.userRole) {
-      case UserRole.admin:
+      case UserRole.ADMIN:
         return [
           NavItem(
             iconPath: Assets.icons.rsDashboard.path,
@@ -106,11 +109,14 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
             onTap: () => _onItemTapped(2),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           )
         ];
-      case UserRole.dokter:
+      case UserRole.DOKTER:
         return [
           NavItem(
             iconPath: Assets.icons.rsDashboard.path,
@@ -123,11 +129,14 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
           //   onTap: () => _onItemTapped(1),
           // ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           )
         ];
-      case UserRole.apotek:
+      case UserRole.APOTEKER:
         return [
           NavItem(
             iconPath: Assets.icons.rsDashboard.path,
@@ -150,11 +159,14 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
             onTap: () => _onItemTapped(3),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           )
         ];
-      case UserRole.pemilik:
+      case UserRole.PEMILIK:
         return [
           NavItem(
             iconPath: Assets.icons.rsDashboard.path,
@@ -172,7 +184,10 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
             onTap: () => _onItemTapped(2),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await SharedPreferencesUtils.deleteAuthToken();
+              Get.offAllNamed(AppRoutes.login);
+            },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           )
         ];

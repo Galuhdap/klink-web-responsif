@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
-import 'package:klinik_web_responsif/core/components/button_component.dart';
 import 'package:klinik_web_responsif/core/components/card_dashboard_component.dart';
-import 'package:klinik_web_responsif/core/components/label_status_antrian_component.dart';
-import 'package:klinik_web_responsif/core/components/search_new_component.dart';
-import 'package:klinik_web_responsif/core/components/status_antrian_component.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
@@ -17,7 +9,6 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
-import 'package:klinik_web_responsif/routes/app_routes.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StackholderScreen extends StatefulWidget {

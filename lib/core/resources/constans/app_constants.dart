@@ -26,7 +26,7 @@ class AppConstants {
   static const String LABEL_DATA_PASIEN = "Data Pasien";
   static const String LABEL_DATA_ANTRIAN = "Data Antrian Pasien";
 
-  static const String LABEL_DAFTAR_REKAM_MEDIS = "Daftar Rekam Medis";
+  static const String LABEL_DAFTAR_REKAM_MEDIS = "Rekam Medis";
   static const String LABEL_JADWAL_PERIKSA = "Jadwal Periksa";
   static const String LABEL_KELUHAN = "Keluhan";
   static const String LABEL_TERAPI_TINDAKAN = "Terapi / Tindakan";
@@ -99,7 +99,7 @@ class AppConstants {
   static const String LABEL_WEIGHT_TRASH = "Berat Sampah";
   static const String LABEL_PRICEs_TRASH = "Harga Sampah";
   static const String LABEL_BACK = "Kembali";
-  static const String LABEL_NOs = "Tidak";
+  static const String LABEL_NOS = "Tidak";
   static const String LABEL_YES = "Ya";
 
   static const String LABEL_WITHDRAW_FUNDS = "Penarikan Dana";
@@ -154,7 +154,7 @@ class AppConstants {
   static const String ACTION_DETAIL_WITHDRAW_FUNDS = "Detail Pengajuan Dana";
 
   // History
-  static const String LABEL_RIWAYAT_TRANSAKSI = "Riwayat Transaksi";
+  static const String LABEL_RIWAYAT = "Riwayat Transaksi";
   static const String LABEL_DEPOSIT_TRASH_SUCCES = "Setor Sampah Berhasil!";
   static const String LABEL_REGISTER_SUCCES = "Register Berhasil!";
   static const String LABEL_DELETE_DEPOSIT_TRASH_SUCCES =
@@ -172,7 +172,7 @@ class AppConstants {
   static const String LABEL_BERANDA = "Beranda";
 
   //Status
-
+  static const String LABEL_PENDINGS = "Pending";
   static const String LABEL_COMPLETE = "Complete";
 
   //Profile
