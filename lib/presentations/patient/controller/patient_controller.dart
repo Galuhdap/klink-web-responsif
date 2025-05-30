@@ -9,6 +9,7 @@ import 'package:klinik_web_responsif/services/pasien/model/request/post_pasient_
 import 'package:klinik_web_responsif/services/pasien/model/response/get_pasien_by_id_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_pasien_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/post_pasien_response.dart';
+import 'package:klinik_web_responsif/services/pasien/model/response/put_antrian_pasien_response.dart';
 import 'package:klinik_web_responsif/services/pasien/pasien_repository.dart';
 
 class PatientController extends GetxController {
@@ -27,11 +28,15 @@ class PatientController extends GetxController {
   RxList<ListPasien> pasienList = <ListPasien>[].obs;
   Rx<DataPasien?> dataPasien = Rx<DataPasien?>(null);
   Rx<PostPasienResponse?> createPasien = Rx<PostPasienResponse?>(null);
+
   Rx<Failures?> errorCreatePasien = Rx<Failures?>(null);
+  Rx<PutAntrianPasienResponse?> postPasiens =
+      Rx<PutAntrianPasienResponse?>(null);
 
   RxBool isLoading = false.obs;
   RxBool isLoadingId = false.obs;
   RxBool isLoadingCreate = false.obs;
+  RxBool isPostLoading = false.obs;
   RxBool readOnly = true.obs;
   RxInt numberOfPage = 1.obs;
 
@@ -42,6 +47,7 @@ class PatientController extends GetxController {
   void onInit() {
     super.onInit();
     getPasien();
+    // getStatisticTotalPasien();
     //getPasienById();
   }
 
@@ -70,15 +76,20 @@ class PatientController extends GetxController {
   Future<void> getPasien({
     int page = 1,
     int limit = 10,
-    String search = '',
+    String name = '',
+    String nik = '',
+    String umur = '',
+    String norme = '',
   }) async {
     isLoading.value = true;
     try {
       final response = await pasienRepository.getPasien(
-        page: page,
-        limit: limit,
-        search: search,
-      );
+          page: page,
+          limit: limit,
+          name: name,
+          nik: nik,
+          umur: umur,
+          norme: norme);
 
       response.fold(
         (failure) {
@@ -89,8 +100,6 @@ class PatientController extends GetxController {
 
           pasienList.addAll(response.data.data);
           numberOfPage.value = response.data.pagination.totalPages;
-
-          // balanceCustomer.value = response.data;
         },
       );
       isLoading.value = false;
@@ -111,10 +120,7 @@ class PatientController extends GetxController {
         },
         (response) async {
           inspect(response.data);
-          print(response.data);
           dataPasien.value = response.data;
-
-          // dataPasienId.addAll(response.data);
         },
       );
       isLoadingId.value = false;
@@ -134,7 +140,6 @@ class PatientController extends GetxController {
         tglLahir: tglLahirController.value,
         nik: nikController.text,
         noTelp: noTelpController.text,
-        // umur: umurController.text,
       );
       final response = await pasienRepository.postPasien(data);
 
@@ -169,6 +174,7 @@ class PatientController extends GetxController {
         (response) async {
           inspect(response.data);
           createPasien.value = response;
+          await postAntrianPasien(response.data.id);
           nameController.clear();
           jenisKelaminController.value = '';
           alamatController.clear();
@@ -179,8 +185,7 @@ class PatientController extends GetxController {
           await Future.delayed(Duration(seconds: 3));
           getPasien();
           isLoadingCreate.value = false;
-          Get.back();
-          Get.snackbar(
+                   Get.snackbar(
             "Berhasil Mendaftar Pasien",
             '',
             snackPosition: SnackPosition.TOP,
@@ -206,7 +211,6 @@ class PatientController extends GetxController {
         tglLahir: tglLahirController.value,
         nik: nikController.text,
         noTelp: noTelpController.text,
-        // umur: umurController.text,
       );
       final response = await pasienRepository.putPasien(data, id);
 
@@ -260,6 +264,41 @@ class PatientController extends GetxController {
             colorText: Colors.white,
             duration: Duration(seconds: 5),
           );
+        },
+      );
+    } catch (e) {
+      print('e:$e');
+      isLoadingCreate.value = false;
+    }
+  }
+
+  Future<void> postAntrianPasien(String id) async {
+    isLoadingCreate.value = true;
+    try {
+      final response = await pasienRepository.postAntrianPasien(id);
+
+      response.fold(
+        (failures) async {
+          inspect(failures);
+          await Future.delayed(Duration(seconds: 3));
+
+          isLoadingCreate.value = false;
+          Get.back();
+        },
+        (response) async {
+          //  inspect(response.data);
+          postPasiens.value = response;
+          await Future.delayed(Duration(seconds: 3));
+          isLoadingCreate.value = false;
+          // Get.back();
+          // Get.snackbar(
+          //   "Pasien",
+          //   'Pasien Sedang Dalam Pemeriksaan Oleh Dokter',
+          //   snackPosition: SnackPosition.TOP,
+          //   backgroundColor: AppColors.colorBaseSuccess,
+          //   colorText: Colors.white,
+          //   duration: Duration(seconds: 5),
+          // );
         },
       );
     } catch (e) {

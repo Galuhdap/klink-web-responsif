@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/core/components/button_component.dart';
 import 'package:klinik_web_responsif/core/components/input_data_component.dart';
-import 'package:klinik_web_responsif/core/components/modal/show_modal_tanda_tanya_component.dart';
 import 'package:klinik_web_responsif/core/components/popup_menu_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
 import 'package:klinik_web_responsif/core/components/show_bottom_dialog.dart';
@@ -83,7 +82,7 @@ class DocterScreen extends StatelessWidget {
                               ],
                             ),
                             child: SearchNewComponent(
-                              controller: TextEditingController(),
+                              controller: controller.searchController,
                               keyboardType: TextInputType.name,
                               hintText: AppConstants.LABEL_CARI,
                               suffixIcon: const Icon(
@@ -91,7 +90,28 @@ class DocterScreen extends StatelessWidget {
                                 color: AppColors.colorSecondary500,
                               ),
                               onChanged: (value) {
-                                controller.getDoctor(search: value);
+                                final input = value.trim();
+                                final parts = input
+                                    .split(',')
+                                    .map((e) => e.trim())
+                                    .toList();
+
+                                String name = '';
+                                String nik = '';
+
+                                for (var part in parts) {
+                                  if (RegExp(r'^\d{16}$').hasMatch(part)) {
+                                    nik = part;
+                                  } else {
+                                    name += '$part ';
+                                  }
+                                }
+
+                                name = name.trim();
+                                controller.getDoctor(
+                                  name: name.isNotEmpty ? name : '',
+                                  nik: nik.isNotEmpty ? nik : '',
+                                );
                               },
                             ),
                           ),
@@ -238,26 +258,26 @@ class DocterScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              DataColumn(
-                                                label: Padding(
-                                                  padding: EdgeInsets.only(
-                                                    left: MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                        0.05,
-                                                  ),
-                                                  child: Text(
-                                                    AppConstants.LABEL_STATUS,
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s14,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                ),
-                                              ),
+                                              // DataColumn(
+                                              //   label: Padding(
+                                              //     padding: EdgeInsets.only(
+                                              //       left: MediaQuery.of(context)
+                                              //               .size
+                                              //               .width *
+                                              //           0.05,
+                                              //     ),
+                                              //     child: Text(
+                                              //       AppConstants.LABEL_STATUS,
+                                              //       style: Get
+                                              //           .textTheme.labelLarge!
+                                              //           .copyWith(
+                                              //               fontSize:
+                                              //                   AppSizes.s14,
+                                              //               color: AppColors
+                                              //                   .colorBaseBlack),
+                                              //     ),
+                                              //   ),
+                                              // ),
                                               DataColumn(
                                                 label: Padding(
                                                   padding: EdgeInsets.only(
@@ -423,24 +443,24 @@ class DocterScreen extends StatelessWidget {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              DataCell(
-                                                                Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .only(
-                                                                    left: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.03,
-                                                                  ),
-                                                                  child:
-                                                                      StatusDoctorAktifComponent(
-                                                                    status: doctor
-                                                                        .statusDokter
-                                                                        .status,
-                                                                  ),
-                                                                ),
-                                                              ),
+                                                              // DataCell(
+                                                              //   Padding(
+                                                              //     padding:
+                                                              //         EdgeInsets
+                                                              //             .only(
+                                                              //       left: MediaQuery.of(context)
+                                                              //               .size
+                                                              //               .width *
+                                                              //           0.03,
+                                                              //     ),
+                                                              //     child:
+                                                              //         StatusDoctorAktifComponent(
+                                                              //       status: doctor
+                                                              //           .statusDokter
+                                                              //           .status,
+                                                              //     ),
+                                                              //   ),
+                                                              // ),
                                                               DataCell(
                                                                 Padding(
                                                                   padding:
@@ -539,27 +559,27 @@ class DocterScreen extends StatelessWidget {
                                                                                             ),
                                                                                           ),
                                                                                         ),
-                                                                                        InkWell(
-                                                                                          onTap: () {
-                                                                                            showModalCenter(
-                                                                                              context,
-                                                                                              ShowModalTandaTanyaComponent(
-                                                                                                label: 'Apakah anda yakin ingin menghapus data Farhan ?',
-                                                                                                onTapNo: () {
-                                                                                                  Get.back();
-                                                                                                },
-                                                                                                onTapYes: () {},
-                                                                                              ),
-                                                                                            );
-                                                                                          },
-                                                                                          child: Text(
-                                                                                            'Hapus',
-                                                                                            style: Get.textTheme.labelLarge!.copyWith(
-                                                                                              fontSize: AppSizes.s14,
-                                                                                              color: AppColors.colorBaseBlack,
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
+                                                                                        // InkWell(
+                                                                                        //   onTap: () {
+                                                                                        //     showModalCenter(
+                                                                                        //       context,
+                                                                                        //       ShowModalTandaTanyaComponent(
+                                                                                        //         label: 'Apakah anda yakin ingin menghapus data Farhan ?',
+                                                                                        //         onTapNo: () {
+                                                                                        //           Get.back();
+                                                                                        //         },
+                                                                                        //         onTapYes: () {},
+                                                                                        //       ),
+                                                                                        //     );
+                                                                                        //   },
+                                                                                        //   child: Text(
+                                                                                        //     'Hapus',
+                                                                                        //     style: Get.textTheme.labelLarge!.copyWith(
+                                                                                        //       fontSize: AppSizes.s14,
+                                                                                        //       color: AppColors.colorBaseBlack,
+                                                                                        //     ),
+                                                                                        //   ),
+                                                                                        // ),
                                                                                       ],
                                                                                     ).paddingOnly(
                                                                                       left: AppSizes.s24,
@@ -649,26 +669,26 @@ class DocterScreen extends StatelessWidget {
                                                                                   );
                                                                                 },
                                                                               ),
-                                                                              PopupMenuItem(
-                                                                                child: PopupMenuActionComponent(
-                                                                                  label: 'Hapus',
-                                                                                ),
-                                                                                value: () {
-                                                                                  debugPrint('Hapus');
-                                                                                },
-                                                                                onTap: () {
-                                                                                  showModalCenter(
-                                                                                    context,
-                                                                                    ShowModalTandaTanyaComponent(
-                                                                                      label: 'Apakah anda yakin ingin menghapus data Dokter ?',
-                                                                                      onTapNo: () {
-                                                                                        Get.back();
-                                                                                      },
-                                                                                      onTapYes: () {},
-                                                                                    ),
-                                                                                  );
-                                                                                },
-                                                                              ),
+                                                                              // PopupMenuItem(
+                                                                              //   child: PopupMenuActionComponent(
+                                                                              //     label: 'Hapus',
+                                                                              //   ),
+                                                                              //   value: () {
+                                                                              //     debugPrint('Hapus');
+                                                                              //   },
+                                                                              //   onTap: () {
+                                                                              //     showModalCenter(
+                                                                              //       context,
+                                                                              //       ShowModalTandaTanyaComponent(
+                                                                              //         label: 'Apakah anda yakin ingin menghapus data Dokter ?',
+                                                                              //         onTapNo: () {
+                                                                              //           Get.back();
+                                                                              //         },
+                                                                              //         onTapYes: () {},
+                                                                              //       ),
+                                                                              //     );
+                                                                              //   },
+                                                                              // ),
                                                                             ],
                                                                           ),
                                                                         ),

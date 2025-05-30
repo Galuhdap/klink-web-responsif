@@ -81,17 +81,20 @@ class Data {
 class RmeData {
     final String id;
     final DateTime jadwalPeriksa;
+    final String idPasien;
     final String namaPasien;
     final String noRekamMedis;
     final String keluhan;
     final String terapiTindakan;
     final String dx;
     final int total;
-    final List<DataObat> obat;
+    final List<Obat> obat;
+    final User user;
 
     RmeData({
         required this.id,
         required this.jadwalPeriksa,
+        required this.idPasien,
         required this.namaPasien,
         required this.noRekamMedis,
         required this.keluhan,
@@ -99,22 +102,26 @@ class RmeData {
         required this.dx,
         required this.total,
         required this.obat,
+        required this.user,
     });
 
     RmeData copyWith({
         String? id,
         DateTime? jadwalPeriksa,
+        String? idPasien,
         String? namaPasien,
         String? noRekamMedis,
         String? keluhan,
         String? terapiTindakan,
         String? dx,
         int? total,
-        List<DataObat>? obat,
+        List<Obat>? obat,
+        User? user,
     }) => 
         RmeData(
             id: id ?? this.id,
             jadwalPeriksa: jadwalPeriksa ?? this.jadwalPeriksa,
+            idPasien: idPasien ?? this.idPasien,
             namaPasien: namaPasien ?? this.namaPasien,
             noRekamMedis: noRekamMedis ?? this.noRekamMedis,
             keluhan: keluhan ?? this.keluhan,
@@ -122,23 +129,27 @@ class RmeData {
             dx: dx ?? this.dx,
             total: total ?? this.total,
             obat: obat ?? this.obat,
+            user: user ?? this.user,
         );
 
     factory RmeData.fromJson(Map<String, dynamic> json) => RmeData(
         id: json["id"],
         jadwalPeriksa: DateTime.parse(json["jadwal_periksa"]),
+        idPasien: json["id_pasien"],
         namaPasien: json["nama_pasien"],
         noRekamMedis: json["no_rekam_medis"],
         keluhan: json["keluhan"],
         terapiTindakan: json["terapi_tindakan"],
         dx: json["dx"],
         total: json["total"],
-        obat: List<DataObat>.from(json["obat"].map((x) => DataObat.fromJson(x))),
+        obat: List<Obat>.from(json["obat"].map((x) => Obat.fromJson(x))),
+        user: User.fromJson(json["user"]),
     );
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "jadwal_periksa": "${jadwalPeriksa.year.toString().padLeft(4, '0')}-${jadwalPeriksa.month.toString().padLeft(2, '0')}-${jadwalPeriksa.day.toString().padLeft(2, '0')}",
+        "jadwal_periksa": jadwalPeriksa.toIso8601String(),
+        "id_pasien": idPasien,
         "nama_pasien": namaPasien,
         "no_rekam_medis": noRekamMedis,
         "keluhan": keluhan,
@@ -146,45 +157,51 @@ class RmeData {
         "dx": dx,
         "total": total,
         "obat": List<dynamic>.from(obat.map((x) => x.toJson())),
+        "user": user.toJson(),
     };
 }
 
-class DataObat {
+class Obat {
     final String id;
     final String namaObat;
     final DateTime tglKadaluarsa;
     final int stock;
     final String statusObat;
+    final int qty;
 
-    DataObat({
+    Obat({
         required this.id,
         required this.namaObat,
         required this.tglKadaluarsa,
         required this.stock,
         required this.statusObat,
+        required this.qty,
     });
 
-    DataObat copyWith({
+    Obat copyWith({
         String? id,
         String? namaObat,
         DateTime? tglKadaluarsa,
         int? stock,
         String? statusObat,
+        int? qty,
     }) => 
-        DataObat(
+        Obat(
             id: id ?? this.id,
             namaObat: namaObat ?? this.namaObat,
             tglKadaluarsa: tglKadaluarsa ?? this.tglKadaluarsa,
             stock: stock ?? this.stock,
             statusObat: statusObat ?? this.statusObat,
+            qty: qty ?? this.qty,
         );
 
-    factory DataObat.fromJson(Map<String, dynamic> json) => DataObat(
+    factory Obat.fromJson(Map<String, dynamic> json) => Obat(
         id: json["id"],
         namaObat: json["nama_obat"],
         tglKadaluarsa: DateTime.parse(json["tgl_kadaluarsa"]),
         stock: json["stock"],
         statusObat: json["status_obat"],
+        qty: json["qty"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -193,6 +210,42 @@ class DataObat {
         "tgl_kadaluarsa": "${tglKadaluarsa.year.toString().padLeft(4, '0')}-${tglKadaluarsa.month.toString().padLeft(2, '0')}-${tglKadaluarsa.day.toString().padLeft(2, '0')}",
         "stock": stock,
         "status_obat": statusObat,
+        "qty": qty,
+    };
+}
+
+class User {
+    final String name;
+    final String email;
+    final String noTelp;
+
+    User({
+        required this.name,
+        required this.email,
+        required this.noTelp,
+    });
+
+    User copyWith({
+        String? name,
+        String? email,
+        String? noTelp,
+    }) => 
+        User(
+            name: name ?? this.name,
+            email: email ?? this.email,
+            noTelp: noTelp ?? this.noTelp,
+        );
+
+    factory User.fromJson(Map<String, dynamic> json) => User(
+        name: json["name"],
+        email: json["email"],
+        noTelp: json["no_telp"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "name": name,
+        "email": email,
+        "no_telp": noTelp,
     };
 }
 

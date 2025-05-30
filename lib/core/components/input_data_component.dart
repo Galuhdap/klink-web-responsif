@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
@@ -14,17 +15,20 @@ class InputDataComponent extends StatelessWidget {
   final int maxLines;
   final String? Function(String?)? validator;
   final String? errorText;
-  const InputDataComponent({
-    super.key,
-    required this.label,
-    required this.hintText,
-    required this.controller,
-    this.readOnly = false,
-    this.textInputType = TextInputType.name,
-    this.maxLines = 1,
-    this.validator,
-    this.errorText,
-  });
+  final Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+  const InputDataComponent(
+      {super.key,
+      required this.label,
+      required this.hintText,
+      required this.controller,
+      this.readOnly = false,
+      this.textInputType = TextInputType.name,
+      this.maxLines = 1,
+      this.validator,
+      this.errorText,
+      this.onChanged,
+      this.inputFormatters});
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,8 @@ class InputDataComponent extends StatelessWidget {
           readOnly: readOnly,
           validator: validator,
           errorText: errorText,
+          onChanged: onChanged,
+          inputFormatters: inputFormatters,
         ),
         AppSizes.s12.height,
       ],

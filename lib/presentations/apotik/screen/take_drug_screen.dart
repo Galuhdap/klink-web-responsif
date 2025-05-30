@@ -127,6 +127,7 @@ class TakeDrugScreen extends StatelessWidget {
                         // ),
                       ],
                     ),
+                    
                   ],
                 ),
               ),
@@ -203,7 +204,7 @@ class TakeDrugScreen extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                              rows: controller.patient.isEmpty
+                              rows: controller.medicineList.isEmpty
                                   ? [
                                       const DataRow(
                                         cells: [
@@ -244,14 +245,14 @@ class TakeDrugScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ]
-                                  : controller.patient
+                                  : controller.medicineList
                                       .map(
                                         (patient) => DataRow(
                                           cells: [
                                             DataCell(
                                               Center(
                                                 child: Text(
-                                                  patient["nomor_antrian"],
+                                                  patient.namaObat,
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -272,7 +273,7 @@ class TakeDrugScreen extends StatelessWidget {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      patient["nama_pasien"],
+                                                       patient.namaObat,
                                                       style: Get
                                                           .textTheme.labelLarge!
                                                           .copyWith(
@@ -280,7 +281,7 @@ class TakeDrugScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Text(
-                                                      patient['rm'],
+                                                       patient.namaObat,
                                                       style: Get
                                                           .textTheme.bodySmall!
                                                           .copyWith(
@@ -293,7 +294,7 @@ class TakeDrugScreen extends StatelessWidget {
                                             ),
                                             DataCell(
                                               StatusAntrianComponent(
-                                                status: patient['status'],
+                                                status: '',
                                               ),
                                             ),
                                             DataCell(

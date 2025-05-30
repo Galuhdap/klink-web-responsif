@@ -25,6 +25,10 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final int maxLines;
   final String? errorText;
+  final double horizontal;
+  final double vertical;
+  final double fontSize;
+  final Color fontColor;
 
   const CustomTextField(
       {Key? key,
@@ -45,7 +49,11 @@ class CustomTextField extends StatefulWidget {
       this.onChanged,
       this.inputFormatters,
       this.maxLines = 1,
+      this.horizontal = 20,
+      this.vertical = 20,
       this.errorText,
+      this.fontSize = 14,
+      this.fontColor = Colors.black,
       this.readOnly = false})
       : _controller = controller,
         super(key: key);
@@ -114,7 +122,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderRadius: BorderRadius.circular(AppSizes.s4),
         ),
         contentPadding: AppSizes.symmetricPadding(
-            horizontal: AppSizes.s20, vertical: AppSizes.s20),
+            horizontal: widget.horizontal, vertical: widget.vertical),
       ),
       cursorColor: AppColors.colorBaseBlack,
       style: TextStyle(

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -11,12 +10,15 @@ class CardDashbordComponent extends StatelessWidget {
   final String title;
   final String count;
   final bool isIconActive;
-  const CardDashbordComponent({
-    super.key,
-    required this.title,
-    required this.count,
-    this.isIconActive = true,
-  });
+  final bool changeIcon;
+  final IconData? iconSaxChange;
+  const CardDashbordComponent(
+      {super.key,
+      required this.title,
+      required this.count,
+      this.isIconActive = true,
+      this.changeIcon = true,
+      this.iconSaxChange});
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +43,15 @@ class CardDashbordComponent extends StatelessWidget {
                 color: AppColors.colorPrimary50,
               ),
               child: Center(
-                child: SvgPicture.asset(
-                  Assets.icons.pasienIcon.path,
-                ),
+                child: changeIcon
+                    ? SvgPicture.asset(
+                        Assets.icons.pasienIcon.path,
+                      )
+                    : Icon(
+                        iconSaxChange,
+                        size: AppSizes.s65,
+                        color: AppColors.colorBackground,
+                      ),
               ),
             ),
             AppSizes.s16.width,
@@ -59,8 +67,7 @@ class CardDashbordComponent extends StatelessWidget {
                 Text(
                   title,
                   style: Get.textTheme.labelMedium!.copyWith(
-                      fontSize: AppSizes.s16,
-                      color: AppColors.colorBaseBlack),
+                      fontSize: AppSizes.s16, color: AppColors.colorBaseBlack),
                 ),
                 Text(
                   count,

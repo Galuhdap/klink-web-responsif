@@ -24,7 +24,7 @@ class LabelStatusAntrianComponent extends StatelessWidget {
                     height: 14,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSizes.s100),
-                      color: Color(0xfff6C22A6),
+                      color: AppColors.colorMenungguText,
                     ),
                   ),
                   AppSizes.s8.width,
@@ -55,6 +55,25 @@ class LabelStatusAntrianComponent extends StatelessWidget {
                   ),
                 ],
               ),
+              // Row(
+              //   children: [
+              //     Container(
+              //       width: 14,
+              //       height: 14,
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(AppSizes.s100),
+              //         color: Color(0xfffFFA756),
+              //       ),
+              //     ),
+              //     AppSizes.s8.width,
+              //     Text(
+              //       AppConstants.LABEL_PENDING,
+              //       style: Get.textTheme.bodyMedium!.copyWith(
+              //           fontSize: AppSizes.s14,
+              //           color: AppColors.colorBaseBlack),
+              //     ),
+              //   ],
+              // ),
               Row(
                 children: [
                   Container(
@@ -62,26 +81,7 @@ class LabelStatusAntrianComponent extends StatelessWidget {
                     height: 14,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSizes.s100),
-                      color: Color(0xfffFFA756),
-                    ),
-                  ),
-                  AppSizes.s8.width,
-                  Text(
-                    AppConstants.LABEL_PENDING,
-                    style: Get.textTheme.bodyMedium!.copyWith(
-                        fontSize: AppSizes.s14,
-                        color: AppColors.colorBaseBlack),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppSizes.s100),
-                      color: Color(0xfffFF3A29),
+                      color: AppColors.colorSelesaiText,
                     ),
                   ),
                   AppSizes.s8.width,
@@ -100,7 +100,7 @@ class LabelStatusAntrianComponent extends StatelessWidget {
                     height: 14,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSizes.s100),
-                      color: Color(0xfff6C22A6),
+                      color: AppColors.colorDibatalkanText,
                     ),
                   ),
                   AppSizes.s8.width,
@@ -159,25 +159,25 @@ class LabelStatusAntrianComponent extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppSizes.s100),
-                          color: Color(0xfffFFA756),
-                        ),
-                      ),
-                      AppSizes.s8.width,
-                      Text(
-                        AppConstants.LABEL_PENDING,
-                        style: Get.textTheme.bodyMedium!.copyWith(
-                            fontSize: AppSizes.s14,
-                            color: AppColors.colorBaseBlack),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Container(
+                  //       width: 14,
+                  //       height: 14,
+                  //       decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(AppSizes.s100),
+                  //         color: Color(0xfffFFA756),
+                  //       ),
+                  //     ),
+                  //     AppSizes.s8.width,
+                  //     Text(
+                  //       AppConstants.LABEL_PENDING,
+                  //       style: Get.textTheme.bodyMedium!.copyWith(
+                  //           fontSize: AppSizes.s14,
+                  //           color: AppColors.colorBaseBlack),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
               Row(

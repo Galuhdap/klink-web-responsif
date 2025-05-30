@@ -58,7 +58,7 @@ abstract class ApiService {
     String endpoint, {
     Map<String, String>? queryParameter,
     Map<String, String>? header,
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
   }) async {
     try {
       Response response = await dio.post(
@@ -89,7 +89,7 @@ abstract class ApiService {
     String endpoint, {
     Map<String, String>? queryParameter,
     Map<String, String>? header,
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
   }) async {
     try {
       Response response = await dio.put(
@@ -115,4 +115,66 @@ abstract class ApiService {
       return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
     }
   }
+
+  Future<Either<Failures, dynamic>> del(
+    String endpoint, {
+    Map<String, String>? queryParameter,
+    Map<String, String>? header,
+    Map<String, dynamic>? body,
+  }) async {
+    try {
+      Response response = await dio.delete(
+        endpoint,
+        queryParameters: queryParameter,
+        data: body,
+        options: Options(
+          headers: header,
+          validateStatus: (_) => true,
+        ),
+      );
+
+      final jsonMap = jsonDecode(response.toString());
+
+      if (response.statusCode != 201 ||
+          (jsonMap is Map && jsonMap['success'] == false)) {
+        final errorResponse = ErrorResponse.fromJson(jsonMap);
+        return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+      } else {
+        return Right(jsonMap);
+      }
+    } catch (error) {
+      return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+    }
+  }
+
+  // Future<Either<Failures, dynamic>> put(
+  //   String endpoint, {
+  //   Map<String, String>? queryParameter,
+  //   Map<String, String>? header,
+  //   Map<String, String>? body,
+  // }) async {å
+  //   try {
+  //     Response response = await dio.put(
+  //       endpoint,
+  //       queryParameters: queryParameter,
+  //       data: body,
+  //       options: Options(
+  //         headers: header,
+  //         validateStatus: (_) => true,
+  //       ),
+  //     );
+
+  //     final jsonMap = jsonDecode(response.toString());
+
+  //     if (response.statusCode != 201 ||
+  //         (jsonMap is Map && jsonMap['success'] == false)) {
+  //       final errorResponse = ErrorResponse.fromJson(jsonMap);
+  //       return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+  //     } else {
+  //       return Right(jsonMap);
+  //     }
+  //   } catch (error) {
+  //     return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+  //   }
+  // }
 }

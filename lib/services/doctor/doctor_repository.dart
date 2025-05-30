@@ -11,8 +11,9 @@ class DoctorRepository {
   Future<Either<Failure, GetDoctorResponse>> getDoctor({
     required int page,
     required int limit,
-    required String search,
+    required String name,
+    required String nik,
   }) async {
-    return source.getDoctor(page: page, limit: limit, search: search);
+    return source.getDoctor(page: page, limit: limit, name: name, nik: nik);
   }
 }

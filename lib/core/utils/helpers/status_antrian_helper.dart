@@ -6,24 +6,24 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 
 Color setStatusColorFill(LabelAntrianStatus labelAntrianStatus) {
   switch (labelAntrianStatus) {
-    case LabelAntrianStatus.menunggu:
+    case LabelAntrianStatus.WAITING:
       return AppColors.colorMenungguFill;
-    case LabelAntrianStatus.proses:
+    case LabelAntrianStatus.PROCESSING:
       return AppColors.colorProsesFill;
-    case LabelAntrianStatus.pending:
+    case LabelAntrianStatus.PENDING:
       return AppColors.colorPendingFill;
-    case LabelAntrianStatus.selesai:
+    case LabelAntrianStatus.FINISHED:
       return AppColors.colorSelesaiFill;
-    case LabelAntrianStatus.dibatalkan:
+    case LabelAntrianStatus.CANCEL:
       return AppColors.colorDibatalkanFill;
-    case LabelAntrianStatus.ambil_obat:
+    case LabelAntrianStatus.TAKE_MEDICINE:
       return AppColors.colorMenungguFill;
   }
 }
 
 Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
   switch (labelAntrianStatus) {
-    case LabelAntrianStatus.menunggu:
+    case LabelAntrianStatus.WAITING:
       return Text(
         'Menunggu',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -31,7 +31,7 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
           color: AppColors.colorMenungguText,
         ),
       );
-    case LabelAntrianStatus.proses:
+    case LabelAntrianStatus.PROCESSING:
       return Text(
         'Proses',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -39,7 +39,7 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
           color: AppColors.colorProsesText,
         ),
       );
-    case LabelAntrianStatus.pending:
+    case LabelAntrianStatus.PENDING:
       return Text(
         'Pending',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -47,7 +47,7 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
           color: AppColors.colorPendingText,
         ),
       );
-    case LabelAntrianStatus.selesai:
+    case LabelAntrianStatus.FINISHED:
       return Text(
         'Selesai',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -55,7 +55,7 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
           color: AppColors.colorSelesaiText,
         ),
       );
-    case LabelAntrianStatus.dibatalkan:
+    case LabelAntrianStatus.CANCEL:
       return Text(
         'Dibatalkan',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -63,7 +63,7 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
           color: AppColors.colorDibatalkanText,
         ),
       );
-    case LabelAntrianStatus.ambil_obat:
+    case LabelAntrianStatus.TAKE_MEDICINE:
       return Text(
         'Ambil Obat',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -76,18 +76,18 @@ Widget setStatusName(LabelAntrianStatus labelAntrianStatus) {
 
 extension InflationExt on String {
   LabelAntrianStatus get labelAntrianStatus {
-    if (this == 'menunggu') {
-      return LabelAntrianStatus.menunggu;
-    } else if (this == 'proses') {
-      return LabelAntrianStatus.proses;
-    } else if (this == 'pending') {
-      return LabelAntrianStatus.pending;
-    } else if (this == 'selesai') {
-      return LabelAntrianStatus.selesai;
-    } else if (this == 'ambil_obat') {
-      return LabelAntrianStatus.ambil_obat;
+    if (this == 'WAITING') {
+      return LabelAntrianStatus.WAITING;
+    } else if (this == 'PROCESSING') {
+      return LabelAntrianStatus.PROCESSING;
+    } else if (this == 'PENDING') {
+      return LabelAntrianStatus.PENDING;
+    } else if (this == 'FINISHED') {
+      return LabelAntrianStatus.FINISHED;
+    } else if (this == 'TAKE_MEDICINE') {
+      return LabelAntrianStatus.TAKE_MEDICINE;
     } else {
-      return LabelAntrianStatus.dibatalkan;
+      return LabelAntrianStatus.CANCEL;
     }
   }
 }

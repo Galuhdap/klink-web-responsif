@@ -9,13 +9,14 @@ class DoctorDatasources extends ApiService {
   Future<Either<Failure, GetDoctorResponse>> getDoctor({
     required int page,
     required int limit,
-    required String search,
+    required String name,
+    required String nik,
   }) async {
     final prefs = await SharedPreferencesUtils.getAuthToken();
 
     try {
       final response = await get(
-          NetworkConstants.GET_DOCTOR_URL(page, limit, search),
+          NetworkConstants.GET_DOCTOR_URL(page, limit, name, nik),
           header: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${prefs}",
@@ -23,7 +24,7 @@ class DoctorDatasources extends ApiService {
 
       return Right(GetDoctorResponse.fromJson(response));
     } catch (e) {
-      return left(Failure(false,400, 'Data Tidak Masuk'));
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
     }
   }
 }

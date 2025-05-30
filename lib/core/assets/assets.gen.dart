@@ -104,11 +104,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/sort.svg
   SvgGenImage get sort => const SvgGenImage('assets/icons/sort.svg');
 
-  /// File path: assets/icons/succes.svg
-  SvgGenImage get succes => const SvgGenImage('assets/icons/succes.svg');
-
   /// File path: assets/icons/success.svg
   SvgGenImage get success => const SvgGenImage('assets/icons/success.svg');
+
+  /// File path: assets/icons/tabler_archive-filled.svg
+  SvgGenImage get tablerArchiveFilled =>
+      const SvgGenImage('assets/icons/tabler_archive-filled.svg');
 
   /// File path: assets/icons/tanda_tanya.svg
   SvgGenImage get tandaTanya =>
@@ -116,6 +117,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/transaksi.svg
   SvgGenImage get transaksi => const SvgGenImage('assets/icons/transaksi.svg');
+
+  /// File path: assets/icons/vaadin_cart.svg
+  SvgGenImage get vaadinCart =>
+      const SvgGenImage('assets/icons/vaadin_cart.svg');
 
   /// File path: assets/icons/🦆 icon _security pass_.svg
   SvgGenImage get aIconSecurityPass =>
@@ -140,10 +145,11 @@ class $AssetsIconsGen {
     setting,
     shoppingBagProduct,
     sort,
-    succes,
     success,
+    tablerArchiveFilled,
     tandaTanya,
     transaksi,
+    vaadinCart,
     aIconSecurityPass,
   ];
 }

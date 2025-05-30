@@ -52,14 +52,26 @@ class _StackholderScreenState extends State<StackholderScreen> {
                     ? Column(
                         spacing: AppSizes.s16,
                         children: [
-                          CardDashbordComponent(
-                            title: AppConstants.LABEL_PASIEN_BULAN_INI,
-                            count: '20',
-                          ),
-                          CardDashbordComponent(
-                            title: AppConstants.LABEL_PASIEN_TERDAFTAR,
-                            count: '20',
-                          ),
+                          Obx(() => CardDashbordComponent(
+                                title: AppConstants.LABEL_PASIEN_BULAN_INI,
+                                count: controller.isLoadingTotal.value
+                                    ? 'Load...'
+                                    : controller.totalPasien.value == ''
+                                        ? '-'
+                                        : controller.totalPasien.value!.data
+                                            .pasienBaruBulanIni
+                                            .toString(),
+                              )),
+                          Obx(() => CardDashbordComponent(
+                                title: AppConstants.LABEL_PASIEN_TERDAFTAR,
+                                count: controller.isLoadingTotal.value
+                                    ? 'Load...'
+                                    : controller.totalPasien.value == ''
+                                        ? '-'
+                                        : controller
+                                            .totalPasien.value!.data.totalPasien
+                                            .toString(),
+                              )),
                         ],
                       )
                     : Row(
@@ -67,16 +79,28 @@ class _StackholderScreenState extends State<StackholderScreen> {
                         spacing: AppSizes.s16,
                         children: [
                           Flexible(
-                            child: CardDashbordComponent(
-                              title: AppConstants.LABEL_PASIEN_BULAN_INI,
-                              count: '20',
-                            ),
+                            child: Obx(() => CardDashbordComponent(
+                                  title: AppConstants.LABEL_PASIEN_BULAN_INI,
+                                  count: controller.isLoadingTotal.value
+                                      ? 'Load...'
+                                      : controller.totalPasien.value == ''
+                                          ? '-'
+                                          : controller.totalPasien.value!.data
+                                              .pasienBaruBulanIni
+                                              .toString(),
+                                )),
                           ),
                           Flexible(
-                            child: CardDashbordComponent(
-                              title: AppConstants.LABEL_PASIEN_TERDAFTAR,
-                              count: '20',
-                            ),
+                            child: Obx(() => CardDashbordComponent(
+                                  title: AppConstants.LABEL_PASIEN_TERDAFTAR,
+                                  count: controller.isLoadingTotal.value
+                                      ? 'Load...'
+                                      : controller.totalPasien.value == ''
+                                          ? '-'
+                                          : controller.totalPasien.value!.data
+                                              .totalPasien
+                                              .toString(),
+                                )),
                           ),
                         ],
                       ),

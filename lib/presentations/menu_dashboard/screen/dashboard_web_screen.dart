@@ -6,11 +6,13 @@ import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/obat_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_has_expired_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/menu_report_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/take_drug_screen.dart';
-import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stackholder_screen.dart';
+import 'package:klinik_web_responsif/presentations/home/screen/staff/apotik_dashboard_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
@@ -35,7 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return [
           const StaffScreen(),
           const DataPatientScreen(),
-          const DocterScreen(),
+          // const DocterScreen(),
         ];
       case UserRole.DOKTER:
         return [
@@ -44,10 +46,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ];
       case UserRole.APOTEKER:
         return [
-          const StaffScreen(),
-          const ObatScreen(),
-          const TakeDrugScreen(),
-          const RiwayatTransaksiScreen(),
+          const ApotikDashboardScreen(),
+          const MedicineScreen(),
+          // const ObatScreen(),
+          const MedicineHasExpiredScreen(),
+          const MenuTransaksiScreen(),
+          // const TakeDrugScreen(),
+          // const RiwayatTransaksiScreen(),
+          const MenuReportScreen(),
         ];
       case UserRole.PEMILIK:
         return [
@@ -105,11 +111,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isActive: _selectedIndex == 1,
                 onTap: () => _onItemTapped(1),
               ),
-              NavItem(
-                iconPath: Assets.icons.doctor.path,
-                isActive: _selectedIndex == 2,
-                onTap: () => _onItemTapped(2),
-              ),
+              // NavItem(
+              //   iconPath: Assets.icons.doctor.path,
+              //   isActive: _selectedIndex == 2,
+              //   onTap: () => _onItemTapped(2),
+              // ),
             ],
           ),
           IconButton(
@@ -163,15 +169,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onTap: () => _onItemTapped(1),
               ),
               NavItem(
-                iconPath: Assets.icons.transaksi.path,
+                iconPath: Assets.icons.tablerArchiveFilled.path,
                 isActive: _selectedIndex == 2,
                 onTap: () => _onItemTapped(2),
               ),
               NavItem(
-                iconPath: Assets.icons.chartPie.path,
+                iconPath: Assets.icons.vaadinCart.path,
                 isActive: _selectedIndex == 3,
                 onTap: () => _onItemTapped(3),
               ),
+              NavItem(
+                iconPath: Assets.icons.transaksi.path,
+                isActive: _selectedIndex == 4,
+                onTap: () => _onItemTapped(4),
+              ),
+              // NavItem(
+              //   iconPath: Assets.icons.chartPie.path,
+              //   isActive: _selectedIndex == 3,
+              //   onTap: () => _onItemTapped(3),
+              // ),
             ],
           ),
           IconButton(

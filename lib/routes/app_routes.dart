@@ -1,8 +1,7 @@
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/presentations/docter/screen/docter_screen.dart';
+import 'package:klinik_web_responsif/presentations/home/screen/staff/apotik_dashboard_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
-import 'package:klinik_web_responsif/presentations/menu_dashboard/screen/dashboard_mobile_screen.dart';
-import 'package:klinik_web_responsif/presentations/menu_dashboard/screen/dashboard_web_screen.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/screen/responive_dashboard.dart';
 import 'package:klinik_web_responsif/presentations/login/screen/login_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
@@ -17,12 +16,13 @@ class AppRoutes {
   static const String patien = "/patient";
   static const String dashboardMobile = "/dashboardMobile";
   static const String responsiveDashboard = "/responsiveDashboard";
-  static const String staffHome = "/staf-home";
-  static const String rekamMedis = "/rekam-medis";
+  static const String staffHome = "/staf/home";
+  static const String apotikHome = "/apotik/home";
+  static const String rekamMedis = "/rekam/medis";
   static const String docter = "/docter";
 
   static const String splash = "/splash";
-  
+
 
   static final routes = [
     GetPage(name: splash, page: () => SplashScreen()),
@@ -34,6 +34,7 @@ class AppRoutes {
     GetPage(name: staffHome, page: () => StaffScreen()),
     // GetPage(name: rekamMedis, page: () => RekamMedisScreen()),
     GetPage(name: docter, page: () => DocterScreen()),
+    GetPage(name: apotikHome, page: () => ApotikDashboardScreen()),
     //cara menggunakan Binding
     //GetPage(name: login, page : () => LoginScreen(), binding: LoginBinding()),
   ];

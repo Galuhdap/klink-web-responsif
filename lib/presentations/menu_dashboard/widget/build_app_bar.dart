@@ -105,13 +105,20 @@ class BuildAppBar extends StatelessWidget {
                             color: AppColors.colorBasePrimary,
                             borderRadius: BorderRadius.circular(AppSizes.s4),
                           ),
-                          child: Center(
-                            child: Text(
-                              labelButton,
-                              style: Get.textTheme.bodyMedium!.copyWith(
-                                  fontSize: AppSizes.s16,
-                                  color: AppColors.colorBaseWhite),
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_rounded,
+                                color: AppColors.colorBaseWhite,
+                              ),
+                              Text(
+                                labelButton,
+                                style: Get.textTheme.bodyMedium!.copyWith(
+                                    fontSize: AppSizes.s14,
+                                    color: AppColors.colorBaseWhite),
+                              ),
+                            ],
                           ),
                         ),
                       )

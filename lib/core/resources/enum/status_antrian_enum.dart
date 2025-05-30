@@ -1,3 +1,8 @@
 enum LabelAntrianStatus {
-  menunggu, proses, pending, selesai, dibatalkan, ambil_obat
+  WAITING,
+  PROCESSING,
+  PENDING,
+  FINISHED,
+  CANCEL,
+  TAKE_MEDICINE,
 }

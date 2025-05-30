@@ -16,6 +16,7 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/core/utils/helpers/validation_helper.dart';
+import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/patient_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
@@ -37,7 +38,7 @@ class DataPatientScreen extends StatelessWidget {
     return GetBuilder<PatientController>(
       init: PatientController(),
       builder: (controller) {
-        var controllerRme = Get.put(RekamMedisController());
+        // var controllerRme = Get.put(RekamMedisController());
         return Scaffold(
           backgroundColor: Color(0xfffF8F8F8),
           appBar: PreferredSize(
@@ -64,188 +65,250 @@ class DataPatientScreen extends StatelessWidget {
                                 child: Lottie.asset(Assets.lottie.hospital),
                               ),
                             )
-                          : Form(
-                              key: controller.formKey,
-                              child: ListView(
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      'Tambah Data',
-                                      style: Get.textTheme.labelMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: AppSizes.s16),
-                                    ),
-                                  ),
-                                  AppSizes.s12.height,
-                                  Divider(),
-                                  InputDataComponent(
-                                    label: 'Nama Pasien',
-                                    hintText: 'Nama Pasien',
-                                    controller: controller.nameController,
-                                    validator: emptyValidation,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Jenis Kelamin',
-                                        style: Get.textTheme.bodyMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: AppSizes.s14,
-                                                color:
-                                                    AppColors.colorBaseBlack),
-                                      ),
-                                      AppSizes.s12.height,
-                                      DropdownSearch<String>(
-                                        items: (f, cs) => [
-                                          "Laki-laki",
-                                          "Perempuan",
-                                        ],
-                                        dropdownBuilder:
-                                            (context, selectedItem) {
-                                          return Text(
-                                            selectedItem ?? "Jenis Kelamin",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              color: selectedItem == null
-                                                  ? Colors.grey
-                                                  : Colors.black,
-                                            ),
-                                          );
-                                        },
-                                        popupProps: PopupProps.menu(
-                                          disabledItemFn: (item) =>
-                                              item == 'Item 3',
-                                          fit: FlexFit.loose,
-                                        ),
-                                        onChanged: (String? selectedValue) {
-                                          controller.jenisKelaminController
-                                              .value = selectedValue!;
-                                        },
-                                      ),
-                                      AppSizes.s12.height,
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tanggal Lahir',
-                                        style: Get.textTheme.bodyMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: AppSizes.s14,
-                                                color:
-                                                    AppColors.colorBaseBlack),
-                                      ),
-                                      AppSizes.s12.height,
-                                      InkWell(onTap: () async {
-                                        final DateTime? pickedDate =
-                                            await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(1950),
-                                          lastDate: DateTime
-                                              .now(), // ⛔ hanya sampai hari ini, tidak bisa pilih besok
-                                        );
-
-                                        if (pickedDate != null) {
-                                          controller.tglLahirController.value =
-                                              pickedDate;
-                                        }
-                                      }, child: Obx(() {
-                                        return Container(
-                                          padding: AppSizes.symmetricPadding(
-                                              vertical: AppSizes.s5,
-                                              horizontal: AppSizes.s20),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  AppColors.colorSecondary400,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                                AppSizes.s4),
+                          : controller.postPasiens.value != null
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 20,
+                                  children: [
+                                    Container(
+                                      width: 200,
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              AppSizes.s100),
+                                          color: AppColors.colorBasePrimary),
+                                      child: Center(
+                                        child: Text(
+                                          controller.postPasiens.value!.data
+                                              .nomerAntrian,
+                                          style: Get.textTheme.labelLarge!
+                                              .copyWith(
+                                            fontSize: AppSizes.s100,
+                                            color: AppColors.colorBaseWhite,
                                           ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.calendar_month,
-                                                weight: AppSizes.s20,
-                                                size: AppSizes.s30,
-                                                color:
-                                                    AppColors.colorNeutrals100,
-                                              ),
-                                              AppSizes.s10.width,
-                                              Text(
-                                                controller
-                                                    .tglLahirController.value
-                                                    .toDateyyyymmddFormattedString(),
-                                                style: Get.textTheme.bodySmall!
-                                                    .copyWith(
-                                                  fontSize: AppSizes.s14,
-                                                  color: AppColors
-                                                      .colorNeutrals400,
-                                                ),
-                                              ),
-                                            ],
-                                          ).paddingSymmetric(
-                                              vertical: AppSizes.s5),
-                                        );
-                                      })),
-                                      AppSizes.s12.height,
-                                    ],
-                                  ),
-                                  InputDataComponent(
-                                    label: 'Alamat',
-                                    hintText: 'Alamat',
-                                    controller: controller.alamatController,
-                                    validator: emptyValidation,
-                                  ),
-                                  InputDataComponent(
-                                    label: 'No Telpon',
-                                    hintText: 'No Telpon',
-                                    controller: controller.noTelpController,
-                                    validator: emptyValidation,
-                                    // validator: (value) => controller.errorCreatePasien.value!.message?['no_telp'],
-                                  ),
-                                  InputDataComponent(
-                                    label: 'NIK',
-                                    hintText: 'NIK',
-                                    controller: controller.nikController,
-                                    validator: emptyValidation,
-                                    // validator: (value) => controller.errorCreatePasien.value!.message?["nik"],
-                                  ),
-                                  Row(
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        'Nomor Antrian Ditambahkan',
+                                        style:
+                                            Get.textTheme.labelLarge!.copyWith(
+                                          fontSize: AppSizes.s24,
+                                          color: AppColors.colorNeutrals200,
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Button.filled(
+                                        onPressed: () {
+                                          controller.postPasiens.value = null;
+                                          Get.put(HomeController());
+                                          Get.back();
+                                          Get.back();
+                                          Get.back();
+                                        },
+                                        label: 'Selesai',
+                                      ).paddingSymmetric(
+                                        horizontal: AppSizes.s300,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Form(
+                                  key: controller.formKey,
+                                  child: ListView(
                                     children: [
-                                      Flexible(
-                                        child: Button.outlined(
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            label: 'Batal'),
+                                      Center(
+                                        child: Text(
+                                          'Tambah Data',
+                                          style: Get.textTheme.labelMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: AppSizes.s16),
+                                        ),
                                       ),
-                                      AppSizes.s12.width,
-                                      Flexible(
-                                        child: Button.filled(
-                                            onPressed: () {
-                                              if (controller
-                                                  .formKey.currentState!
-                                                  .validate()) {
-                                                controller.postPasien();
-                                              }
-                                            },
-                                            label: 'Simpan'),
+                                      AppSizes.s12.height,
+                                      Divider(),
+                                      InputDataComponent(
+                                        label: 'Nama Pasien',
+                                        hintText: 'Nama Pasien',
+                                        controller: controller.nameController,
+                                        validator: emptyValidation,
                                       ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Jenis Kelamin',
+                                            style: Get.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: AppSizes.s14,
+                                                    color: AppColors
+                                                        .colorBaseBlack),
+                                          ),
+                                          AppSizes.s12.height,
+                                          DropdownSearch<String>(
+                                            items: (f, cs) => [
+                                              "Laki-laki",
+                                              "Perempuan",
+                                            ],
+                                            dropdownBuilder:
+                                                (context, selectedItem) {
+                                              return Text(
+                                                selectedItem ?? "Jenis Kelamin",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: selectedItem == null
+                                                      ? Colors.grey
+                                                      : Colors.black,
+                                                ),
+                                              );
+                                            },
+                                            popupProps: PopupProps.menu(
+                                              disabledItemFn: (item) =>
+                                                  item == 'Item 3',
+                                              fit: FlexFit.loose,
+                                            ),
+                                            onChanged: (String? selectedValue) {
+                                              controller.jenisKelaminController
+                                                  .value = selectedValue!;
+                                            },
+                                          ),
+                                          AppSizes.s12.height,
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Tanggal Lahir',
+                                            style: Get.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: AppSizes.s14,
+                                                    color: AppColors
+                                                        .colorBaseBlack),
+                                          ),
+                                          AppSizes.s12.height,
+                                          InkWell(onTap: () async {
+                                            final DateTime? pickedDate =
+                                                await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(1950),
+                                              lastDate: DateTime
+                                                  .now(), // ⛔ hanya sampai hari ini, tidak bisa pilih besok
+                                            );
+
+                                            if (pickedDate != null) {
+                                              controller.tglLahirController
+                                                  .value = pickedDate;
+                                            }
+                                          }, child: Obx(() {
+                                            return Container(
+                                              padding:
+                                                  AppSizes.symmetricPadding(
+                                                      vertical: AppSizes.s5,
+                                                      horizontal: AppSizes.s20),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: AppColors
+                                                      .colorSecondary400,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppSizes.s4),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.calendar_month,
+                                                    weight: AppSizes.s20,
+                                                    size: AppSizes.s30,
+                                                    color: AppColors
+                                                        .colorNeutrals100,
+                                                  ),
+                                                  AppSizes.s10.width,
+                                                  Text(
+                                                    controller
+                                                        .tglLahirController
+                                                        .value
+                                                        .toDateyyyymmddFormattedString(),
+                                                    style: Get
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                      fontSize: AppSizes.s14,
+                                                      color: AppColors
+                                                          .colorNeutrals400,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ).paddingSymmetric(
+                                                  vertical: AppSizes.s5),
+                                            );
+                                          })),
+                                          AppSizes.s12.height,
+                                        ],
+                                      ),
+                                      InputDataComponent(
+                                        label: 'Alamat',
+                                        hintText: 'Alamat',
+                                        controller: controller.alamatController,
+                                        validator: emptyValidation,
+                                      ),
+                                      InputDataComponent(
+                                        label: 'No Telpon',
+                                        hintText: 'No Telpon',
+                                        controller: controller.noTelpController,
+                                        validator: emptyValidation,
+                                        // validator: (value) => controller.errorCreatePasien.value!.message?['no_telp'],
+                                      ),
+                                      InputDataComponent(
+                                        label: 'NIK',
+                                        hintText: 'NIK',
+                                        controller: controller.nikController,
+                                        validator: emptyValidation,
+                                        // validator: (value) => controller.errorCreatePasien.value!.message?["nik"],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Flexible(
+                                            child: Button.outlined(
+                                                onPressed: () {
+                                                  Get.back();
+                                                },
+                                                label: 'Batal'),
+                                          ),
+                                          AppSizes.s12.width,
+                                          Flexible(
+                                            child: Button.filled(
+                                                onPressed: () async {
+                                                  if (controller
+                                                      .formKey.currentState!
+                                                      .validate()) {
+                                                    await controller
+                                                        .postPasien();
+                                                    // await controller
+                                                    //     .postAntrianPasien(
+                                                    //         controller
+                                                    //             .createPasien
+                                                    //             .value!
+                                                    //             .data
+                                                    //             .id);
+                                                  }
+                                                },
+                                                label: 'Simpan'),
+                                          ),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
-                              ),
-                            );
+                                  ),
+                                );
                     },
                   ),
                 );
@@ -291,256 +354,336 @@ class DataPatientScreen extends StatelessWidget {
                                                       Assets.lottie.hospital),
                                                 ),
                                               )
-                                            : Form(
-                                                key: controller.formKey,
-                                                child: ListView(
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        'Tambah Data',
-                                                        style: Get.textTheme
-                                                            .labelMedium!
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    AppSizes
-                                                                        .s16),
+                                            : controller.postPasiens.value !=
+                                                    null
+                                                ? Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    spacing: 20,
+                                                    children: [
+                                                      Container(
+                                                        width: 200,
+                                                        height: 200,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        AppSizes
+                                                                            .s100),
+                                                            color: AppColors
+                                                                .colorBasePrimary),
+                                                        child: Center(
+                                                          child: Text(
+                                                            controller
+                                                                .postPasiens
+                                                                .value!
+                                                                .data
+                                                                .nomerAntrian,
+                                                            style: Get.textTheme
+                                                                .labelLarge!
+                                                                .copyWith(
+                                                              fontSize:
+                                                                  AppSizes.s100,
+                                                              color: AppColors
+                                                                  .colorBaseWhite,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    AppSizes.s12.height,
-                                                    Divider(),
-                                                    InputDataComponent(
-                                                      label: 'Nama Pasien',
-                                                      hintText: 'Nama Pasien',
-                                                      controller: controller
-                                                          .nameController,
-                                                      validator:
-                                                          emptyValidation,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          'Jenis Kelamin',
+                                                      Center(
+                                                        child: Text(
+                                                          'Nomor Antrian Ditambahkan',
                                                           style: Get.textTheme
-                                                              .bodyMedium!
+                                                              .labelLarge!
                                                               .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize:
-                                                                      AppSizes
-                                                                          .s14,
-                                                                  color: AppColors
-                                                                      .colorBaseBlack),
+                                                            fontSize:
+                                                                AppSizes.s24,
+                                                            color: AppColors
+                                                                .colorNeutrals200,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Center(
+                                                        child: Button.filled(
+                                                          onPressed: () {
+                                                            controller
+                                                                .postPasiens
+                                                                .value = null;
+                                                            Get.put(
+                                                                HomeController());
+                                                            Get.back();
+                                                            Get.back();
+                                                            Get.back();
+                                                          },
+                                                          label: 'Selesai',
+                                                        ).paddingSymmetric(
+                                                          horizontal:
+                                                              AppSizes.s300,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Form(
+                                                    key: controller.formKey,
+                                                    child: ListView(
+                                                      children: [
+                                                        Center(
+                                                          child: Text(
+                                                            'Tambah Data',
+                                                            style: Get.textTheme
+                                                                .labelMedium!
+                                                                .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        AppSizes
+                                                                            .s16),
+                                                          ),
                                                         ),
                                                         AppSizes.s12.height,
-                                                        DropdownSearch<String>(
-                                                          items: (f, cs) => [
-                                                            "Laki-laki",
-                                                            "Perempuan",
-                                                          ],
-                                                          dropdownBuilder:
-                                                              (context,
-                                                                  selectedItem) {
-                                                            return Text(
-                                                              selectedItem ??
-                                                                  "Jenis Kelamin",
-                                                              style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: selectedItem ==
-                                                                        null
-                                                                    ? Colors
-                                                                        .grey
-                                                                    : Colors
-                                                                        .black,
-                                                              ),
-                                                            );
-                                                          },
-                                                          popupProps:
-                                                              PopupProps.menu(
+                                                        Divider(),
+                                                        InputDataComponent(
+                                                          label: 'Nama Pasien',
+                                                          hintText:
+                                                              'Nama Pasien',
+                                                          controller: controller
+                                                              .nameController,
+                                                          validator:
+                                                              emptyValidation,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              'Jenis Kelamin',
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyMedium!
+                                                                  .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          AppSizes
+                                                                              .s14,
+                                                                      color: AppColors
+                                                                          .colorBaseBlack),
+                                                            ),
+                                                            AppSizes.s12.height,
+                                                            DropdownSearch<
+                                                                String>(
+                                                              items: (f, cs) =>
+                                                                  [
+                                                                "Laki-laki",
+                                                                "Perempuan",
+                                                              ],
+                                                              dropdownBuilder:
+                                                                  (context,
+                                                                      selectedItem) {
+                                                                return Text(
+                                                                  selectedItem ??
+                                                                      "Jenis Kelamin",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: selectedItem ==
+                                                                            null
+                                                                        ? Colors
+                                                                            .grey
+                                                                        : Colors
+                                                                            .black,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              popupProps: PopupProps.menu(
                                                                   disabledItemFn:
                                                                       (item) =>
                                                                           item ==
                                                                           'Item 3',
                                                                   fit: FlexFit
                                                                       .loose),
-                                                          onChanged: (String?
-                                                              selectedValue) {
-                                                            controller
-                                                                    .jenisKelaminController
-                                                                    .value =
-                                                                selectedValue!;
-                                                          },
+                                                              onChanged: (String?
+                                                                  selectedValue) {
+                                                                controller
+                                                                        .jenisKelaminController
+                                                                        .value =
+                                                                    selectedValue!;
+                                                              },
+                                                            ),
+                                                            AppSizes.s12.height,
+                                                          ],
                                                         ),
-                                                        AppSizes.s12.height,
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          'Tanggal Lahir',
-                                                          style: Get.textTheme
-                                                              .bodyMedium!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize:
-                                                                      AppSizes
-                                                                          .s14,
-                                                                  color: AppColors
-                                                                      .colorBaseBlack),
-                                                        ),
-                                                        AppSizes.s12.height,
-                                                        InkWell(
-                                                            onTap: () async {
-                                                          final DateTime?
-                                                              pickedDate =
-                                                              await showDatePicker(
-                                                            context: context,
-                                                            initialDate:
-                                                                DateTime.now(),
-                                                            firstDate:
-                                                                DateTime(1950),
-                                                            lastDate: DateTime
-                                                                .now(), // ⛔ hanya sampai hari ini, tidak bisa pilih besok
-                                                          );
-                                                          if (pickedDate !=
-                                                              null) {
-                                                            controller
-                                                                .tglLahirController
-                                                                .value = pickedDate;
-                                                          }
-                                                        }, child: Obx(() {
-                                                          return Container(
-                                                            padding: AppSizes
-                                                                .symmetricPadding(
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              'Tanggal Lahir',
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyMedium!
+                                                                  .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          AppSizes
+                                                                              .s14,
+                                                                      color: AppColors
+                                                                          .colorBaseBlack),
+                                                            ),
+                                                            AppSizes.s12.height,
+                                                            InkWell(onTap:
+                                                                () async {
+                                                              final DateTime?
+                                                                  pickedDate =
+                                                                  await showDatePicker(
+                                                                context:
+                                                                    context,
+                                                                initialDate:
+                                                                    DateTime
+                                                                        .now(),
+                                                                firstDate:
+                                                                    DateTime(
+                                                                        1950),
+                                                                lastDate: DateTime
+                                                                    .now(), // ⛔ hanya sampai hari ini, tidak bisa pilih besok
+                                                              );
+                                                              if (pickedDate !=
+                                                                  null) {
+                                                                controller
+                                                                        .tglLahirController
+                                                                        .value =
+                                                                    pickedDate;
+                                                              }
+                                                            }, child: Obx(() {
+                                                              return Container(
+                                                                padding: AppSizes.symmetricPadding(
                                                                     vertical:
                                                                         AppSizes
                                                                             .s5,
                                                                     horizontal:
                                                                         AppSizes
                                                                             .s20),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              border:
-                                                                  Border.all(
-                                                                color: AppColors
-                                                                    .colorSecondary400,
-                                                              ),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: AppColors
+                                                                        .colorSecondary400,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
                                                                           AppSizes
                                                                               .s4),
-                                                            ),
-                                                            child: Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .calendar_month,
-                                                                  weight:
-                                                                      AppSizes
-                                                                          .s20,
-                                                                  size: AppSizes
-                                                                      .s30,
-                                                                  color: AppColors
-                                                                      .colorNeutrals100,
                                                                 ),
-                                                                AppSizes
-                                                                    .s10.width,
-                                                                Text(
-                                                                  controller
-                                                                      .tglLahirController
-                                                                      .value
-                                                                      .toDateyyyymmddFormattedString(),
-                                                                  style: Get
-                                                                      .textTheme
-                                                                      .bodySmall!
-                                                                      .copyWith(
-                                                                    fontSize:
+                                                                child: Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .calendar_month,
+                                                                      weight:
+                                                                          AppSizes
+                                                                              .s20,
+                                                                      size: AppSizes
+                                                                          .s30,
+                                                                      color: AppColors
+                                                                          .colorNeutrals100,
+                                                                    ),
+                                                                    AppSizes.s10
+                                                                        .width,
+                                                                    Text(
+                                                                      controller
+                                                                          .tglLahirController
+                                                                          .value
+                                                                          .toDateyyyymmddFormattedString(),
+                                                                      style: Get
+                                                                          .textTheme
+                                                                          .bodySmall!
+                                                                          .copyWith(
+                                                                        fontSize:
+                                                                            AppSizes.s14,
+                                                                        color: AppColors
+                                                                            .colorNeutrals400,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ).paddingSymmetric(
+                                                                    vertical:
                                                                         AppSizes
-                                                                            .s14,
-                                                                    color: AppColors
-                                                                        .colorNeutrals400,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ).paddingSymmetric(
-                                                                vertical:
-                                                                    AppSizes
-                                                                        .s5),
-                                                          );
-                                                        })),
-                                                        AppSizes.s12.height,
+                                                                            .s5),
+                                                              );
+                                                            })),
+                                                            AppSizes.s12.height,
+                                                          ],
+                                                        ),
+                                                        InputDataComponent(
+                                                          label: 'Alamat',
+                                                          hintText: 'Alamat',
+                                                          controller: controller
+                                                              .alamatController,
+                                                          validator:
+                                                              emptyValidation,
+                                                        ),
+                                                        InputDataComponent(
+                                                          label: 'No Telpon',
+                                                          hintText: 'No Telpon',
+                                                          controller: controller
+                                                              .noTelpController,
+                                                          validator:
+                                                              emptyValidation,
+                                                        ),
+                                                        InputDataComponent(
+                                                          label: 'NIK',
+                                                          hintText: 'NIK',
+                                                          controller: controller
+                                                              .nikController,
+                                                          validator:
+                                                              emptyValidation,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Flexible(
+                                                              child: Button
+                                                                  .outlined(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back();
+                                                                      },
+                                                                      label:
+                                                                          'Batal'),
+                                                            ),
+                                                            AppSizes.s12.width,
+                                                            Flexible(
+                                                              child:
+                                                                  Button.filled(
+                                                                      onPressed:
+                                                                          () {
+                                                                        if (controller
+                                                                            .formKey
+                                                                            .currentState!
+                                                                            .validate()) {
+                                                                          controller
+                                                                              .postPasien();
+                                                                        }
+                                                                      },
+                                                                      label:
+                                                                          'Simpan'),
+                                                            ),
+                                                          ],
+                                                        )
                                                       ],
                                                     ),
-                                                    InputDataComponent(
-                                                      label: 'Alamat',
-                                                      hintText: 'Alamat',
-                                                      controller: controller
-                                                          .alamatController,
-                                                      validator:
-                                                          emptyValidation,
-                                                    ),
-                                                    InputDataComponent(
-                                                      label: 'No Telpon',
-                                                      hintText: 'No Telpon',
-                                                      controller: controller
-                                                          .noTelpController,
-                                                      validator:
-                                                          emptyValidation,
-                                                    ),
-                                                    InputDataComponent(
-                                                      label: 'NIK',
-                                                      hintText: 'NIK',
-                                                      controller: controller
-                                                          .nikController,
-                                                      validator:
-                                                          emptyValidation,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Flexible(
-                                                          child:
-                                                              Button.outlined(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Get.back();
-                                                                  },
-                                                                  label:
-                                                                      'Batal'),
-                                                        ),
-                                                        AppSizes.s12.width,
-                                                        Flexible(
-                                                          child: Button.filled(
-                                                              onPressed: () {
-                                                                if (controller
-                                                                    .formKey
-                                                                    .currentState!
-                                                                    .validate()) {
-                                                                  controller
-                                                                      .postPasien();
-                                                                }
-                                                              },
-                                                              label: 'Simpan'),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              );
+                                                  );
                                       },
                                     ),
                                   );
@@ -592,35 +735,45 @@ class DataPatientScreen extends StatelessWidget {
                                 color: AppColors.colorSecondary500,
                               ),
                               onChanged: (value) {
-                                controller.getPasien(search: value);
+                                final input = value.trim();
+                                final parts = input
+                                    .split(',')
+                                    .map((e) => e.trim())
+                                    .toList();
+
+                                String name = '';
+                                String nik = '';
+                                String umur = '';
+                                String norme = '';
+
+                                for (var part in parts) {
+                                
+                                  if (RegExp(r'^\d{16}$').hasMatch(part)) {
+                                    nik = part;
+                                  } else if (RegExp(r'^(RM-\d+|\d{3,})$')
+                                      .hasMatch(part)) {
+                                    // cocokkan format RM-0001 atau 000001 (6 digit atau lebih)
+                                    norme = part;
+                                  } else if (int.tryParse(part) != null &&
+                                      int.parse(part) <= 200) {
+                                    umur = part;
+                                  } else {
+                                    name += '$part ';
+                                  }
+                                }
+
+                                name = name.trim();
+
+                                controller.getPasien(
+                                  name: name.isNotEmpty ? name : '',
+                                  nik: nik.isNotEmpty ? nik : '',
+                                  umur: umur.isNotEmpty ? umur : '',
+                                  norme: norme.isNotEmpty ? norme : '',
+                                );
                               },
                             ),
                           ),
                         ),
-                        // AppSizes.s17.width,
-                        // Container(
-                        //   width: 50,
-                        //   height: 50,
-                        //   decoration: BoxDecoration(
-                        //     borderRadius: BorderRadius.circular(AppSizes.s4),
-                        //     border: Border.all(color: Color(0xfffF0F0F0)),
-                        //     color: AppColors.colorBaseWhite,
-                        //     boxShadow: [
-                        //       BoxShadow(
-                        //         offset: const Offset(0, 0),
-                        //         blurRadius: 15,
-                        //         spreadRadius: 0,
-                        //         color: AppColors.colorNeutrals300.withAlpha(40),
-                        //       ),
-                        //     ],
-                        //   ),
-                        //   child: Center(
-                        //     child: Icon(
-                        //       Iconsax.filter,
-                        //       color: AppColors.colorSecondary500,
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ],
@@ -1221,7 +1374,7 @@ class DataPatientScreen extends StatelessWidget {
                                                                                                                               controller.umurController.clear();
                                                                                                                               Get.back();
                                                                                                                             },
-                                                                                                                      label: 'Batal'),
+                                                                                                                      label: 'Kembali'),
                                                                                                                 ),
                                                                                                                 AppSizes.s12.width,
                                                                                                                 Flexible(
@@ -1271,72 +1424,89 @@ class DataPatientScreen extends StatelessWidget {
                                                                                           ),
                                                                                         ),
                                                                                       ),
-                                                                                      InkWell(
-                                                                                        onTap: () {
-                                                                                          controllerRme.getRmePasien(id: patient.id);
-                                                                                          Get.to(RekamMedisScreen(name: patient.name));
-                                                                                        },
-                                                                                        child: Text(
-                                                                                          'Rekam Medis',
-                                                                                          style: Get.textTheme.labelLarge!.copyWith(
-                                                                                            fontSize: AppSizes.s14,
-                                                                                            color: AppColors.colorBaseBlack,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
+                                                                                      // InkWell(
+                                                                                      //   onTap: () {
+                                                                                      //     controllerRme.getRmePasien(id: patient.id);
+                                                                                      //     Get.to(RekamMedisScreen(
+                                                                                      //       name: patient.name,
+                                                                                      //       rme: patient.noRekamMedis,
+                                                                                      //       id_pasien: patient.id,
+                                                                                      //     ));
+                                                                                      //   },
+                                                                                      //   child: Text(
+                                                                                      //     'Rekam Medis',
+                                                                                      //     style: Get.textTheme.labelLarge!.copyWith(
+                                                                                      //       fontSize: AppSizes.s14,
+                                                                                      //       color: AppColors.colorBaseBlack,
+                                                                                      //     ),
+                                                                                      //   ),
+                                                                                      // ),
                                                                                       InkWell(
                                                                                         onTap: () {
                                                                                           showModalCenter(
                                                                                             context,
-                                                                                            ShowModalTandaTanyaComponent(
-                                                                                              label: 'Apakah anda yakin ingin menambahkan Farhan ke antrian ?',
-                                                                                              onTapNo: () {
-                                                                                                Get.back();
-                                                                                              },
-                                                                                              onTapYes: () {
-                                                                                                showModalCenter(
-                                                                                                  context,
-                                                                                                  Column(
-                                                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                    spacing: 20,
-                                                                                                    children: [
-                                                                                                      Container(
-                                                                                                        width: 200,
-                                                                                                        height: 200,
-                                                                                                        decoration: BoxDecoration(
-                                                                                                          borderRadius: BorderRadius.circular(AppSizes.s100),
-                                                                                                          color: AppColors.colorBasePrimary,
+                                                                                            Obx(
+                                                                                              () {
+                                                                                                return controller.isLoadingCreate.value
+                                                                                                    ? Center(
+                                                                                                        child: SizedBox(
+                                                                                                          width: 400,
+                                                                                                          height: 400,
+                                                                                                          child: Lottie.asset(Assets.lottie.hospital),
                                                                                                         ),
-                                                                                                        child: Center(
-                                                                                                          child: Text(
-                                                                                                            '19',
-                                                                                                            style: Get.textTheme.labelLarge!.copyWith(
-                                                                                                              fontSize: AppSizes.s100,
-                                                                                                              color: AppColors.colorBaseWhite,
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Center(
-                                                                                                        child: Text(
-                                                                                                          'Nomor Antrian Ditambahkan',
-                                                                                                          style: Get.textTheme.labelLarge!.copyWith(
-                                                                                                            fontSize: AppSizes.s24,
-                                                                                                            color: AppColors.colorNeutrals200,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Center(
-                                                                                                          child: Button.filled(
-                                                                                                        onPressed: () {
-                                                                                                          Get.back();
-                                                                                                          Get.back();
-                                                                                                        },
-                                                                                                        label: 'Selesai',
-                                                                                                      )),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                );
+                                                                                                      )
+                                                                                                    : controller.postPasiens.value != null
+                                                                                                        ? Column(
+                                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                            spacing: 20,
+                                                                                                            children: [
+                                                                                                              Container(
+                                                                                                                width: 200,
+                                                                                                                height: 200,
+                                                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppSizes.s100), color: AppColors.colorBasePrimary),
+                                                                                                                child: Center(
+                                                                                                                  child: Text(
+                                                                                                                    controller.postPasiens.value!.data.nomerAntrian,
+                                                                                                                    style: Get.textTheme.labelLarge!.copyWith(
+                                                                                                                      fontSize: AppSizes.s100,
+                                                                                                                      color: AppColors.colorBaseWhite,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Center(
+                                                                                                                child: Text(
+                                                                                                                  'Nomor Antrian Ditambahkan',
+                                                                                                                  style: Get.textTheme.labelLarge!.copyWith(
+                                                                                                                    fontSize: AppSizes.s24,
+                                                                                                                    color: AppColors.colorNeutrals200,
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Center(
+                                                                                                                child: Button.filled(
+                                                                                                                  onPressed: () {
+                                                                                                                    controller.postPasiens.value = null;
+                                                                                                                    Get.put(HomeController());
+                                                                                                                    Get.back();
+                                                                                                                    Get.back();
+                                                                                                                  },
+                                                                                                                  label: 'Selesai',
+                                                                                                                ).paddingSymmetric(
+                                                                                                                  horizontal: AppSizes.s300,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          )
+                                                                                                        : ShowModalTandaTanyaComponent(
+                                                                                                            label: 'Apakah anda yakin ingin menambahkan ${patient.name} ke antrian ?',
+                                                                                                            onTapNo: () {
+                                                                                                              Get.back();
+                                                                                                            },
+                                                                                                            onTapYes: () {
+                                                                                                              controller.postAntrianPasien(patient.id);
+                                                                                                            },
+                                                                                                          );
                                                                                               },
                                                                                             ),
                                                                                           );
@@ -1418,7 +1588,7 @@ class DataPatientScreen extends StatelessWidget {
                                                                                                               "Terima kasih telah berobat di Klinik Chania Care Center. Semoga lekas sembuh! 💊\n\n"
                                                                                                               "*Uji Coba!*",
                                                                                                             );
-                                                                                                            var whatsappUrl = Uri.parse("whatsapp://send?phone=62${patient.noTelp}&text=$text");
+                                                                                                            var whatsappUrl = Uri.parse("whatsapp://send?phone=629514599817&text=$text");
                                                                                                             try {
                                                                                                               launchUrl(whatsappUrl);
                                                                                                             } catch (e) {
@@ -1728,18 +1898,22 @@ class DataPatientScreen extends StatelessWidget {
                                                                             //     );
                                                                             //   },
                                                                             // ),
-                                                                            PopupMenuItem(
-                                                                              child: PopupMenuActionComponent(
-                                                                                label: 'Rekam Medis',
-                                                                              ),
-                                                                              value: () {
-                                                                                debugPrint('Rekam Medis');
-                                                                              },
-                                                                              onTap: () {
-                                                                                controllerRme.getRmePasien(id: patient.id);
-                                                                                Get.to(RekamMedisScreen(name: patient.name));
-                                                                              },
-                                                                            ),
+                                                                            // PopupMenuItem(
+                                                                            //   child: PopupMenuActionComponent(
+                                                                            //     label: 'Rekam Medis',
+                                                                            //   ),
+                                                                            //   value: () {
+                                                                            //     debugPrint('Rekam Medis');
+                                                                            //   },
+                                                                            //   onTap: () {
+                                                                            //     controllerRme.getRmePasien(id: patient.id);
+                                                                            //     Get.to(RekamMedisScreen(
+                                                                            //       name: patient.name,
+                                                                            //       rme: patient.noRekamMedis,
+                                                                            //       id_pasien: patient.id,
+                                                                            //     ));
+                                                                            //   },
+                                                                            // ),
                                                                             PopupMenuItem(
                                                                               child: PopupMenuActionComponent(
                                                                                 label: 'Tambahkan Antrian',
@@ -1750,58 +1924,67 @@ class DataPatientScreen extends StatelessWidget {
                                                                               onTap: () {
                                                                                 showModalCenter(
                                                                                   context,
-                                                                                  ShowModalTandaTanyaComponent(
-                                                                                    label: 'Apakah anda yakin ingin menambahkan Farhan ke antrian ?',
-                                                                                    onTapNo: () {
-                                                                                      Get.back();
-                                                                                    },
-                                                                                    onTapYes: () {
-                                                                                      showModalCenter(
-                                                                                        context,
-                                                                                        Column(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          spacing: 20,
-                                                                                          children: [
-                                                                                            Container(
-                                                                                              width: 200,
-                                                                                              height: 200,
-                                                                                              decoration: BoxDecoration(
-                                                                                                borderRadius: BorderRadius.circular(AppSizes.s100),
-                                                                                                color: AppColors.colorBasePrimary,
+                                                                                  Obx(
+                                                                                    () {
+                                                                                      return controller.isPostLoading.value
+                                                                                          ? Center(
+                                                                                              child: SizedBox(
+                                                                                                width: 400,
+                                                                                                height: 400,
+                                                                                                child: Lottie.asset(Assets.lottie.hospital),
                                                                                               ),
-                                                                                              child: Center(
-                                                                                                child: Text(
-                                                                                                  '19',
-                                                                                                  style: Get.textTheme.labelLarge!.copyWith(
-                                                                                                    fontSize: AppSizes.s100,
-                                                                                                    color: AppColors.colorBaseWhite,
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                            Center(
-                                                                                              child: Text(
-                                                                                                'Nomor Antrian Ditambahkan',
-                                                                                                style: Get.textTheme.labelLarge!.copyWith(
-                                                                                                  fontSize: AppSizes.s24,
-                                                                                                  color: AppColors.colorNeutrals200,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                            Center(
-                                                                                              child: Button.filled(
-                                                                                                onPressed: () {
-                                                                                                  Get.back();
-                                                                                                  Get.back();
-                                                                                                },
-                                                                                                label: 'Selesai',
-                                                                                              ).paddingSymmetric(
-                                                                                                horizontal: AppSizes.s300,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      );
+                                                                                            )
+                                                                                          : controller.postPasiens.value != null
+                                                                                              ? Column(
+                                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                  spacing: 20,
+                                                                                                  children: [
+                                                                                                    Container(
+                                                                                                      width: 200,
+                                                                                                      height: 200,
+                                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppSizes.s100), color: AppColors.colorBasePrimary),
+                                                                                                      child: Center(
+                                                                                                        child: Text(
+                                                                                                          controller.postPasiens.value!.data.nomerAntrian,
+                                                                                                          style: Get.textTheme.labelLarge!.copyWith(
+                                                                                                            fontSize: AppSizes.s100,
+                                                                                                            color: AppColors.colorBaseWhite,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    Center(
+                                                                                                      child: Text(
+                                                                                                        'Nomor Antrian Ditambahkan',
+                                                                                                        style: Get.textTheme.labelLarge!.copyWith(
+                                                                                                          fontSize: AppSizes.s24,
+                                                                                                          color: AppColors.colorNeutrals200,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    Center(
+                                                                                                      child: Button.filled(
+                                                                                                        onPressed: () {
+                                                                                                          controller.postPasiens.value = null;
+                                                                                                          Get.back();
+                                                                                                          Get.back();
+                                                                                                        },
+                                                                                                        label: 'Selesai',
+                                                                                                      ).paddingSymmetric(
+                                                                                                        horizontal: AppSizes.s300,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                )
+                                                                                              : ShowModalTandaTanyaComponent(
+                                                                                                  label: 'Apakah anda yakin ingin menambahkan ${patient.name} ke antrian ?',
+                                                                                                  onTapNo: () {
+                                                                                                    Get.back();
+                                                                                                  },
+                                                                                                  onTapYes: () {
+                                                                                                    controller.postAntrianPasien(patient.id);
+                                                                                                  },
+                                                                                                );
                                                                                     },
                                                                                   ),
                                                                                 );
@@ -1897,7 +2080,7 @@ class DataPatientScreen extends StatelessWidget {
                                                                                                     "Terima kasih telah berobat di Klinik Chania Care Center. Semoga lekas sembuh! 💊\n\n"
                                                                                                     "*Uji Coba!*",
                                                                                                   );
-                                                                                                  var whatsappUrl = Uri.parse("whatsapp://send?phone=62${patient.noTelp}&text=$text");
+                                                                                                  var whatsappUrl = Uri.parse("whatsapp://send?phone=6289514599817&text=$text");
                                                                                                   try {
                                                                                                     launchUrl(whatsappUrl);
                                                                                                   } catch (e) {
