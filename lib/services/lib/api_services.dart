@@ -116,6 +116,37 @@ abstract class ApiService {
     }
   }
 
+  Future<Either<Failures, dynamic>> patch(
+    String endpoint, {
+    Map<String, String>? queryParameter,
+    Map<String, String>? header,
+    Map<String, dynamic>? body,
+  }) async {
+    try {
+      Response response = await dio.patch(
+        endpoint,
+        queryParameters: queryParameter,
+        data: body,
+        options: Options(
+          headers: header,
+          validateStatus: (_) => true,
+        ),
+      );
+
+      final jsonMap = jsonDecode(response.toString());
+
+      if (response.statusCode != 201 ||
+          (jsonMap is Map && jsonMap['success'] == false)) {
+        final errorResponse = ErrorResponse.fromJson(jsonMap);
+        return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+      } else {
+        return Right(jsonMap);
+      }
+    } catch (error) {
+      return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+    }
+  }
+
   Future<Either<Failures, dynamic>> del(
     String endpoint, {
     Map<String, String>? queryParameter,

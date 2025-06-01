@@ -18,6 +18,7 @@ import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_med
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put_new_medicine_response.dart';
 
 class ApotikRepository {
   final ApotikDatasources source;
@@ -142,5 +143,19 @@ class ApotikRepository {
         name_medicine: name_medicine,
         price_buy: price_buy,
         price_sell: price_sell);
+  }
+
+  Future<Either<Failures, PutNewMedicineResponse>> putNewMedicine({
+    required String name_medicine,
+    required int price_buy,
+    required int price_sell,
+    required String id,
+  }) async {
+    return source.putNewMedicine(
+      name_medicine: name_medicine,
+      price_buy: price_buy,
+      price_sell: price_sell,
+      id: id,
+    );
   }
 }

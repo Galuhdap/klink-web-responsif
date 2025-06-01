@@ -11,9 +11,10 @@ import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
-import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/core/utils/helpers/validation_helper.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/medicine_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_medicine_tabel.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:lottie/lottie.dart';
@@ -55,7 +56,7 @@ class MedicineScreen extends StatelessWidget {
                               ),
                             )
                           : Form(
-                              key: controller.formKey,
+                              key: controller.formKeyNewPost,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -75,16 +76,18 @@ class MedicineScreen extends StatelessWidget {
                                     hintText: 'Nama Obat',
                                     controller:
                                         controller.nameMedicineController,
+                                    validator: emptyValidation,
                                   ),
-                                  InputDataComponent(
-                                    label: 'Harga Beli',
-                                    hintText: 'Harga Beli',
-                                    controller: controller.priceBuyController,
-                                  ),
+                                  // InputDataComponent(
+                                  //   label: 'Harga Beli',
+                                  //   hintText: 'Harga Beli',
+                                  //   controller: controller.priceBuyController,
+                                  // ),
                                   InputDataComponent(
                                     label: 'Harga Jual',
                                     hintText: 'Harga Jual',
                                     controller: controller.priceSellController,
+                                    validator: emptyValidation,
                                   ),
                                   Row(
                                     children: [
@@ -100,7 +103,7 @@ class MedicineScreen extends StatelessWidget {
                                         child: Button.filled(
                                             onPressed: () async {
                                               if (controller
-                                                  .formKey.currentState!
+                                                  .formKeyNewPost.currentState!
                                                   .validate()) {
                                                 controller.postNewMedicine();
                                               }
@@ -121,6 +124,7 @@ class MedicineScreen extends StatelessWidget {
           body: Obx(
             () {
               return ListView(
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   Responsive.isDesktop(context)
                       ? CustomTabelComponent(
@@ -131,7 +135,7 @@ class MedicineScreen extends StatelessWidget {
                             color: AppColors.colorBaseSecondary.withAlpha(50),
                           ),
                           customContentPagination:
-                              controller.numberOfPageReportPurchase.value == 0
+                              controller.numberOfPageNewMedicine.value == 0
                                   ? Container()
                                   : Container(
                                       width: double.infinity,
@@ -217,109 +221,24 @@ class MedicineScreen extends StatelessWidget {
                                 controller.isLoadingHasExpiredMedicine.value,
                           ),
                         )
-                      : Column(
-                          spacing: AppSizes.s30,
-                          children: [
-                            ListMobileContainerComponent(
-                              label: 'Obat Expired',
-                              children: controller
-                                      .isLoadingExpiredMedicine.value
-                                  ? Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : ListView.builder(
-                                      itemCount:
-                                          controller.medicineExpiredList.length,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        var datas = controller
-                                            .medicineExpiredList[index];
-                                        return Container(
-                                          margin: AppSizes.onlyPadding(
-                                              top: AppSizes.s7),
-                                          padding: AppSizes.symmetricPadding(
-                                            vertical: 15,
-                                            horizontal: 15,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.colorBaseWhite,
-                                            borderRadius: BorderRadius.circular(
-                                              AppSizes.s5,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color:
-                                                    Colors.grey.withAlpha(40),
-                                                spreadRadius: 0,
-                                                blurRadius: 24,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    datas.nameMedicine,
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s15,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                  Text(
-                                                    'Stock ${datas.stock}',
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s12,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                  Text(
-                                                    datas.noBuy,
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s12,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Expired ${datas.tanggalExpired.toDateddmmmyyyyFormattedString()}',
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s12,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ],
-                        )
+                      : ListMobileContainerComponent(
+                          label: 'Data Obat',
+                          height: 480,
+                          children: controller.isLoadingExpiredMedicine.value
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ListView.builder(
+                                  itemCount: controller.medicineNewList.length,
+                                  itemBuilder: (BuildContext context, index) {
+                                    var datas =
+                                        controller.medicineNewList[index];
+                                    return MedicineListMobile(
+                                      datas: datas,
+                                      controller: controller,
+                                    );
+                                  },
+                                ))
                 ],
               ).paddingSymmetric(
                 vertical: AppSizes.s41,

@@ -5,8 +5,8 @@ import 'package:klinik_web_responsif/core/components/list_mobile_component.dart'
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
-import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/meidicine_has_expired_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_has_expired_tabel.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:number_paginator/number_paginator.dart';
@@ -131,6 +131,7 @@ class MedicineHasExpiredScreen extends StatelessWidget {
                           children: [
                             ListMobileContainerComponent(
                               label: 'Obat Expired',
+                              height: 480,
                               children: controller
                                       .isLoadingExpiredMedicine.value
                                   ? Center(
@@ -143,87 +144,7 @@ class MedicineHasExpiredScreen extends StatelessWidget {
                                           (BuildContext context, index) {
                                         var datas = controller
                                             .medicineExpiredList[index];
-                                        return Container(
-                                          margin: AppSizes.onlyPadding(
-                                              top: AppSizes.s7),
-                                          padding: AppSizes.symmetricPadding(
-                                            vertical: 15,
-                                            horizontal: 15,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.colorBaseWhite,
-                                            borderRadius: BorderRadius.circular(
-                                              AppSizes.s5,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color:
-                                                    Colors.grey.withAlpha(40),
-                                                spreadRadius: 0,
-                                                blurRadius: 24,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    datas.nameMedicine,
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s15,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                  Text(
-                                                    'Stock ${datas.stock}',
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s12,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                  Text(
-                                                    datas.noBuy,
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s12,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Expired ${datas.tanggalExpired.toDateddmmmyyyyFormattedString()}',
-                                                    style: Get
-                                                        .textTheme.labelLarge!
-                                                        .copyWith(
-                                                            fontSize:
-                                                                AppSizes.s12,
-                                                            color: AppColors
-                                                                .colorBaseBlack),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        );
+                                        return MedicineHasExpiredListMobile(datas: datas);
                                       },
                                     ),
                             ),

@@ -38,7 +38,7 @@ class TabTransaksiWidget extends StatelessWidget {
                   label,
                   style: Get.textTheme.labelLarge!.copyWith(
                     fontSize: AppSizes.s17,
-                    color: controller.selectedIndex.value == index
+                    color: controller.selectedIndexReport.value == index
                         ? AppColors.colorBaseBlack
                         : AppColors.colorBaseSecondary,
                   ),
@@ -47,7 +47,7 @@ class TabTransaksiWidget extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   height: 2,
-                  color: controller.selectedIndex.value == index
+                  color: controller.selectedIndexReport.value == index
                       ? AppColors.colorBasePrimary
                       : AppColors.colorBaseSecondary.withAlpha(50),
                 ),

@@ -75,5 +75,5 @@ build appbundle prod: flutter build appbundle -t lib/main_prod.dart --no-tree-sh
 
 # Create APK for dev / prod flavor. Runs in release mode by default.
 
-build apk dev : flutter build apk -t lib/main_dev.dart --flavor dev --split-per-abi --no-shrink
-build apk prod : flutter build apk -t lib/main_prod.dart --flavor prod --split-per-abi --no-shrink
+build web dev : flutter build web -t lib/main_dev.dart --no-tree-shake-icons
+build web prod : flutter build web -t lib/main_prod.dart --no-tree-shake-icons

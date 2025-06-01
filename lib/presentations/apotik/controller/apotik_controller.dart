@@ -27,6 +27,7 @@ import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_med
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put_new_medicine_response.dart';
 
 enum PaymentMethod { tunai, qris }
 
@@ -72,6 +73,8 @@ class ApotikController extends GetxController {
       Rx<PostBuyMedicineResponse?>(null);
   Rx<PostNewMedicineResponse?> postNewMedicineResponse =
       Rx<PostNewMedicineResponse?>(null);
+  Rx<PutNewMedicineResponse?> putNewMedicineResponse =
+      Rx<PutNewMedicineResponse?>(null);
 
   RxBool isLoading = false.obs;
   RxBool isLoadingTransaction = false.obs;
@@ -112,6 +115,7 @@ class ApotikController extends GetxController {
 
   SuggestionsBoxController suggestionBoxController = SuggestionsBoxController();
   final formKey = GlobalKey<FormState>();
+  final formKeyNewPost = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
   Rx<DateTime> tglLahirController = DateTime.now().obs;
   RxInt grandTotal = 0.obs;
@@ -801,7 +805,8 @@ class ApotikController extends GetxController {
           reportPurchaseMedicineList.clear();
           reportPurchaseMedicineList.addAll(response.data.data);
           totalPurchaseReport.value = response.data.totalKeseluruhan;
-          numberOfPageNewMedicine.value = response.data.pagination.totalPages;
+          numberOfPageReportPurchase.value =
+              response.data.pagination.totalPages;
         },
       );
       isLoadingReportPurchase.value = false;
@@ -844,7 +849,7 @@ class ApotikController extends GetxController {
     try {
       final response = await apotikRepository.postNewMedicine(
           name_medicine: nameMedicineController.text,
-          price_buy: int.parse(priceBuyController.text),
+          price_buy: 1,
           price_sell: int.parse(priceSellController.text));
 
       response.fold(
@@ -864,14 +869,17 @@ class ApotikController extends GetxController {
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red.withOpacity(0.9),
             colorText: Colors.white,
-            duration: Duration(seconds: 5),
+            duration: Duration(seconds: 2),
           );
           Get.back();
         },
         (response) async {
           inspect(response);
           postNewMedicineResponse.value = response;
-          await Future.delayed(Duration(seconds: 3));
+          await Future.delayed(Duration(seconds: 2));
+          nameMedicineController.text = "";
+          priceSellController.text = "";
+          priceBuyController.text = "";
           getNewMedicine();
           isLoadingPostNewMedicine.value = false;
           Get.back();
@@ -881,7 +889,57 @@ class ApotikController extends GetxController {
             snackPosition: SnackPosition.TOP,
             backgroundColor: AppColors.colorBaseSuccess,
             colorText: Colors.white,
-            duration: Duration(seconds: 5),
+            duration: Duration(seconds: 2),
+          );
+        },
+      );
+    } catch (e) {
+      isLoadingPostNewMedicine.value = true;
+    }
+  }
+
+  Future<void> putNewMedicine(String id) async {
+    isLoadingPostNewMedicine.value = true;
+    try {
+      final response = await apotikRepository.putNewMedicine(
+        name_medicine: nameMedicineController.text,
+        price_buy: int.parse(priceBuyController.text),
+        price_sell: int.parse(priceSellController.text),
+        id: id,
+      );
+
+      response.fold(
+        (failures) async {
+          await Future.delayed(Duration(seconds: 2));
+
+          isLoadingPostNewMedicine.value = false;
+          final Map<String, String>? messages = failures.message;
+
+          final errorText =
+              messages!.values.map((e) => e.toString()).join('\n');
+          Get.back();
+          Get.snackbar(
+            "Gagal Melakukan Pengeditan Obat",
+            errorText,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red.withOpacity(0.9),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+        (response) async {
+          putNewMedicineResponse.value = response;
+          await Future.delayed(Duration(seconds: 2));
+          getNewMedicine();
+          isLoadingPostNewMedicine.value = false;
+          Get.back();
+          Get.snackbar(
+            "Berhasil Melakukan Pengeditan Obat",
+            '',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 3),
           );
         },
       );

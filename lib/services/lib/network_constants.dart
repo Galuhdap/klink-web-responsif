@@ -149,6 +149,10 @@ class NetworkConstants {
     return BASE_URL + "/apotik/medicine";
   }
 
+  static String PUT_NEW_MEDICINE_URL(String id) {
+    return BASE_URL + "/apotik/medicine/${id}";
+  }
+
   static String GET_REPORT_MEDICINE_BUY_URL(int page, int limit,
       String start_date, String end_date, String no_buy, String name_supplier) {
     return BASE_URL +

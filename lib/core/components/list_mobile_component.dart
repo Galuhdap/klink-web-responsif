@@ -5,20 +5,20 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 
 class ListMobileContainerComponent extends StatelessWidget {
   final String label;
-  final Widget children;
+  final Widget? children;
+  final double height;
   const ListMobileContainerComponent({
     super.key,
     required this.label,
-    required this.children,
+    this.children,
+    this.height = 400
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppSizes.symmetricPadding(
-        vertical: 15,
-        horizontal: 15,
-      ),
+     
+      height: height,
       decoration: BoxDecoration(
         color: AppColors.colorBaseWhite,
         borderRadius: BorderRadius.circular(
@@ -36,15 +36,34 @@ class ListMobileContainerComponent extends StatelessWidget {
       child: Column(
         spacing: AppSizes.s15,
         children: [
-          Text(
-            label,
-            style: Get.textTheme.labelLarge!.copyWith(
-                fontSize: AppSizes.s17, color: AppColors.colorBaseBlack),
+          Container(
+            padding: AppSizes.symmetricPadding(
+              vertical: AppSizes.s15,
+              horizontal: AppSizes.s15,
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.colorBasePrimary,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(AppSizes.s10),
+                topRight: Radius.circular(AppSizes.s10),
+              ),
+            ),
+            child: Text(
+              label,
+              style: Get.textTheme.labelLarge!.copyWith(
+                  fontSize: AppSizes.s17, color: AppColors.colorBaseWhite),
+            ),
           ),
-          SizedBox(
-            height: AppSizes.s200,
-            child: children,
-          ),
+          Expanded(
+            // height: AppSizes.s200,
+            child: children!,
+          )
+          // SizedBox(
+          //   height: AppSizes.s200,
+          //   child: children,
+          // )
+          // if (children != null) ...[children!],
         ],
       ),
     );

@@ -32,9 +32,18 @@ List<DataColumn> getListMedicineColumns() {
         ),
       ),
     ),
+    // DataColumn(
+    //   label: Text(
+    //     'Harga Beli',
+    //     style: Get.textTheme.labelLarge!.copyWith(
+    //       fontSize: AppSizes.s14,
+    //       color: AppColors.colorBaseBlack,
+    //     ),
+    //   ),
+    // ),
     DataColumn(
       label: Text(
-        'Harga Beli',
+        'HARGA JUAL',
         style: Get.textTheme.labelLarge!.copyWith(
           fontSize: AppSizes.s14,
           color: AppColors.colorBaseBlack,
@@ -42,17 +51,9 @@ List<DataColumn> getListMedicineColumns() {
       ),
     ),
     DataColumn(
+       headingRowAlignment: MainAxisAlignment.center,
       label: Text(
-        'Harga Jual',
-        style: Get.textTheme.labelLarge!.copyWith(
-          fontSize: AppSizes.s14,
-          color: AppColors.colorBaseBlack,
-        ),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'Stock',
+        'STOCK',
         style: Get.textTheme.labelLarge!.copyWith(
           fontSize: AppSizes.s14,
           color: AppColors.colorBaseBlack,
@@ -82,7 +83,7 @@ List<DataRow> getRowsMedicine({
     return [
       const DataRow(
         cells: [
-          DataCell.empty,
+          // DataCell.empty,
           DataCell.empty,
           DataCell(Center(child: CircularProgressIndicator())),
           DataCell.empty,
@@ -106,7 +107,7 @@ List<DataRow> getRowsMedicine({
               Text('Data tidak ditemukan..'),
             ],
           )),
-          DataCell.empty,
+          // DataCell.empty,
           DataCell.empty,
           DataCell.empty,
         ],
@@ -131,12 +132,14 @@ List<DataRow> getRowsMedicine({
             style: const TextStyle(fontWeight: FontWeight.bold))),
         DataCell(Text(row.nameMedicine,
             style: const TextStyle(fontWeight: FontWeight.bold))),
-        DataCell(Text(row.priceBuy.currencyFormatRp,
-            style: const TextStyle(fontWeight: FontWeight.bold))),
+        // DataCell(Text(row.priceBuy.currencyFormatRp,
+        //     style: const TextStyle(fontWeight: FontWeight.bold))),
         DataCell(Text(row.priceSell.currencyFormatRp,
             style: const TextStyle(fontWeight: FontWeight.bold))),
-        DataCell(Text(row.stock.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold))),
+        DataCell(Center(
+          child: Text(row.stock.toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+        )),
         DataCell(Center(
           child: Row(
             spacing: 10,
@@ -188,12 +191,12 @@ List<DataRow> getRowsMedicine({
                                         controller:
                                             controller.nameMedicineController,
                                       ),
-                                      InputDataComponent(
-                                        label: 'Harga Beli',
-                                        hintText: 'Harga Beli',
-                                        controller:
-                                            controller.priceBuyController,
-                                      ),
+                                      // InputDataComponent(
+                                      //   label: 'Harga Beli',
+                                      //   hintText: 'Harga Beli',
+                                      //   controller:
+                                      //       controller.priceBuyController,
+                                      // ),
                                       InputDataComponent(
                                         label: 'Harga Jual',
                                         hintText: 'Harga Jual',
@@ -223,8 +226,8 @@ List<DataRow> getRowsMedicine({
                                                   if (controller
                                                       .formKey.currentState!
                                                       .validate()) {
-                                                    // controller
-                                                    //     .postNewMedicine();
+                                                    controller
+                                                        .putNewMedicine(row.id);
                                                   }
                                                 },
                                                 label: 'Simpan'),

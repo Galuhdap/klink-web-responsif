@@ -21,6 +21,7 @@ import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_med
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/lib/api_services.dart';
 import 'package:klinik_web_responsif/services/lib/network_constants.dart';
 
@@ -377,6 +378,33 @@ class ApotikDatasources extends ApiService {
       return response.fold(
         (failures) => Left(failures),
         (response) => Right(PostNewMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, PutNewMedicineResponse>> putNewMedicine({
+    required String name_medicine,
+    required int price_buy,
+    required int price_sell,
+    required String id,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await patch(NetworkConstants.PUT_NEW_MEDICINE_URL(id), body: {
+        "name_medicine": name_medicine,
+        "price_buy": price_buy,
+        "price_sell": price_sell
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+      inspect(response);
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PutNewMedicineResponse.fromJson(response)),
       );
     } catch (e) {
       return left(Failures(false, 400, {"api": "Server Not Connection!"}));

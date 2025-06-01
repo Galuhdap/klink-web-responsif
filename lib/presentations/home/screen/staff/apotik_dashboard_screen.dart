@@ -88,7 +88,11 @@ class ApotikDashboardScreen extends StatelessWidget {
                                           controller.topFiveMedicineList[index];
                                       return Container(
                                         margin: AppSizes.onlyPadding(
-                                            top: AppSizes.s7),
+                                          top: AppSizes.s7,
+                                          bottom: AppSizes.s7,
+                                          left: AppSizes.s15,
+                                          right: AppSizes.s15,
+                                        ),
                                         padding: AppSizes.symmetricPadding(
                                           vertical: 15,
                                           horizontal: 15,
@@ -163,7 +167,11 @@ class ApotikDashboardScreen extends StatelessWidget {
                                           controller.medicineExpiredList[index];
                                       return Container(
                                         margin: AppSizes.onlyPadding(
-                                            top: AppSizes.s7),
+                                          top: AppSizes.s7,
+                                          bottom: AppSizes.s7,
+                                          left: AppSizes.s15,
+                                          right: AppSizes.s15,
+                                        ),
                                         padding: AppSizes.symmetricPadding(
                                           vertical: 15,
                                           horizontal: 15,
@@ -237,7 +245,7 @@ class ApotikDashboardScreen extends StatelessWidget {
                                                               .colorBaseBlack),
                                                 ),
                                                 Text(
-                                                  'Sisa ${datas.sisaHari}',
+                                                  'Sisa ${datas.sisaHari} Hari',
                                                   style: Get
                                                       .textTheme.labelLarge!
                                                       .copyWith(

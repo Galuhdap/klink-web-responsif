@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:klinik_web_responsif/core/components/custom_tabel_component.dart';
+import 'package:klinik_web_responsif/core/components/list_mobile_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
@@ -12,6 +13,7 @@ import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/medicine_menu_report_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_detail_report_buy_tabel.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_report_buy_tabel.dart';
 import 'package:klinik_web_responsif/presentations/apotik/widget/tab_transaksi_widget.dart';
@@ -691,8 +693,7 @@ class MenuReportScreen extends StatelessWidget {
                                             data: controller
                                                 .reportPurchaseMedicineList,
                                             isLoading: controller
-                                                .isLoadingHasExpiredMedicine
-                                                .value,
+                                                .isLoadingReportPurchase.value,
                                             controller: controller),
                                       ),
                                     ],
@@ -708,8 +709,23 @@ class MenuReportScreen extends StatelessWidget {
                     })
                   : Obx(() {
                       return controller.selectedIndexReport.value == 0
-                          ? Center(
-                              child: Text('Pembelian'),
+                          ? ListMobileContainerComponent(
+                              label: 'Laporan Pembelian',
+                              height: 480,
+                              children: controller.isLoadingReportPurchase.value
+                                  ? Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : ListView.builder(
+                                      itemCount: controller
+                                          .reportPurchaseMedicineList.length,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        var datas = controller
+                                            .reportPurchaseMedicineList[index];
+                                        return MedicineMenuReportListMobile(datas: datas);
+                                      },
+                                    ),
                             )
                           : controller.selectedIndexReport.value == 1
                               ? Center(
@@ -729,3 +745,4 @@ class MenuReportScreen extends StatelessWidget {
     );
   }
 }
+
