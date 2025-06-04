@@ -238,7 +238,8 @@ class MedicineScreen extends StatelessWidget {
                                       controller: controller,
                                     );
                                   },
-                                ))
+                                ),
+                        ),
                 ],
               ).paddingSymmetric(
                 vertical: AppSizes.s41,

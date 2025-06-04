@@ -6,18 +6,18 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 class ListMobileContainerComponent extends StatelessWidget {
   final String label;
   final Widget? children;
+  final Widget? customSearch;
   final double height;
-  const ListMobileContainerComponent({
-    super.key,
-    required this.label,
-    this.children,
-    this.height = 400
-  });
+  const ListMobileContainerComponent(
+      {super.key,
+      required this.label,
+      this.children,
+      this.customSearch,
+      this.height = 400});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-     
       height: height,
       decoration: BoxDecoration(
         color: AppColors.colorBaseWhite,
@@ -55,6 +55,9 @@ class ListMobileContainerComponent extends StatelessWidget {
                   fontSize: AppSizes.s17, color: AppColors.colorBaseWhite),
             ),
           ),
+          if (customSearch != null) ...[
+            customSearch!,
+          ],
           Expanded(
             // height: AppSizes.s200,
             child: children!,

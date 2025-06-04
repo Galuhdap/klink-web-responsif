@@ -14,39 +14,10 @@ import 'package:klinik_web_responsif/services/pasien/pasien_repository.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeController extends GetxController {
-
-  RxList data = [
-    {
-      "no" : "1",
-      "obat" : "aasdasd",
-      "pembelian" : "sdasdasd",
-      "stock" : "asdsad",
-      "tanggal" : "asdsadas",
-      "sisa" : "dsad",
-    },
-    {
-      "no" : "1",
-      "obat" : "aasdasd",
-      "pembelian" : "sdasdasd",
-      "stock" : "asdsad",
-      "tanggal" : "asdsadas",
-      "sisa" : "dsad",
-    },
-    {
-      "no" : "1",
-      "obat" : "aasdasd",
-      "pembelian" : "sdasdasd",
-      "stock" : "asdsad",
-      "tanggal" : "asdsadas",
-      "sisa" : "dsad",
-    },
-  ].obs;
-
-
-
   final PasienRepository pasienRepository = locator();
 
   RxList<AntrianData> antrianPasienList = <AntrianData>[].obs;
+  RxList<AntrianData> finishedPatients = <AntrianData>[].obs;
   Rx<PutAntrianPasienResponse?> putPasiens =
       Rx<PutAntrianPasienResponse?>(null);
   Rx<DelAntrianResponse?> delAntrian = Rx<DelAntrianResponse?>(null);
@@ -57,12 +28,21 @@ class HomeController extends GetxController {
   RxList<AntrianData> waitingPatients = <AntrianData>[].obs;
 
   final searchController = TextEditingController();
+  final searchControllerFinished = TextEditingController();
+  final nameQueueController = TextEditingController();
+  final nameQueueFinishedController = TextEditingController();
+  final noQueueController = TextEditingController();
+  final noQueueFinishedController = TextEditingController();
+  final noRmeController = TextEditingController();
+  final noRmeFinishedController = TextEditingController();
   RxBool isLoading = false.obs;
+  RxBool isLoadingFinished = false.obs;
   RxBool isLoadingTotal = false.obs;
   RxBool isPutLoading = false.obs;
   RxBool isDelLoading = false.obs;
   RxString role = ''.obs;
-  RxInt numberOfPage = 0.obs;
+  RxInt numberOfPage = 1.obs;
+  RxInt numberOfPageFinished = 1.obs;
   RxInt waitingTimeSecondss = 0.obs;
   RxBool queueActive = false.obs;
 
@@ -83,9 +63,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    connectSocket();
+    //connectSocket();
     getStatisticTotalPasien();
     getRole();
+    getAntrianPasien();
+    getAntrianPasienFinished();
+    // getAntrianPasienFinished();
   }
 
   //SOCET.IO
@@ -103,11 +86,7 @@ class HomeController extends GetxController {
       connectionColor.value = Colors.green;
       print('Connected to socket server');
       getAntrianPasien();
-      // if (role == 'ADMIN') {
-      //   getAntrianPasien();
-      // } else {
-      //   getAntrianProssesPasien();
-      // }
+      getAntrianPasienFinished();
     });
 
     socket.onDisconnect((_) {
@@ -127,8 +106,8 @@ class HomeController extends GetxController {
       (data) => {
         print("Queue status update: ${data}"),
         queueActive.value = data['active'],
-        antrianPasienList.refresh()
-        //  getAntrianProssesPasien(),
+        antrianPasienList.refresh(),
+        finishedPatients.refresh(),
       },
     );
 
@@ -246,19 +225,7 @@ class HomeController extends GetxController {
           inspect(failure.code);
         },
         (response) async {
-          // Kalau role-nya dokter, hanya ambil PROCESSING
           final allData = response.data.data;
-          // processingPatients.value = allData
-          //     .where((item) => item.status == "PROCESSING")
-          //     .toList()
-          //   ..sort((a, b) =>
-          //       int.parse(a.nomerAntrian).compareTo(int.parse(b.nomerAntrian)));
-
-          // waitingPatients.value = allData
-          //     .where((item) => item.status == "WAITING")
-          //     .toList()
-          //   ..sort((a, b) =>
-          //       int.parse(a.nomerAntrian).compareTo(int.parse(b.nomerAntrian)));
 
           if (role == 'DOKTER') {
             antrianPasienList.clear();
@@ -277,12 +244,7 @@ class HomeController extends GetxController {
             antrianPasienList.clear();
 
             numberOfPage.value = response.data.pagination.totalPages;
-            // final takeMedicineOnly = allData
-            //     .where((item) =>
-            //         item.status == "TAKE_MEDICINE" || item.status == "FINISHED")
-            //     .toList()
-            //   ..sort((a, b) => int.parse(a.nomerAntrian)
-            //       .compareTo(int.parse(b.nomerAntrian)));
+
             final takeMedicineOnly = allData
                 .where((item) =>
                     item.status == "TAKE_MEDICINE" || item.status == "FINISHED")
@@ -305,9 +267,13 @@ class HomeController extends GetxController {
               'TAKE_MEDICINE': 2,
               'PENDING': 3,
               'CANCELLED': 4,
-              'FINISHED': 5,
             };
-            final sortedData = allData.toList()
+
+// Ambil hanya yang bukan 'FINISHED' dan termasuk dalam statusOrder
+            final sortedData = allData
+                .where((item) =>
+                    statusOrder.containsKey(item.status.toUpperCase()))
+                .toList()
               ..sort((a, b) {
                 final aStatusOrder = statusOrder[a.status.toUpperCase()] ?? 999;
                 final bStatusOrder = statusOrder[b.status.toUpperCase()] ?? 999;
@@ -315,13 +281,15 @@ class HomeController extends GetxController {
                 if (aStatusOrder != bStatusOrder) {
                   return aStatusOrder.compareTo(bStatusOrder);
                 }
- 
+
                 return int.parse(a.nomerAntrian)
                     .compareTo(int.parse(b.nomerAntrian));
               });
 
-            antrianPasienList.clear();
-            antrianPasienList.addAll(sortedData);
+            antrianPasienList
+              ..clear()
+              ..addAll(sortedData);
+            numberOfPage.value = response.data.pagination.totalPages;
           }
         },
       );
@@ -329,6 +297,38 @@ class HomeController extends GetxController {
     } catch (e) {
       print('e:$e');
       isLoading.value = false;
+    }
+  }
+
+  Future<void> getAntrianPasienFinished({
+    int page = 1,
+    int limit = 10,
+    String name = '',
+    String nomer_antrian = '',
+    String no_rme = '',
+  }) async {
+    isLoadingFinished.value = true;
+    try {
+      final response = await pasienRepository.getAntrianPasienFinished(
+          page: page,
+          limit: limit,
+          name: name,
+          nomer_antrian: nomer_antrian,
+          no_rme: no_rme);
+
+      response.fold((failure) {
+        inspect(failure.code);
+      }, (response) async {
+        finishedPatients
+          ..clear()
+          ..addAll(response.data.data);
+
+        numberOfPageFinished.value = response.data.pagination.totalPages;
+      });
+      isLoadingFinished.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingFinished.value = false;
     }
   }
 
@@ -403,6 +403,7 @@ class HomeController extends GetxController {
           }
 
           isPutLoading.value = false;
+          Get.back();
           Get.back();
         },
       );

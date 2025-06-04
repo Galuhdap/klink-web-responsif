@@ -19,8 +19,6 @@ import 'package:klinik_web_responsif/core/utils/helpers/validation_helper.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/patient_controller.dart';
-import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
-import 'package:klinik_web_responsif/presentations/patient/screen/rekam_medis_screen.dart';
 import 'package:klinik_web_responsif/services/pasien/model/request/post_pasient_request.dart';
 import 'package:lottie/lottie.dart';
 import 'package:number_paginator/number_paginator.dart';
@@ -38,7 +36,6 @@ class DataPatientScreen extends StatelessWidget {
     return GetBuilder<PatientController>(
       init: PatientController(),
       builder: (controller) {
-        // var controllerRme = Get.put(RekamMedisController());
         return Scaffold(
           backgroundColor: Color(0xfffF8F8F8),
           appBar: PreferredSize(
@@ -747,7 +744,6 @@ class DataPatientScreen extends StatelessWidget {
                                 String norme = '';
 
                                 for (var part in parts) {
-                                
                                   if (RegExp(r'^\d{16}$').hasMatch(part)) {
                                     nik = part;
                                   } else if (RegExp(r'^(RM-\d+|\d{3,})$')
@@ -1022,7 +1018,6 @@ class DataPatientScreen extends StatelessWidget {
                                                         .asMap()
                                                         .entries
                                                         .map((entry) {
-                                                        final index = entry.key;
                                                         final patient =
                                                             entry.value;
                                                         return DataRow(
@@ -1030,7 +1025,8 @@ class DataPatientScreen extends StatelessWidget {
                                                             DataCell(
                                                               Center(
                                                                 child: Text(
-                                                                  '${index + 1}',
+                                                                  patient.no
+                                                                      .toString(),
                                                                   style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight

@@ -42,6 +42,12 @@ class NetworkConstants {
         "/queue/pasien?page=${page}&limit=${limit}&name=${name}&nomer_antrian=${nomer_antrian}&no_rme=${no_rme}";
   }
 
+  static String GET_ANTRIAN_PASIEN_FINISHED_URL(
+      int page, int limit, String name, String nomer_antrian, String no_rme) {
+    return BASE_URL +
+        "/queue/pasien/finished?page=${page}&limit=${limit}&name=${name}&nomer_antrian=${nomer_antrian}&no_rme=${no_rme}";
+  }
+
   static String GET_ANTRIAN_PROSES_PASIEN_URL(
       int page, int limit, String search) {
     return BASE_URL +

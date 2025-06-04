@@ -6,7 +6,6 @@ import 'package:klinik_web_responsif/core/components/popup_menu_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
 import 'package:klinik_web_responsif/core/components/show_bottom_dialog.dart';
 import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
-import 'package:klinik_web_responsif/core/components/status_docter_aktif_component.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';

@@ -132,6 +132,30 @@ class PasienDatasources extends ApiService {
     }
   }
 
+  Future<Either<Failure, GetAntrianPasienResponse>> getAntrianPasienFinished({
+    required int page,
+    required int limit,
+    required String name,
+    required String nomer_antrian,
+    required String no_rme,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response = await get(
+          NetworkConstants.GET_ANTRIAN_PASIEN_FINISHED_URL(
+              page, limit, name, nomer_antrian, no_rme),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+
+      return Right(GetAntrianPasienResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
   Future<Either<Failure, GetAntrianPasienResponse>> getAntrianProsessPasien({
     required int page,
     required int limit,

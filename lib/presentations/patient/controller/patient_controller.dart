@@ -14,6 +14,10 @@ import 'package:klinik_web_responsif/services/pasien/pasien_repository.dart';
 
 class PatientController extends GetxController {
   final searchController = TextEditingController();
+  final namesearchController = TextEditingController();
+  final niksearchController = TextEditingController();
+  final umursearchController = TextEditingController();
+  final normeearchController = TextEditingController();
 
   final PasienRepository pasienRepository = locator();
 
@@ -42,6 +46,8 @@ class PatientController extends GetxController {
 
   final formKey = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
+  var hasMore = true.obs;
+  final ScrollController scrollControllerNew = ScrollController();
 
   @override
   void onInit() {
@@ -96,8 +102,10 @@ class PatientController extends GetxController {
           inspect(failure.code);
         },
         (response) async {
+          if (response.data.data.length < limit) {
+            hasMore.value = false;
+          }
           pasienList.clear();
-
           pasienList.addAll(response.data.data);
           numberOfPage.value = response.data.pagination.totalPages;
         },
@@ -108,6 +116,13 @@ class PatientController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // Future refreshData() async {
+  //   hasMore.value = true;
+  //   pasienList.value = [];
+
+  //   await getPasien();
+  // }
 
   Future<void> getPasienById(String id) async {
     isLoadingId.value = true;
@@ -185,7 +200,7 @@ class PatientController extends GetxController {
           await Future.delayed(Duration(seconds: 3));
           getPasien();
           isLoadingCreate.value = false;
-                   Get.snackbar(
+          Get.snackbar(
             "Berhasil Mendaftar Pasien",
             '',
             snackPosition: SnackPosition.TOP,

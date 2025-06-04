@@ -79,6 +79,7 @@ class Pasien {
 }
 
 class ListPasien {
+    final int no;
     final String id;
     final String name;
     final String nik;
@@ -90,6 +91,7 @@ class ListPasien {
     final String noRekamMedis;
 
     ListPasien({
+        required this.no,
         required this.id,
         required this.name,
         required this.nik,
@@ -102,6 +104,7 @@ class ListPasien {
     });
 
     ListPasien copyWith({
+        int? no,
         String? id,
         String? name,
         String? nik,
@@ -113,6 +116,7 @@ class ListPasien {
         String? noRekamMedis,
     }) => 
         ListPasien(
+            no: no ?? this.no,
             id: id ?? this.id,
             name: name ?? this.name,
             nik: nik ?? this.nik,
@@ -125,6 +129,7 @@ class ListPasien {
         );
 
     factory ListPasien.fromJson(Map<String, dynamic> json) => ListPasien(
+        no: json["no"],
         id: json["id"],
         name: json["name"],
         nik: json["nik"],
@@ -137,6 +142,7 @@ class ListPasien {
     );
 
     Map<String, dynamic> toJson() => {
+        "no": no,
         "id": id,
         "name": name,
         "nik": nik,

@@ -1,22 +1,22 @@
 class AppConstants {
   //Antrian
   static const String LABEL_DAFTAR_ANTRIAN = "Daftar Antrian Pasien";
-  static const String LABEL_NO_ANTRIAN = "No Antrian";
-  static const String LABEL_NAMA_PASIEN = "Nama Pasien";
+  static const String LABEL_NO_ANTRIAN = "NO ANTRIAN";
+  static const String LABEL_NAMA_PASIEN = "NAMA PASIEN";
   static const String LABEL_NAMA = "Nama";
-  static const String LABEL_STATUS = "Status";
+  static const String LABEL_STATUS = "STATUS";
   static const String LABEL_WAKTU_TUNGGU = "Waktu Tunggu";
   static const String LABEL_ACTION = "Action";
 
   static const String LABEL_QTY = "Qty";
 
   static const String LABEL_CARI = "Cari";
-  static const String LABEL_NO = "No";
-  static const String LABEL_NO_REKAM_MEDIS = "No Rekam Medis";
+  static const String LABEL_NO = "NO";
+  static const String LABEL_NO_REKAM_MEDIS = "NO REKAM MEDIS";
   static const String LABEL_NIK = "NIK";
-  static const String LABEL_UMUR = "Umur";
-  static const String LABEL_JENIS_KELAMIN = "Jenis Kelamin";
-  static const String LABEL_TGL_LAHIR = "Tgl Lahir";
+  static const String LABEL_UMUR = "UMUR";
+  static const String LABEL_JENIS_KELAMIN = "JENIS KELAMIN";
+  static const String LABEL_TGL_LAHIR = "TGL LAHIR";
 
   static const String LABEL_PASIEN_BULAN_INI = "Pasien Baru Bulan ini";
   static const String LABEL_PASIEN_TERDAFTAR = "Pasien Terdaftar";

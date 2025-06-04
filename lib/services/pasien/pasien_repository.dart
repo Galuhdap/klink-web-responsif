@@ -48,8 +48,7 @@ class PasienRepository {
     return source.postPasien(data);
   }
 
-  Future<Either<Failures, DelAntrianResponse>> delAntrianId(
-      String id) async {
+  Future<Either<Failures, DelAntrianResponse>> delAntrianId(String id) async {
     return source.deleteAntrianById(id);
   }
 
@@ -66,6 +65,21 @@ class PasienRepository {
     required String no_rme,
   }) async {
     return source.getAntrianPasien(
+        page: page,
+        limit: limit,
+        name: name,
+        nomer_antrian: nomer_antrian,
+        no_rme: no_rme);
+  }
+
+  Future<Either<Failure, GetAntrianPasienResponse>> getAntrianPasienFinished({
+    required int page,
+    required int limit,
+    required String name,
+    required String nomer_antrian,
+    required String no_rme,
+  }) async {
+    return source.getAntrianPasienFinished(
         page: page,
         limit: limit,
         name: name,

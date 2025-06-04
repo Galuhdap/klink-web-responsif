@@ -11,10 +11,11 @@ import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_screen
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_report_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
+import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stackholder_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/apotik_dashboard_screen.dart';
-import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
-import 'package:klinik_web_responsif/presentations/patient/screen/data_patient_page.dart';
+import 'package:klinik_web_responsif/presentations/home/screen/staff/queue_screen.dart';
+import 'package:klinik_web_responsif/presentations/patient/screen/patient_screen.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
 import 'package:klinik_web_responsif/routes/app_routes.dart';
 
@@ -35,13 +36,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     switch (widget.userRole) {
       case UserRole.ADMIN:
         return [
-          const StaffScreen(),
-          const DataPatientScreen(),
+          const QueueScreen(),
+          const PatientScreen(),
+         // const DataPatientScreen(),
           // const DocterScreen(),
         ];
       case UserRole.DOKTER:
         return [
-          const StaffScreen(),
+          const QueueScreen(),
           //const DataAntrianPasienDocterScreen(),
         ];
       case UserRole.APOTEKER:
@@ -147,6 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           IconButton(
             onPressed: () async {
               await SharedPreferencesUtils.deleteAuthToken();
+              Get.delete<HomeController>();
               Get.offAllNamed(AppRoutes.login);
             },
             icon: SvgPicture.asset(Assets.icons.logOut.path),

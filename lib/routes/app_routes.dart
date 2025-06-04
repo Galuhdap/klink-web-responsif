@@ -12,10 +12,10 @@ class AppRoutes {
   static const String main = "/";
 
   static const String login = "/login";
-  static const String dashboardWeb = "/dashboardWeb";
+  static const String dashboardWeb = "/dashboard/web";
   static const String patien = "/patient";
-  static const String dashboardMobile = "/dashboardMobile";
-  static const String responsiveDashboard = "/responsiveDashboard";
+  static const String dashboardMobile = "/dashboard/mobile";
+  static const String responsiveDashboard = "/dashboard";
   static const String staffHome = "/staf/home";
   static const String apotikHome = "/apotik/home";
   static const String rekamMedis = "/rekam/medis";
