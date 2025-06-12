@@ -148,15 +148,38 @@ class NetworkConstants {
         "/apotik/stock/medicine?page=${page}&limit=${limit}&name_medicine=${name_medicine}";
   }
 
+  static String GET_MEDICINE_GROUP_STOCK_ZERO_URL(
+      int page, int limit, String name_medicine) {
+    return BASE_URL +
+        "/apotik/stock/medicine/zero?page=${page}&limit=${limit}&name_medicine=${name_medicine}";
+  }
+
   static String POST_MEDICINE_BUY_URL() {
     return BASE_URL + "/apotik/buy/medicine";
   }
+
   static String POST_NEW_MEDICINE_URL() {
     return BASE_URL + "/apotik/medicine";
   }
 
   static String PUT_NEW_MEDICINE_URL(String id) {
     return BASE_URL + "/apotik/medicine/${id}";
+  }
+
+  static String DELETE_NEW_MEDICINE_URL(String id) {
+    return BASE_URL + "/apotik/medicine/${id}";
+  }
+
+  static String POST_UNIT_NEW_MEDICINE_URL() {
+    return BASE_URL + "/apotik/medicine/unit";
+  }
+
+  static String PUT_UNIT_NEW_MEDICINE_URL(String id) {
+    return BASE_URL + "/apotik/medicine/unit/${id}";
+  }
+
+  static String DELETE_UNIT_NEW_MEDICINE_URL(String id) {
+    return BASE_URL + "/apotik/medicine/unit/${id}";
   }
 
   static String GET_REPORT_MEDICINE_BUY_URL(int page, int limit,
@@ -169,5 +192,10 @@ class NetworkConstants {
       int page, int limit, String name_medicine) {
     return BASE_URL +
         "/apotik/medicine?page=${page}&limit=${limit}&name_medicine=${name_medicine}";
+  }
+
+  static String GET_UNIT_URL(int page, int limit, String name) {
+    return BASE_URL +
+        "/apotik/medicine/unit?page=${page}&limit=${limit}&name=${name}";
   }
 }

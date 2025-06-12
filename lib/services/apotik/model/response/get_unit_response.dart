@@ -1,32 +1,30 @@
 // To parse this JSON data, do
 //
-//     final getGroupStockMedicineResponse = getGroupStockMedicineResponseFromJson(jsonString);
+//     final getUnitResponse = getUnitResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-GetGroupStockMedicineResponse getGroupStockMedicineResponseFromJson(
-        String str) =>
-    GetGroupStockMedicineResponse.fromJson(json.decode(str));
+GetUnitResponse getUnitResponseFromJson(String str) =>
+    GetUnitResponse.fromJson(json.decode(str));
 
-String getGroupStockMedicineResponseToJson(
-        GetGroupStockMedicineResponse data) =>
+String getUnitResponseToJson(GetUnitResponse data) =>
     json.encode(data.toJson());
 
-class GetGroupStockMedicineResponse {
+class GetUnitResponse {
   bool success;
   int code;
   String message;
   Data data;
 
-  GetGroupStockMedicineResponse({
+  GetUnitResponse({
     required this.success,
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory GetGroupStockMedicineResponse.fromJson(Map<String, dynamic> json) =>
-      GetGroupStockMedicineResponse(
+  factory GetUnitResponse.fromJson(Map<String, dynamic> json) =>
+      GetUnitResponse(
         success: json["success"],
         code: json["code"],
         message: json["message"],
@@ -42,7 +40,7 @@ class GetGroupStockMedicineResponse {
 }
 
 class Data {
-  List<DatumGroupStockMedicine> data;
+  List<DatumUnit> data;
   Pagination pagination;
 
   Data({
@@ -51,8 +49,8 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        data: List<DatumGroupStockMedicine>.from(
-            json["data"].map((x) => DatumGroupStockMedicine.fromJson(x))),
+        data: List<DatumUnit>.from(
+            json["data"].map((x) => DatumUnit.fromJson(x))),
         pagination: Pagination.fromJson(json["pagination"]),
       );
 
@@ -62,36 +60,31 @@ class Data {
       };
 }
 
-class DatumGroupStockMedicine {
-  int no;
+class DatumUnit {
+  int? no;
   String id;
-  String nameMedicine;
-  int priceSell;
-  int totalStock;
+  String name;
+  int? level;
 
-  DatumGroupStockMedicine({
-    required this.no,
+  DatumUnit({
+    this.no,
     required this.id,
-    required this.nameMedicine,
-    required this.priceSell,
-    required this.totalStock,
+    required this.name,
+    this.level,
   });
 
-  factory DatumGroupStockMedicine.fromJson(Map<String, dynamic> json) =>
-      DatumGroupStockMedicine(
+  factory DatumUnit.fromJson(Map<String, dynamic> json) => DatumUnit(
         no: json["no"],
         id: json["id"],
-        nameMedicine: json["name_medicine"],
-        priceSell: json["price_sell"],
-        totalStock: json["total_stock"],
+        name: json["name"],
+        level: json["level"],
       );
 
   Map<String, dynamic> toJson() => {
         "no": no,
         "id": id,
-        "name_medicine": nameMedicine,
-        "price_sell": priceSell,
-        "total_stock": totalStock,
+        "name": name,
+        "level": level,
       };
 }
 

@@ -335,157 +335,166 @@ class QueueScreen extends StatelessWidget {
                                   controllerRme: controllerRme,
                                 ),
                               ),
-                              AppSizes.s50.height,
-                              CustomTabelComponent(
-                                label: "Daftar Antrian Selesai",
-                                sizeRowTabel:
-                                    MediaQuery.of(context).size.width / 1.1,
-                                sizeWidth:
-                                    MediaQuery.of(context).size.width / 1,
-                                customContentPagination: controller
-                                            .numberOfPageFinished.value <=
-                                        1
-                                    ? Container()
-                                    : Container(
-                                        width: double.infinity,
-                                        padding: AppSizes.onlyPadding(
-                                            bottom: AppSizes.s50),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: AppColors.colorBaseWhite,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        AppSizes.s4),
-                                              ),
-                                              child: Obx(() {
-                                                return NumberPaginator(
-                                                  numberPages: controller
-                                                      .numberOfPageFinished
-                                                      .value,
-                                                  onPageChange: (int index) {
-                                                    final page = index + 1;
-                                                    controller.getAntrianPasienFinished(
-                                                        page: page,
-                                                        name: controller
-                                                            .nameQueueFinishedController
-                                                            .text,
-                                                        no_rme: controller
-                                                            .noRmeFinishedController
-                                                            .text,
-                                                        nomer_antrian: controller
-                                                            .noQueueFinishedController
-                                                            .text);
-                                                  },
-                                                  child: const SizedBox(
-                                                    height: 48,
-                                                    width: 300,
-                                                    child: Row(
-                                                      children: [
-                                                        PrevButton(),
-                                                        Expanded(
-                                                          child:
-                                                              NumberContent(),
-                                                        ),
-                                                        NextButton(),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                customContent: Container(
-                                  width:
+                              if (controller.role.value == 'ADMIN' &&
+                                  controller.role.value == 'APOTIK') ...[
+                                AppSizes.s50.height,
+                                CustomTabelComponent(
+                                  label: "Daftar Antrian Selesai",
+                                  sizeRowTabel:
                                       MediaQuery.of(context).size.width / 1.1,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        offset: const Offset(0, 0),
-                                        blurRadius: 15,
-                                        spreadRadius: 0,
-                                        color: AppColors.colorNeutrals300
-                                            .withAlpha(40),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Flexible(
-                                        child: SearchNewComponent(
-                                          controller: controller
-                                              .searchControllerFinished,
-                                          keyboardType: TextInputType.name,
-                                          hintText: AppConstants.LABEL_CARI,
-                                          suffixIcon: const Icon(
-                                            Icons.search,
-                                            color: AppColors.colorSecondary500,
+                                  sizeWidth:
+                                      MediaQuery.of(context).size.width / 1,
+                                  customContentPagination: controller
+                                              .numberOfPageFinished.value <=
+                                          1
+                                      ? Container()
+                                      : Container(
+                                          width: double.infinity,
+                                          padding: AppSizes.onlyPadding(
+                                              bottom: AppSizes.s50),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      AppColors.colorBaseWhite,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppSizes.s4),
+                                                ),
+                                                child: Obx(() {
+                                                  return NumberPaginator(
+                                                    numberPages: controller
+                                                        .numberOfPageFinished
+                                                        .value,
+                                                    onPageChange: (int index) {
+                                                      final page = index + 1;
+                                                      controller.getAntrianPasienFinished(
+                                                          page: page,
+                                                          name: controller
+                                                              .nameQueueFinishedController
+                                                              .text,
+                                                          no_rme: controller
+                                                              .noRmeFinishedController
+                                                              .text,
+                                                          nomer_antrian: controller
+                                                              .noQueueFinishedController
+                                                              .text);
+                                                    },
+                                                    child: const SizedBox(
+                                                      height: 48,
+                                                      width: 300,
+                                                      child: Row(
+                                                        children: [
+                                                          PrevButton(),
+                                                          Expanded(
+                                                            child:
+                                                                NumberContent(),
+                                                          ),
+                                                          NextButton(),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                              ),
+                                            ],
                                           ),
-                                          onChanged: (value) {
-                                            final input = value.trim();
-                                            final parts = input
-                                                .split(',')
-                                                .map((e) => e.trim())
-                                                .toList();
-
-                                            String name = '';
-                                            String nomerAntrian = '';
-                                            String noRme = '';
-
-                                            controller
-                                                .nameQueueFinishedController
-                                                .text = name;
-                                            controller.noQueueFinishedController
-                                                .text = nomerAntrian;
-                                            controller.noRmeFinishedController
-                                                .text = noRme;
-
-                                            for (var part in parts) {
-                                              if (part
-                                                  .toUpperCase()
-                                                  .startsWith('RM-')) {
-                                                noRme = part;
-                                              } else if (int.tryParse(part) !=
-                                                  null) {
-                                                nomerAntrian = part;
-                                              } else {
-                                                name = part;
-                                              }
-                                            }
-
-                                            controller.getAntrianPasienFinished(
-                                              name: name.isNotEmpty ? name : '',
-                                              nomer_antrian:
-                                                  nomerAntrian.isNotEmpty
-                                                      ? nomerAntrian
-                                                      : '',
-                                              no_rme:
-                                                  noRme.isNotEmpty ? noRme : '',
-                                            );
-                                          },
                                         ),
-                                      ),
-                                      // AppSizes.s20.width,
-                                      // LabelStatusAntrianComponent(),
-                                    ],
+                                  customContent: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.1,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          offset: const Offset(0, 0),
+                                          blurRadius: 15,
+                                          spreadRadius: 0,
+                                          color: AppColors.colorNeutrals300
+                                              .withAlpha(40),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          child: SearchNewComponent(
+                                            controller: controller
+                                                .searchControllerFinished,
+                                            keyboardType: TextInputType.name,
+                                            hintText: AppConstants.LABEL_CARI,
+                                            suffixIcon: const Icon(
+                                              Icons.search,
+                                              color:
+                                                  AppColors.colorSecondary500,
+                                            ),
+                                            onChanged: (value) {
+                                              final input = value.trim();
+                                              final parts = input
+                                                  .split(',')
+                                                  .map((e) => e.trim())
+                                                  .toList();
+
+                                              String name = '';
+                                              String nomerAntrian = '';
+                                              String noRme = '';
+
+                                              controller
+                                                  .nameQueueFinishedController
+                                                  .text = name;
+                                              controller
+                                                  .noQueueFinishedController
+                                                  .text = nomerAntrian;
+                                              controller.noRmeFinishedController
+                                                  .text = noRme;
+
+                                              for (var part in parts) {
+                                                if (part
+                                                    .toUpperCase()
+                                                    .startsWith('RM-')) {
+                                                  noRme = part;
+                                                } else if (int.tryParse(part) !=
+                                                    null) {
+                                                  nomerAntrian = part;
+                                                } else {
+                                                  name = part;
+                                                }
+                                              }
+
+                                              controller
+                                                  .getAntrianPasienFinished(
+                                                name:
+                                                    name.isNotEmpty ? name : '',
+                                                nomer_antrian:
+                                                    nomerAntrian.isNotEmpty
+                                                        ? nomerAntrian
+                                                        : '',
+                                                no_rme: noRme.isNotEmpty
+                                                    ? noRme
+                                                    : '',
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        // AppSizes.s20.width,
+                                        // LabelStatusAntrianComponent(),
+                                      ],
+                                    ),
+                                  ),
+                                  listColumns: getListQueueColumns(
+                                    controller: controller,
+                                    data: "FINISHED",
+                                  ),
+                                  listRows: getRowsQueue(
+                                    context: context,
+                                    controller: controller,
+                                    data: controller.finishedPatients,
+                                    isLoading: controller.isLoading.value,
+                                    controllerApotik: controllerApotik,
+                                    controllerRme: controllerRme,
                                   ),
                                 ),
-                                listColumns: getListQueueColumns(
-                                  controller: controller,
-                                  data: "FINISHED",
-                                ),
-                                listRows: getRowsQueue(
-                                  context: context,
-                                  controller: controller,
-                                  data: controller.finishedPatients,
-                                  isLoading: controller.isLoading.value,
-                                  controllerApotik: controllerApotik,
-                                  controllerRme: controllerRme,
-                                ),
-                              ),
+                              ]
                             ],
                           )
                         : Column(

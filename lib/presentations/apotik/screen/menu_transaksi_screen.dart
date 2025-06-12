@@ -10,7 +10,6 @@ import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/transaks
 import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/transaksi_buy/select_detail_medicine_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/transaksi_buy/select_medicine_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tab_menu/tab_menu_buy_screen.dart';
-import 'package:klinik_web_responsif/presentations/apotik/widget/tab_transaksi_widget.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 
 class MenuTransaksiScreen extends StatelessWidget {
@@ -37,27 +36,6 @@ class MenuTransaksiScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              Row(
-                children: [
-                  Flexible(
-                    child: TabTransaksiWidget(
-                      label: 'Pembelian',
-                      controller: controller,
-                      index: 0,
-                      onTap: () => controller.selectTab(0),
-                    ),
-                  ),
-                  Flexible(
-                    child: TabTransaksiWidget(
-                      label: 'Penjualan',
-                      controller: controller,
-                      index: 1,
-                      onTap: () => controller.selectTab(1),
-                    ),
-                  ),
-                ],
-              ),
-              AppSizes.s20.height,
               Responsive.isDesktop(context)
                   ? Obx(() {
                       return controller.selectedIndex.value == 0
@@ -142,12 +120,11 @@ class MenuTransaksiScreen extends StatelessWidget {
                                 ),
                                 AppSizes.s20.height,
                                 ListMobileContainerComponent(
-                                  label: 'Lanjutkan Pembelian',
-                                  height: 180,
-                                  children: ConfirmPaymentMobile(
-                                    controller: controller,
-                                  )
-                                ),
+                                    label: 'Lanjutkan Pembelian',
+                                    height: 180,
+                                    children: ConfirmPaymentMobile(
+                                      controller: controller,
+                                    )),
                               ],
                             ))
                           : Center(

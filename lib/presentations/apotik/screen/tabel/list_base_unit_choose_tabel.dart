@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five_medicine_response.dart';
+import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
 
-List<DataColumn> getListMedicineFiveFavoritColumns({
-  required List<TopFiveMedicine> data,
-}) {
+List<DataColumn> getListBaseUnitColumns() {
   return [
     DataColumn(
       label: Text(
@@ -17,14 +17,14 @@ List<DataColumn> getListMedicineFiveFavoritColumns({
     ),
     DataColumn(
       label: Text(
-        'OBAT',
+        'SATUAN',
         style: Get.textTheme.labelLarge!
             .copyWith(fontSize: AppSizes.s14, color: AppColors.colorBaseBlack),
       ),
     ),
     DataColumn(
       label: Text(
-        'Jumlah',
+        'ACTION',
         style: Get.textTheme.labelLarge!
             .copyWith(fontSize: AppSizes.s14, color: AppColors.colorBaseBlack),
       ),
@@ -32,11 +32,13 @@ List<DataColumn> getListMedicineFiveFavoritColumns({
   ];
 }
 
-List<DataRow> getListMedicineFiveFavoritDays({
-  required List<TopFiveMedicine> data, // ganti dengan model aslimu
-  required bool isLoadingExpiredMedicine,
+List<DataRow> getListBaseUnitRow({
+  required List<DatumUnit> data, // ganti dengan model aslimu
+  required bool isLoading,
+  required ApotikController controller,
+  required BuildContext context,
 }) {
-  if (isLoadingExpiredMedicine) {
+  if (isLoading) {
     return [
       const DataRow(
         cells: [
@@ -57,15 +59,15 @@ List<DataRow> getListMedicineFiveFavoritDays({
       const DataRow(
         cells: [
           DataCell.empty,
-          DataCell(
-            Center(
-              child: Text(
-                'Data Tidak Tersedia',
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          DataCell.empty,
+          DataCell(Row(
+            children: [
+              Icon(Icons.highlight_off),
+              SizedBox(width: 1),
+              //SpaceWidth(4.0),
+              Text('Data'),
+            ],
+          )),
+          DataCell(Text('tidak Ditemukan')),
         ],
       ),
     ];
@@ -92,15 +94,33 @@ List<DataRow> getListMedicineFiveFavoritDays({
         ),
         DataCell(
           Text(
-            row.nameMedicine,
+            row.name.toUpperCase(),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         DataCell(
-          Text(
-            row.totalTerjual.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Center(
+              child: MouseRegion(
+            cursor: SystemMouseCursors.basic,
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+              ),
+              child: IconButton(
+                onPressed: controller.selectedUnitId.value == row.id
+                    ? () {}
+                    : () {
+                        controller.addSelectedMedicineUnit(row.id);
+                      },
+                icon: const Icon(Iconsax.add_circle5),
+                color: controller.selectedUnitId.value == row.id
+                    ? AppColors.colorBaseSecondary
+                    : AppColors.colorBasePrimary,
+              ),
+            ),
+          )),
         ),
       ],
     );

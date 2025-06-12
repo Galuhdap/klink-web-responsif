@@ -4,6 +4,7 @@ import 'package:klinik_web_responsif/services/apotik/apotik_datasources.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_medicines_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
@@ -14,11 +15,12 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_purchase
 import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_unit_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/put_new_medicine_response.dart';
 
 class ApotikRepository {
   final ApotikDatasources source;
@@ -136,26 +138,64 @@ class ApotikRepository {
 
   Future<Either<Failures, PostNewMedicineResponse>> postNewMedicine({
     required String name_medicine,
-    required int price_buy,
     required int price_sell,
+    required String baseUnitId,
+    required List<Map<String, dynamic>> conversions,
   }) async {
     return source.postNewMedicine(
         name_medicine: name_medicine,
-        price_buy: price_buy,
-        price_sell: price_sell);
+        price_sell: price_sell,
+        baseUnitId: baseUnitId,
+        conversions: conversions);
   }
 
-  Future<Either<Failures, PutNewMedicineResponse>> putNewMedicine({
-    required String name_medicine,
-    required int price_buy,
-    required int price_sell,
+  Future<Either<Failures, DeleteMedicineResponse>> deleteNewMedicine({
     required String id,
   }) async {
-    return source.putNewMedicine(
-      name_medicine: name_medicine,
-      price_buy: price_buy,
-      price_sell: price_sell,
+    return source.deleteNewMedicine(
       id: id,
     );
+  }
+
+  Future<Either<Failures, PostNewMedicineResponse>> putNewMedicine(
+      {required String name_medicine,
+      required int price_sell,
+      required String baseUnitId,
+      required List<Map<String, dynamic>> conversions,
+      required String id}) async {
+    return source.putNewMedicine(
+        name_medicine: name_medicine,
+        price_sell: price_sell,
+        baseUnitId: baseUnitId,
+        conversions: conversions,
+        id: id);
+  }
+
+  Future<Either<Failure, GetUnitResponse>> getUnit(
+      {required int page,
+      required int limit,
+      required String name}) async {
+    return source.getUnit(page: page, limit: limit, name: name);
+  }
+
+  Future<Either<Failures, PostUnitMedicineResponse>> postUnitNewMedicine({
+    required String name,
+  }) async {
+    return source.postUnitNewMedicine(
+      name: name,
+    );
+  }
+
+  Future<Either<Failures, DeleteMedicineResponse>> deleteUnitNewMedicine({
+    required String id,
+  }) async {
+    return source.deleteUnitNewMedicine(
+      id: id,
+    );
+  }
+
+  Future<Either<Failures, PostUnitMedicineResponse>> putUnitNewMedicine(
+      {required String name, required String id}) async {
+    return source.putUnitNewMedicine(name: name, id: id);
   }
 }

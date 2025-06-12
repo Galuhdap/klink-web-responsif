@@ -37,6 +37,7 @@ List<DataColumn> getListMedicineExpired30DaysColumns() {
       ),
     ),
     DataColumn(
+      headingRowAlignment: MainAxisAlignment.center,
       label: Text(
         'TANGGAL EXPIRE',
         style: Get.textTheme.labelLarge!
@@ -82,13 +83,8 @@ List<DataRow> getListMedicineExpired30Days({
         cells: [
           DataCell.empty,
           DataCell.empty,
-          DataCell(Row(
-            spacing: 4,
-            children: [
-              Icon(Icons.highlight_off),
-              //SpaceWidth(4.0),
-              Text('Data tidak ditemukan..'),
-            ],
+          DataCell(Center(
+            child: Text('Data tidak ditemukan..'),
           )),
           DataCell.empty,
           DataCell.empty,
@@ -118,9 +114,14 @@ List<DataRow> getListMedicineExpired30Days({
           ),
         ),
         DataCell(
-          Text(
-            row.nameMedicine,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          SizedBox(
+            width: 90,
+            child: Text(
+              row.nameMedicine,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
         ),
         DataCell(Text(row.noBuy,
@@ -128,15 +129,17 @@ List<DataRow> getListMedicineExpired30Days({
         DataCell(
           Center(
             child: Text(
-              row.stock.toString(),
+              '${row.stock.toString()} ${row.nameUnit.toUpperCase()}',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         ),
         DataCell(
-          Text(
-            row.tanggalExpired.toDateddmmmyyyyFormattedString(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          Center(
+            child: Text(
+              row.tanggalExpired.toDateddmmmyyyyFormattedString(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         DataCell(

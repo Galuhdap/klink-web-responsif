@@ -7,6 +7,7 @@ import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_u
 import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_medicines_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
@@ -17,11 +18,12 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_purchase
 import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_unit_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/put_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/lib/api_services.dart';
 import 'package:klinik_web_responsif/services/lib/network_constants.dart';
 
@@ -60,8 +62,6 @@ class ApotikDatasources extends ApiService {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${prefs}",
       });
-
-      inspect(response);
 
       return response.fold(
         (failures) => Left(failures),
@@ -176,8 +176,6 @@ class ApotikDatasources extends ApiService {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${prefs}",
       });
-
-      inspect(response);
 
       return response.fold(
         (failures) => Left(failures),
@@ -360,16 +358,18 @@ class ApotikDatasources extends ApiService {
 
   Future<Either<Failures, PostNewMedicineResponse>> postNewMedicine({
     required String name_medicine,
-    required int price_buy,
     required int price_sell,
+    required String baseUnitId,
+    required List<Map<String, dynamic>> conversions,
   }) async {
     final prefs = await SharedPreferencesUtils.getAuthToken();
     try {
       final response =
           await post(NetworkConstants.POST_NEW_MEDICINE_URL(), body: {
         "name_medicine": name_medicine,
-        "price_buy": price_buy,
-        "price_sell": price_sell
+        "price_sell": price_sell,
+        "baseUnitId": baseUnitId,
+        "conversions": conversions
       }, header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${prefs}",
@@ -384,27 +384,125 @@ class ApotikDatasources extends ApiService {
     }
   }
 
-  Future<Either<Failures, PutNewMedicineResponse>> putNewMedicine({
-    required String name_medicine,
-    required int price_buy,
-    required int price_sell,
-    required String id,
-  }) async {
+  Future<Either<Failures, PostNewMedicineResponse>> putNewMedicine(
+      {required String name_medicine,
+      required int price_sell,
+      required String baseUnitId,
+      required List<Map<String, dynamic>> conversions,
+      required String id}) async {
     final prefs = await SharedPreferencesUtils.getAuthToken();
     try {
       final response =
           await patch(NetworkConstants.PUT_NEW_MEDICINE_URL(id), body: {
         "name_medicine": name_medicine,
-        "price_buy": price_buy,
-        "price_sell": price_sell
+        "price_sell": price_sell,
+        "baseUnitId": baseUnitId,
+        "conversions": conversions
       }, header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${prefs}",
       });
-      inspect(response);
       return response.fold(
         (failures) => Left(failures),
-        (response) => Right(PutNewMedicineResponse.fromJson(response)),
+        (response) => Right(PostNewMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, DeleteMedicineResponse>> deleteNewMedicine({
+    required String id,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await delete(NetworkConstants.DELETE_NEW_MEDICINE_URL(id), header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(DeleteMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failure, GetUnitResponse>> getUnit(
+      {required int page, required int limit, required String name}) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response =
+          await get(NetworkConstants.GET_UNIT_URL(page, limit, name), header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+
+      return Right(GetUnitResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failures, PostUnitMedicineResponse>> postUnitNewMedicine({
+    required String name,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await post(NetworkConstants.POST_UNIT_NEW_MEDICINE_URL(), body: {
+        "name": name,
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PostUnitMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, PostUnitMedicineResponse>> putUnitNewMedicine(
+      {required String name, required String id}) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await patch(NetworkConstants.PUT_UNIT_NEW_MEDICINE_URL(id), body: {
+        "name": name,
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PostUnitMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, DeleteMedicineResponse>> deleteUnitNewMedicine({
+    required String id,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response = await delete(
+          NetworkConstants.DELETE_UNIT_NEW_MEDICINE_URL(id),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(DeleteMedicineResponse.fromJson(response)),
       );
     } catch (e) {
       return left(Failures(false, 400, {"api": "Server Not Connection!"}));

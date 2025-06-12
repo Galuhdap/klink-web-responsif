@@ -42,6 +42,9 @@ class MedicineHasExpiredScreen extends StatelessWidget {
                   Responsive.isDesktop(context)
                       ? CustomTabelComponent(
                           label: 'Obat Expired',
+                          border: TableBorder.all(
+                            color: AppColors.colorBaseSecondary.withAlpha(50),
+                          ),
                           sizeRowTabel: MediaQuery.of(context).size.width / 1.1,
                           sizeWidth: MediaQuery.of(context).size.width / 1,
                           customContentPagination: controller
@@ -124,6 +127,8 @@ class MedicineHasExpiredScreen extends StatelessWidget {
                             data: controller.medicineHasExpiredList,
                             isLoading:
                                 controller.isLoadingHasExpiredMedicine.value,
+                            context: context,
+                            controller: controller,
                           ),
                         )
                       : Column(
@@ -144,7 +149,8 @@ class MedicineHasExpiredScreen extends StatelessWidget {
                                           (BuildContext context, index) {
                                         var datas = controller
                                             .medicineExpiredList[index];
-                                        return MedicineHasExpiredListMobile(datas: datas);
+                                        return MedicineHasExpiredListMobile(
+                                            datas: datas);
                                       },
                                     ),
                             ),

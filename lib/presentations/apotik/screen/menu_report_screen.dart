@@ -16,7 +16,7 @@ import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_cont
 import 'package:klinik_web_responsif/presentations/apotik/screen/mobile/medicine_menu_report_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_detail_report_buy_tabel.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_report_buy_tabel.dart';
-import 'package:klinik_web_responsif/presentations/apotik/widget/tab_transaksi_widget.dart';
+import 'package:klinik_web_responsif/presentations/apotik/widget/tab_medicine_widget.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:number_paginator/number_paginator.dart';
 
@@ -48,26 +48,29 @@ class MenuReportScreen extends StatelessWidget {
               Row(
                 children: [
                   Flexible(
-                    child: TabTransaksiWidget(
+                    child: TabMedicineWidget(
                       label: 'Pembelian',
                       controller: controller,
                       index: 0,
+                      indexSelect: controller.selectedIndexReport.value.obs,
                       onTap: () => controller.selectTabReport(0),
                     ),
                   ),
                   Flexible(
-                    child: TabTransaksiWidget(
+                    child: TabMedicineWidget(
                       label: 'Penjualan',
                       controller: controller,
                       index: 1,
+                      indexSelect: controller.selectedIndexReport.value.obs,
                       onTap: () => controller.selectTabReport(1),
                     ),
                   ),
                   Flexible(
-                    child: TabTransaksiWidget(
+                    child: TabMedicineWidget(
                       label: 'Stock Obat',
                       controller: controller,
                       index: 2,
+                      indexSelect: controller.selectedIndexReport.value.obs,
                       onTap: () => controller.selectTabReport(2),
                     ),
                   ),
@@ -723,7 +726,8 @@ class MenuReportScreen extends StatelessWidget {
                                           (BuildContext context, index) {
                                         var datas = controller
                                             .reportPurchaseMedicineList[index];
-                                        return MedicineMenuReportListMobile(datas: datas);
+                                        return MedicineMenuReportListMobile(
+                                            datas: datas);
                                       },
                                     ),
                             )
@@ -745,4 +749,3 @@ class MenuReportScreen extends StatelessWidget {
     );
   }
 }
-

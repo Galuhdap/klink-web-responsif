@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
-import 'package:klinik_web_responsif/presentations/patient/screen/rekam_medis_screen.dart';
+import 'package:klinik_web_responsif/presentations/patient/screen/electronic_medical_record_screen.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_antrian_pasien_response.dart';
 
 class QueueRoleDoctorAction extends StatelessWidget {
@@ -25,7 +25,7 @@ class QueueRoleDoctorAction extends StatelessWidget {
           onTap: () {
             controllerRme.getRmePasien(id: row.idPasien);
             Get.to(
-              RekamMedisScreen(
+              ElectronicMedicalRecordScreen(
                 name: row.pasien.name,
                 rme: row.pasien.noRekamMedis,
                 id_pasien: row.pasien.id,

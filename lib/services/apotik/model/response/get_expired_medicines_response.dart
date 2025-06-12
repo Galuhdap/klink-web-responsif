@@ -65,6 +65,7 @@ class DatumExpiredMedicine {
   String nameMedicine;
   String noBuy;
   int stock;
+  String nameUnit;
   DateTime tanggalExpired;
   int sisaHari;
 
@@ -73,6 +74,7 @@ class DatumExpiredMedicine {
     required this.nameMedicine,
     required this.noBuy,
     required this.stock,
+    required this.nameUnit,
     required this.tanggalExpired,
     required this.sisaHari,
   });
@@ -83,6 +85,7 @@ class DatumExpiredMedicine {
         nameMedicine: json["name_medicine"],
         noBuy: json["no_buy"],
         stock: json["stock"],
+        nameUnit: json["name_unit"],
         tanggalExpired: DateTime.parse(json["tanggal_expired"]),
         sisaHari: json["sisa_hari"],
       );
@@ -92,6 +95,7 @@ class DatumExpiredMedicine {
         "name_medicine": nameMedicine,
         "no_buy": noBuy,
         "stock": stock,
+        "name_unit": nameUnit,
         "tanggal_expired":
             "${tanggalExpired.year.toString().padLeft(4, '0')}-${tanggalExpired.month.toString().padLeft(2, '0')}-${tanggalExpired.day.toString().padLeft(2, '0')}",
         "sisa_hari": sisaHari,

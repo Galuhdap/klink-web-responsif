@@ -240,7 +240,7 @@ class PasienDatasources extends ApiService {
 
     try {
       final response =
-          await del(NetworkConstants.DEL_ANTRIAN_ID_URL(id), header: {
+          await delete(NetworkConstants.DEL_ANTRIAN_ID_URL(id), header: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${prefs}",
       });

@@ -76,12 +76,13 @@ abstract class ApiService {
       if (response.statusCode != 201 ||
           (jsonMap is Map && jsonMap['success'] == false)) {
         final errorResponse = ErrorResponse.fromJson(jsonMap);
-        return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+        return Left(Failures(
+            errorResponse.success, errorResponse.code, errorResponse.message));
       } else {
         return Right(jsonMap);
       }
     } catch (error) {
-      return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+      return Left(Failures(false, 500, {"api": "Server Not Connection!"}));
     }
   }
 
@@ -107,12 +108,13 @@ abstract class ApiService {
       if (response.statusCode != 201 ||
           (jsonMap is Map && jsonMap['success'] == false)) {
         final errorResponse = ErrorResponse.fromJson(jsonMap);
-        return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+        return Left(Failures(
+            errorResponse.success, errorResponse.code, errorResponse.message));
       } else {
         return Right(jsonMap);
       }
     } catch (error) {
-      return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+      return Left(Failures(false, 500, {"api": "Server Not Connection!"}));
     }
   }
 
@@ -138,26 +140,23 @@ abstract class ApiService {
       if (response.statusCode != 201 ||
           (jsonMap is Map && jsonMap['success'] == false)) {
         final errorResponse = ErrorResponse.fromJson(jsonMap);
-        return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+        return Left(Failures(
+            errorResponse.success, errorResponse.code, errorResponse.message));
       } else {
         return Right(jsonMap);
       }
     } catch (error) {
-      return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+      return Left(Failures(false, 500, {"api": "Server Not Connection!"}));
     }
   }
 
-  Future<Either<Failures, dynamic>> del(
+  Future<Either<Failures, dynamic>> delete(
     String endpoint, {
-    Map<String, String>? queryParameter,
     Map<String, String>? header,
-    Map<String, dynamic>? body,
   }) async {
     try {
       Response response = await dio.delete(
         endpoint,
-        queryParameters: queryParameter,
-        data: body,
         options: Options(
           headers: header,
           validateStatus: (_) => true,
@@ -169,12 +168,13 @@ abstract class ApiService {
       if (response.statusCode != 201 ||
           (jsonMap is Map && jsonMap['success'] == false)) {
         final errorResponse = ErrorResponse.fromJson(jsonMap);
-        return Left(Failures(errorResponse.success ,errorResponse.code, errorResponse.message));
+        return Left(Failures(
+            errorResponse.success, errorResponse.code, errorResponse.message));
       } else {
         return Right(jsonMap);
       }
     } catch (error) {
-      return Left(Failures(false ,500, {"api" :"Server Not Connection!"}));
+      return Left(Failures(false, 500, {"api": "Server Not Connection!"}));
     }
   }
 

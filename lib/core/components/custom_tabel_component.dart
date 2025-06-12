@@ -6,6 +6,7 @@ import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 
 class CustomTabelComponent extends StatelessWidget {
   final String label;
+  final String? labelName;
   final double sizeRowTabel;
   final double sizeWidth;
   final List<DataColumn> listColumns;
@@ -14,10 +15,12 @@ class CustomTabelComponent extends StatelessWidget {
   final Widget? arrowBack;
   final Widget? customContentBottom;
   final Widget? customContentPagination;
+  final Widget? customContentButton;
   final TableBorder? border;
   const CustomTabelComponent(
       {super.key,
       required this.label,
+      this.labelName,
       this.sizeRowTabel = 0,
       this.sizeWidth = 0,
       required this.listColumns,
@@ -25,6 +28,7 @@ class CustomTabelComponent extends StatelessWidget {
       this.customContent,
       this.customContentBottom,
       this.customContentPagination,
+      this.customContentButton,
       this.arrowBack,
       this.border});
 
@@ -62,16 +66,37 @@ class CustomTabelComponent extends StatelessWidget {
               ),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (arrowBack != null) ...[
-                  arrowBack!,
-                  AppSizes.s10.width,
-                ],
-                Text(
-                  label,
-                  style: Get.textTheme.labelLarge!.copyWith(
-                      fontSize: AppSizes.s17, color: AppColors.colorBackground),
+                Row(
+                  children: [
+                    if (arrowBack != null) ...[
+                      arrowBack!,
+                      AppSizes.s10.width,
+                    ],
+                    Text(
+                      label,
+                      style: Get.textTheme.labelLarge!.copyWith(
+                          fontSize: AppSizes.s17,
+                          color: AppColors.colorBackground),
+                    ),
+                    if (labelName != null) ...[
+                      AppSizes.s5.width,
+                      Icon(
+                        Icons.arrow_forward,
+                        color: AppColors.colorBaseWhite,
+                      ),
+                      AppSizes.s5.width,
+                      Text(
+                        labelName!,
+                        style: Get.textTheme.labelLarge!.copyWith(
+                            fontSize: AppSizes.s17,
+                            color: AppColors.colorBackground),
+                      ),
+                    ]
+                  ],
                 ),
+                if (customContentButton != null) ...[customContentButton!]
               ],
             ),
           ),
@@ -86,7 +111,7 @@ class CustomTabelComponent extends StatelessWidget {
             ),
           ],
           SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             child: Theme(
               data:
                   Theme.of(context).copyWith(dividerColor: Colors.transparent),

@@ -245,19 +245,25 @@ class HomeController extends GetxController {
 
             numberOfPage.value = response.data.pagination.totalPages;
 
-            final takeMedicineOnly = allData
-                .where((item) =>
-                    item.status == "TAKE_MEDICINE" || item.status == "FINISHED")
+            final processingOnly = allData
+                .where((item) => item.status == "TAKE_MEDICINE")
                 .toList()
-              ..sort((a, b) {
-                // Prioritaskan TAKE_MEDICINE, letakkan FINISHED di bawah
-                if (a.status == "FINISHED" && b.status != "FINISHED") return 1;
-                if (a.status != "FINISHED" && b.status == "FINISHED") return -1;
-                return int.parse(a.nomerAntrian)
-                    .compareTo(int.parse(b.nomerAntrian));
-              });
-            antrianPasienList.addAll(takeMedicineOnly);
-            takeMedicinePatients.value = takeMedicineOnly;
+              ..sort((a, b) => int.parse(a.nomerAntrian)
+                  .compareTo(int.parse(b.nomerAntrian)));
+
+            // final takeMedicineOnly = allData
+            //     .where((item) =>
+            //         item.status == "TAKE_MEDICINE" || item.status == "FINISHED")
+            //     .toList()
+            //   ..sort((a, b) {
+            //     // Prioritaskan TAKE_MEDICINE, letakkan FINISHED di bawah
+            //     if (a.status == "FINISHED" && b.status != "FINISHED") return 1;
+            //     if (a.status != "FINISHED" && b.status == "FINISHED") return -1;
+            //     return int.parse(a.nomerAntrian)
+            //         .compareTo(int.parse(b.nomerAntrian));
+            //   });
+            antrianPasienList.addAll(processingOnly);
+            takeMedicinePatients.value = processingOnly;
 
             waitingPatients.clear();
           } else {

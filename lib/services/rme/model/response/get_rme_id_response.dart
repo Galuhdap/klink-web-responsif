@@ -79,6 +79,7 @@ class Data {
 }
 
 class RmeData {
+    final int no;
     final String id;
     final DateTime jadwalPeriksa;
     final String idPasien;
@@ -92,6 +93,7 @@ class RmeData {
     final User user;
 
     RmeData({
+        required this.no,
         required this.id,
         required this.jadwalPeriksa,
         required this.idPasien,
@@ -106,6 +108,7 @@ class RmeData {
     });
 
     RmeData copyWith({
+        int? no,
         String? id,
         DateTime? jadwalPeriksa,
         String? idPasien,
@@ -119,6 +122,7 @@ class RmeData {
         User? user,
     }) => 
         RmeData(
+            no: no ?? this.no,
             id: id ?? this.id,
             jadwalPeriksa: jadwalPeriksa ?? this.jadwalPeriksa,
             idPasien: idPasien ?? this.idPasien,
@@ -133,6 +137,7 @@ class RmeData {
         );
 
     factory RmeData.fromJson(Map<String, dynamic> json) => RmeData(
+        no: json["no"],
         id: json["id"],
         jadwalPeriksa: DateTime.parse(json["jadwal_periksa"]),
         idPasien: json["id_pasien"],
@@ -147,6 +152,7 @@ class RmeData {
     );
 
     Map<String, dynamic> toJson() => {
+        "no":  no,
         "id": id,
         "jadwal_periksa": jadwalPeriksa.toIso8601String(),
         "id_pasien": idPasien,

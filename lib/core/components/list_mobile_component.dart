@@ -8,12 +8,17 @@ class ListMobileContainerComponent extends StatelessWidget {
   final Widget? children;
   final Widget? customSearch;
   final double height;
-  const ListMobileContainerComponent(
-      {super.key,
-      required this.label,
-      this.children,
-      this.customSearch,
-      this.height = 400});
+  final String? labelButton;
+  final Function()? onTap;
+  const ListMobileContainerComponent({
+    super.key,
+    required this.label,
+    this.children,
+    this.customSearch,
+    this.labelButton = '',
+    this.height = 400,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +54,44 @@ class ListMobileContainerComponent extends StatelessWidget {
                 topRight: Radius.circular(AppSizes.s10),
               ),
             ),
-            child: Text(
-              label,
-              style: Get.textTheme.labelLarge!.copyWith(
-                  fontSize: AppSizes.s17, color: AppColors.colorBaseWhite),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  label,
+                  style: Get.textTheme.labelLarge!.copyWith(
+                      fontSize: AppSizes.s17, color: AppColors.colorBaseWhite),
+                ),
+                if (labelButton!.isNotEmpty) ...[
+                  InkWell(
+                    onTap: onTap,
+                    child: Container(
+                      width: 150,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: AppColors.colorSuccess300,
+                        borderRadius: BorderRadius.circular(AppSizes.s4),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_rounded,
+                            color: AppColors.colorBaseWhite,
+                            size: 20,
+                          ),
+                          Text(
+                            labelButton!,
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                                fontSize: AppSizes.s12,
+                                color: AppColors.colorBaseWhite),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ]
+              ],
             ),
           ),
           if (customSearch != null) ...[

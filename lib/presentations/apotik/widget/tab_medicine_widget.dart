@@ -5,18 +5,20 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 
-class TabTransaksiWidget extends StatelessWidget {
+class TabMedicineWidget extends StatelessWidget {
   final ApotikController controller;
   final Function()? onTap;
   final String label;
   final int index;
+  final RxInt indexSelect;
 
-  const TabTransaksiWidget({
+  const TabMedicineWidget({
     super.key,
     required this.label,
     required this.onTap,
     required this.controller,
     required this.index,
+    required this.indexSelect,
   });
 
   @override
@@ -38,7 +40,7 @@ class TabTransaksiWidget extends StatelessWidget {
                   label,
                   style: Get.textTheme.labelLarge!.copyWith(
                     fontSize: AppSizes.s17,
-                    color: controller.selectedIndexReport.value == index
+                    color: indexSelect.value == index
                         ? AppColors.colorBaseBlack
                         : AppColors.colorBaseSecondary,
                   ),
@@ -47,7 +49,7 @@ class TabTransaksiWidget extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   height: 2,
-                  color: controller.selectedIndexReport.value == index
+                  color: indexSelect.value == index
                       ? AppColors.colorBasePrimary
                       : AppColors.colorBaseSecondary.withAlpha(50),
                 ),
@@ -57,3 +59,7 @@ class TabTransaksiWidget extends StatelessWidget {
     );
   }
 }
+
+
+// controller.selectedIndexReport.value
+// controller.selectedIndexReport.value

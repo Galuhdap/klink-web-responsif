@@ -5,15 +5,14 @@ import 'package:klinik_web_responsif/core/components/modal/show_modal_tanda_tany
 import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
-import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
 import 'package:lottie/lottie.dart';
 
-List<DataColumn> getListMedicineColumns() {
+List<DataColumn> getListUnitMedicineColumns() {
   return [
     DataColumn(
+      headingRowAlignment: MainAxisAlignment.center,
       label: Text(
         'NO',
         style: Get.textTheme.labelLarge!.copyWith(
@@ -24,45 +23,7 @@ List<DataColumn> getListMedicineColumns() {
     ),
     DataColumn(
       label: Text(
-        'NAMA OBAT',
-        style: Get.textTheme.labelLarge!.copyWith(
-          fontSize: AppSizes.s14,
-          color: AppColors.colorBaseBlack,
-        ),
-      ),
-    ),
-    // DataColumn(
-    //   label: Text(
-    //     'Harga Beli',
-    //     style: Get.textTheme.labelLarge!.copyWith(
-    //       fontSize: AppSizes.s14,
-    //       color: AppColors.colorBaseBlack,
-    //     ),
-    //   ),
-    // ),
-    DataColumn(
-      label: Text(
-        'HARGA JUAL',
-        style: Get.textTheme.labelLarge!.copyWith(
-          fontSize: AppSizes.s14,
-          color: AppColors.colorBaseBlack,
-        ),
-      ),
-    ),
-    DataColumn(
-      headingRowAlignment: MainAxisAlignment.center,
-      label: Text(
-        'STOCK',
-        style: Get.textTheme.labelLarge!.copyWith(
-          fontSize: AppSizes.s14,
-          color: AppColors.colorBaseBlack,
-        ),
-      ),
-    ),
-    DataColumn(
-      headingRowAlignment: MainAxisAlignment.center,
-      label: Text(
-        'SATUAN',
+        'NAMA SATUAN',
         style: Get.textTheme.labelLarge!.copyWith(
           fontSize: AppSizes.s14,
           color: AppColors.colorBaseBlack,
@@ -82,21 +43,19 @@ List<DataColumn> getListMedicineColumns() {
   ];
 }
 
-List<DataRow> getRowsMedicine({
+List<DataRow> getRowsUnitMedicine({
   required ApotikController controller,
   required BuildContext context,
-  required List<DatumNewMedicine> data, // ganti dengan model aslimu
+  required List<DatumUnit> data, // ganti dengan model aslimu
   required bool isLoading,
 }) {
   if (isLoading) {
     return [
       const DataRow(
         cells: [
-          DataCell.empty,
+          // DataCell.empty,
           DataCell.empty,
           DataCell(Center(child: CircularProgressIndicator())),
-          DataCell.empty,
-          DataCell.empty,
           DataCell.empty,
         ],
       ),
@@ -116,9 +75,7 @@ List<DataRow> getRowsMedicine({
               Text('Data tidak ditemukan..'),
             ],
           )),
-          DataCell.empty,
-          DataCell.empty,
-          DataCell.empty,
+          // DataCell.empty,
         ],
       ),
     ];
@@ -137,20 +94,13 @@ List<DataRow> getRowsMedicine({
         },
       ),
       cells: [
-        DataCell(Text(row.no.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold))),
-        DataCell(Text(row.nameMedicine,
-            style: const TextStyle(fontWeight: FontWeight.bold))),
-        DataCell(Text(row.priceSell.currencyFormatRp,
-            style: const TextStyle(fontWeight: FontWeight.bold))),
         DataCell(Center(
-          child: Text(row.stock.toString(),
+          child: Text(row.no.toString(),
               style: const TextStyle(fontWeight: FontWeight.bold)),
         )),
-        DataCell(Center(
-          child: Text(row.baseUnit.toUpperCase(),
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-        )),
+        DataCell(Text(row.name,
+            style: const TextStyle(fontWeight: FontWeight.bold))),
+
         DataCell(Center(
           child: Row(
             spacing: 10,
@@ -163,32 +113,9 @@ List<DataRow> getRowsMedicine({
                 ),
                 child: IconButton(
                   onPressed: () {
-                    List<DatumUnit> data =
-                        row.conversions.map<DatumUnit>((conv) {
-                      return DatumUnit(
-                        id: conv.id,
-                        name: conv.unitName,
-                        level: conv.multiplier,
-                      );
-                    }).toList();
-                    controller.idMedicine.value = row.id;
-                    controller.nameMedicineController.text = row.nameMedicine;
-                    controller.priceSellController.text =
-                        row.priceSell.toString();
-                    controller.dropdownUnitController.text = row.baseUnit;
-                    controller.selectedUnitId.value = row.idBaseUnit;
-                    controller.selectedMedicineListUnit.value = data;
-                    controller.unitControllers.value = data
-                        .map((unit) =>
-                            TextEditingController(text: unit.level.toString()))
-                        .toList();
-                    if (controller.selectedMedicineListUnit.isNotEmpty) {
-                      controller.isLightOn.value = true;
-                    } else {
-                      controller.isLightOn.value = false;
-                    }
-
-                    controller.showEditMedicine();
+                    controller.idUnitMedicine.value = row.id;
+                    controller.nameUnitMedicineController.text = row.name;
+                    controller.showEditUnitMedicine();
                   },
                   icon: Icon(
                     Icons.edit_square,
@@ -207,7 +134,7 @@ List<DataRow> getRowsMedicine({
                       context,
                       Obx(
                         () {
-                          return controller.isLoadingPostNewMedicine.value
+                          return controller.isLoadingPostUnitNewMedicine.value
                               ? Center(
                                   child: SizedBox(
                                     width: 400,
@@ -217,12 +144,13 @@ List<DataRow> getRowsMedicine({
                                 )
                               : ShowModalTandaTanyaComponent(
                                   label:
-                                      'Apakah Anda Akan Menghapus Obat ${row.nameMedicine} ?',
+                                      'Apakah Anda Akan Menghapus Satuan ${row.name} ?',
                                   onTapNo: () {
                                     Get.back();
                                   },
                                   onTapYes: () async {
-                                    await controller.deleteNewMedicine(row.id);
+                                    await controller
+                                        .deleteUnitNewMedicine(row.id);
                                   },
                                 );
                         },

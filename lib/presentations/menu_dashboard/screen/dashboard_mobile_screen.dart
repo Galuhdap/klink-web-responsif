@@ -5,7 +5,7 @@ import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_has_expired_screen.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/medicine/medicine_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_report_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';

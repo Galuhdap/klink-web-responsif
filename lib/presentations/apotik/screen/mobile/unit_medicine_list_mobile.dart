@@ -6,21 +6,19 @@ import 'package:klinik_web_responsif/core/components/show_bottom_dialog.dart';
 import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
-import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
 import 'package:lottie/lottie.dart';
 
-class MedicineListMobile extends StatelessWidget {
-  const MedicineListMobile({
+class UnitMedicineListMobile extends StatelessWidget {
+  const UnitMedicineListMobile({
     super.key,
     required this.datas,
     required this.controller,
   });
 
-  final DatumNewMedicine datas;
+  final DatumUnit datas;
   final ApotikController controller;
 
   @override
@@ -50,34 +48,10 @@ class MedicineListMobile extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      List<DatumUnit> data =
-                          datas.conversions.map<DatumUnit>((conv) {
-                        return DatumUnit(
-                          id: conv.id,
-                          name: conv.unitName,
-                          level: conv.multiplier,
-                        );
-                      }).toList();
-                      controller.idMedicine.value = datas.id;
-
-                      controller.nameMedicineController.text =
-                          datas.nameMedicine;
-                      controller.priceSellController.text =
-                          datas.priceSell.toString();
-                      controller.dropdownUnitController.text = datas.baseUnit;
-                      controller.selectedUnitId.value = datas.idBaseUnit;
-                      controller.selectedMedicineListUnit.value = data;
-                      controller.unitControllers.value = data
-                          .map((unit) => TextEditingController(
-                              text: unit.level.toString()))
-                          .toList();
-                      if (controller.selectedMedicineListUnit.isNotEmpty) {
-                        controller.isLightOn.value = true;
-                      } else {
-                        controller.isLightOn.value = false;
-                      }
+                      controller.idUnitMedicine.value = datas.id;
+                      controller.nameUnitMedicineController.text = datas.name;
                       Get.back();
-                      controller.showEditMedicine();
+                      controller.showEditUnitMedicine();
                     },
                     child: Text(
                       'Edit',
@@ -93,7 +67,7 @@ class MedicineListMobile extends StatelessWidget {
                         context,
                         Obx(
                           () {
-                            return controller.isLoadingPostNewMedicine.value
+                            return controller.isLoadingPostUnitNewMedicine.value
                                 ? Center(
                                     child: SizedBox(
                                       width: 400,
@@ -104,13 +78,13 @@ class MedicineListMobile extends StatelessWidget {
                                   )
                                 : ShowModalTandaTanyaComponent(
                                     label:
-                                        'Apakah Anda Akan Menghapus Obat ${datas.nameMedicine} ?',
+                                        'Apakah Anda Akan Menghapus Satuan ${datas.name} ?',
                                     onTapNo: () {
                                       Get.back();
                                     },
                                     onTapYes: () async {
                                       await controller
-                                          .deleteNewMedicine(datas.id);
+                                          .deleteUnitNewMedicine(datas.id);
                                     },
                                   );
                           },
@@ -159,45 +133,17 @@ class MedicineListMobile extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  datas.nameMedicine,
-                  style: Get.textTheme.labelLarge!.copyWith(
-                      fontSize: AppSizes.s15, color: AppColors.colorBaseBlack),
-                ),
-                Text(
-                  'Stock ${datas.stock}',
-                  style: Get.textTheme.labelLarge!.copyWith(
-                      fontSize: AppSizes.s12, color: AppColors.colorBaseBlack),
-                ),
-                // Text(
-                //   datas.noBuy,
-                //   style: Get
-                //       .textTheme.labelLarge!
-                //       .copyWith(
-                //           fontSize:
-                //               AppSizes.s12,
-                //           color: AppColors
-                //               .colorBaseBlack),
-                // ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Harga Jual ${datas.priceSell.currencyFormatRp}',
-                  style: Get.textTheme.labelLarge!.copyWith(
-                      fontSize: AppSizes.s12, color: AppColors.colorBaseBlack),
-                ),
-              ],
-            )
-          ],
+        child: Center(
+          child: Text(
+            datas.name
+                .split(' ')
+                .map((word) => word.isNotEmpty
+                    ? '${word[0].toUpperCase()}${word.substring(1)}'
+                    : '')
+                .join(' '),
+            style: Get.textTheme.labelLarge!.copyWith(
+                fontSize: AppSizes.s20, color: AppColors.colorBaseBlack),
+          ),
         ),
       ),
     );
