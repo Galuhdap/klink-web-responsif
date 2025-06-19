@@ -5,7 +5,6 @@
 import 'dart:convert';
 
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 
 GetUnitResponse getUnitResponseFromJson(String str) =>
     GetUnitResponse.fromJson(json.decode(str));

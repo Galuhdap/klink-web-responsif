@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/report/model/response/chart/daily_report_chart.dart';
+import 'package:klinik_web_responsif/services/report/model/response/get/get_daily_sale_medicine_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/get/get_daily_summery_chart_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/get/get_daily_trend_chart.dart';
+import 'package:klinik_web_responsif/services/report/model/response/get/get_report_medicine_low_stock_response.dart';
 import 'package:klinik_web_responsif/services/report/report_repository.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -21,6 +23,14 @@ class ReportController extends GetxController {
   RxList<DatumDailySummury> dailySummaryChartList = <DatumDailySummury>[].obs;
   RxList<DailyReportChart> dailySummarySaleChart = <DailyReportChart>[].obs;
 
+  RxList<DatumDailySaleMedicine> dailySellMedicineList =
+      <DatumDailySaleMedicine>[].obs;
+  RxList<DailyReportChart> dailySellMedicineChart = <DailyReportChart>[].obs;
+
+  RxList<DatumLowStockMedicine> getMedicineStockLowList =
+      <DatumLowStockMedicine>[].obs;
+  RxList<DailyReportChart> getMedicineStockLow = <DailyReportChart>[].obs;
+
   RxInt buyMedicineToday = 0.obs;
 
   RxBool isLoadingDailyTrendChart = false.obs;
@@ -35,6 +45,8 @@ class ReportController extends GetxController {
     tooltipBehavior = TooltipBehavior(enable: true);
     getDailyTrendChart();
     getDailySummaryBar();
+    getDailySellMedicine();
+    getReportMedicineStcokLow();
   }
 
   Future<void> getDailyTrendChart() async {
@@ -113,11 +125,7 @@ class ReportController extends GetxController {
     });
   }
 
-  RxInt penjualanObatHariIni = 0.obs;
-  RxInt hppHariIni = 0.obs;
-  RxInt labaKotorHariIni = 0.obs;
-  RxInt feeDokterHariIni = 0.obs;
-
+  /////////////////////////////////////////////////////////////////
   Future<void> getDailySummaryBar() async {
     isLoadingDailyTrendChart.value = true;
     try {
@@ -154,22 +162,79 @@ class ReportController extends GetxController {
     });
   }
 
-  List<DailyReportChart> chartDataFromMap(Map<String, num> map) {
-    final now = DateTime.now();
-    final labels = ['Penjualan', 'HPP', 'Laba Kotor', 'Fee Dokter'];
-    final keys = [
-      'penjualan_obat_hari_ini',
-      'hpp_hari_ini',
-      'laba_kotor_hari_ini',
-      'fee_dokter_hari_ini',
-    ];
+/////////////////////////////////////////////////////////////////////////////////
+  Future<void> getDailySellMedicine() async {
+    isLoadingDailyTrendChart.value = true;
+    try {
+      final response = await reportRepository.getDailySellMedicineChart();
 
-    return List.generate(keys.length, (i) {
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          dailySellMedicineList.clear();
+          dailySellMedicineList.addAll(response.data);
+          dailySellMedicineChart.value =
+              chartDataSaleMedicineDaily(response.data);
+        },
+      );
+    } catch (e) {
+      print('e:$e');
+    } finally {
+      isLoadingDailyTrendChart.value = false;
+    }
+  }
+
+  List<DailyReportChart> chartDataSaleMedicineDaily(
+      List<DatumDailySaleMedicine> listCommodityGrafilDailys) {
+    return List<DailyReportChart>.generate(dailySellMedicineList.length,
+        (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < dailySellMedicineList.length;
       return DailyReportChart(
-        x: i,
-        y: map[keys[i]]?.toInt() ?? 0,
-        time: now,
-        label: labels[i],
+        x: index,
+        y: isDailyDataAvailable ? dailySellMedicineList[index].total : 0,
+        time: isDailyDataAvailable
+            ? dailySellMedicineList[index].date
+            : DateTime.now().subtract(Duration(days: 7)),
+      );
+    });
+  }
+
+/////////////////////////////////////////////////////////////////////////////////
+  Future<void> getReportMedicineStcokLow() async {
+    isLoadingDailyTrendChart.value = true;
+    try {
+      final response = await reportRepository.getReportMedicineSellStock();
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          getMedicineStockLowList.clear();
+          getMedicineStockLowList.addAll(response.data);
+          getMedicineStockLow.value = chartDataMedicineStockLow(response.data);
+        },
+      );
+    } catch (e) {
+      print('e:$e');
+    } finally {
+      isLoadingDailyTrendChart.value = false;
+    }
+  }
+
+  List<DailyReportChart> chartDataMedicineStockLow(
+      List<DatumLowStockMedicine> listCommodityGrafilDailys) {
+    return List<DailyReportChart>.generate(getMedicineStockLowList.length,
+        (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < getMedicineStockLowList.length;
+      return DailyReportChart(
+        x: index,
+        y: isDailyDataAvailable ? getMedicineStockLowList[index].totalStock : 0,
+        label: isDailyDataAvailable ? getMedicineStockLowList[index].name : '',
       );
     });
   }

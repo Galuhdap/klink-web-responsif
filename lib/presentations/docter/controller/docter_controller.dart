@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/doctor/doctor_repository.dart';
 import 'package:klinik_web_responsif/services/doctor/model/response/get_doctor_response.dart';
+import 'package:klinik_web_responsif/services/doctor/model/response/get_summary_doctor_response.dart';
 
 class DocterController extends GetxController {
   RxList patient = [
@@ -42,10 +43,13 @@ class DocterController extends GetxController {
   final DoctorRepository doctorRepository = locator();
 
   RxList<DataDoctor> doctorList = <DataDoctor>[].obs;
-  
+  Rx<GetSummaryDocterResponse?> getSummaryDoctor =
+      Rx<GetSummaryDocterResponse?>(null);
+
   // Rx<DataPasien?> dataPasien = Rx<DataPasien?>(null);
 
   RxBool isLoading = false.obs;
+  RxBool isLoadingSummary = false.obs;
   RxBool isLoadingId = false.obs;
   RxInt numberOfPage = 1.obs;
 
@@ -53,6 +57,7 @@ class DocterController extends GetxController {
   void onInit() {
     super.onInit();
     getDoctor();
+    getSummaryDoctors();
     //getDoctorById();
   }
 
@@ -84,6 +89,26 @@ class DocterController extends GetxController {
     } catch (e) {
       print('e:$e');
       isLoading.value = false;
+    }
+  }
+
+  Future<void> getSummaryDoctors() async {
+    isLoadingSummary.value = true;
+    try {
+      final response = await doctorRepository.getSummaryDoctor();
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          getSummaryDoctor.value = response;
+        },
+      );
+      isLoadingSummary.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingSummary.value = false;
     }
   }
 }

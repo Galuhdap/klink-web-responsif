@@ -232,4 +232,16 @@ class NetworkConstants {
   static String GET_CHART_REPORT_DAILY_SUMMARY_URL() {
     return BASE_URL + "/report/chart/report/daily/summary";
   }
+
+  static String GET_CHART_REPORT_DAILY_SALE_MEDICINE_URL() {
+    return BASE_URL + "/report/chart/report/daily/sale/medicine";
+  }
+
+  static String GET_SUMMARY_DOCTOR_URL(String id) {
+    return BASE_URL + "/doctor/summary/${id}";
+  }
+
+  static String GET_REPORT_SELL_LOW_MEDICINE_URL() {
+    return BASE_URL + "/report/chart/report/low/stock/medicine";
+  }
 }

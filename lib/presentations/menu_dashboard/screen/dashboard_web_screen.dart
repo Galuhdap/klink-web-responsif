@@ -11,6 +11,7 @@ import 'package:klinik_web_responsif/presentations/apotik/screen/medicine/medici
 import 'package:klinik_web_responsif/presentations/apotik/screen/report/menu_report_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
+import 'package:klinik_web_responsif/presentations/docter/screen/summery_doctor_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stackholder_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/apotik_dashboard_screen.dart';
@@ -45,16 +46,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return [
           const QueueScreen(),
           const PatientScreen(),
+          const SummeryDoctorScreen(),
         ];
       case UserRole.APOTEKER:
         return [
           const ApotikDashboardScreen(),
           const MedicineScreen(),
-          // const ObatScreen(),
           const MedicineHasExpiredScreen(),
           const MenuTransaksiScreen(),
-          // const TakeDrugScreen(),
-          // const RiwayatTransaksiScreen(),
           const MenuReportScreen(),
         ];
       case UserRole.PEMILIK:
@@ -143,6 +142,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 iconPath: Assets.icons.pasien.path,
                 isActive: _selectedIndex == 1,
                 onTap: () => _onItemTapped(1),
+              ),
+              NavItem(
+                iconPath: Assets.icons.transaksi.path,
+                isActive: _selectedIndex == 2,
+                onTap: () => _onItemTapped(2),
               ),
               // NavItem(
               //   iconPath: Assets.icons.pasien.path,

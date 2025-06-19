@@ -33,10 +33,13 @@ import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_med
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/report/model/response/chart/daily_report_chart.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 enum PaymentMethod { tunai, qris }
 
 class ApotikController extends GetxController {
+  late TooltipBehavior tooltipBehavior;
   RxBool actionPay = true.obs;
 
   void ButtonActionPay() {
@@ -147,6 +150,7 @@ class ApotikController extends GetxController {
   Rx<DateTime> tglLahirController = DateTime.now().obs;
   RxInt grandTotal = 0.obs;
   var isDetailView = false.obs;
+  var isDetailSellView = false.obs;
 
   final purchaseNumber = ''.obs;
 
@@ -198,10 +202,30 @@ class ApotikController extends GetxController {
   RxString idMedicine = ''.obs;
   RxString idUnitMedicine = ''.obs;
 
+  RxString invoice = ''.obs;
+  RxString date_transaction = ''.obs;
+  RxString name_pasien = ''.obs;
+  RxString petugas_apotik = ''.obs;
+  RxInt fee_docter = 0.obs;
+  RxString noRekamMedis = ''.obs;
+  RxString alamatPasien = ''.obs;
+  RxInt grandTotalSell = 0.obs;
+
+  RxList<ChartDataPie> dailyChartDatas = <ChartDataPie>[].obs;
+  RxList<ChartDataPie> dailyChartMedineIn = <ChartDataPie>[].obs;
+  RxList<ChartDataPie> dailyChartMedineOut = <ChartDataPie>[].obs;
+
+  RxList<DetailObat> showDetailSellList = <DetailObat>[].obs;
+
   // Simpan data detail yang diklik
 
   void showDetail() {
     isDetailView.value = true;
+  }
+
+  void showDetailSell(List<DetailObat> detailObat) {
+    showDetailSellList.value = detailObat;
+    isDetailSellView.value = true;
   }
 
   void showAddMedicine() {
@@ -222,6 +246,18 @@ class ApotikController extends GetxController {
 
   void showEditUnitMedicine() {
     isEditUnitMedicineView.value = true;
+  }
+
+  void backToListSell() {
+    invoice.value = '';
+    date_transaction.value = '';
+    petugas_apotik.value = '';
+    name_pasien.value = '';
+    fee_docter.value = 0;
+    noRekamMedis.value = '';
+    alamatPasien.value = '';
+    grandTotalSell.value = 0;
+    isDetailSellView.value = false;
   }
 
   void backToList() {
@@ -270,6 +306,7 @@ class ApotikController extends GetxController {
     getSaleReportMedicine();
     getInOutReportMedicine();
     purchaseNumber.value = generatePurchaseNumber();
+    tooltipBehavior = TooltipBehavior(enable: true);
   }
 
   String generatePurchaseNumber() {
@@ -370,6 +407,8 @@ class ApotikController extends GetxController {
   }
 
   void selectTabReport(int index) {
+    backToListSell();
+    backToList();
     selectedIndexReport.value = index;
   }
 
@@ -834,7 +873,8 @@ class ApotikController extends GetxController {
         (response) async {
           // medicineExpiredList.clear();
           topFiveMedicineList.addAll(response.data);
-          inspect(topFiveMedicineList);
+          dailyChartDatas.value = chartDataSaleDilySummary(topFiveMedicineList);
+
           //  numberOfPage.value = response.data.pagination.totalPages;
         },
       );
@@ -1122,6 +1162,8 @@ class ApotikController extends GetxController {
         (response) async {
           reportInOutMedicineList.clear();
           reportInOutMedicineList.addAll(response.data.data);
+          dailyChartMedineIn.value = chartDataInMedicine(response.data.data);
+          dailyChartMedineOut.value = chartDataOutMedicine(response.data.data);
           totalInReport.value = response.data.totalMasuk;
           totalOutReport.value = response.data.totalKeluar;
           numberOfPageReportInOut.value = response.data.pagination.totalPages;
@@ -1603,5 +1645,41 @@ class ApotikController extends GetxController {
       (sum, item) => sum + item.value,
     );
     grandTotalRme.value = total;
+  }
+
+  List<ChartDataPie> chartDataSaleDilySummary(
+      List<TopFiveMedicine> listCommodityGrafilDailys) {
+    return List<ChartDataPie>.generate(topFiveMedicineList.length, (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < topFiveMedicineList.length;
+      return ChartDataPie(
+        isDailyDataAvailable ? topFiveMedicineList[index].nameMedicine : '',
+        isDailyDataAvailable ? topFiveMedicineList[index].totalTerjual : 0,
+      );
+    });
+  }
+
+  List<ChartDataPie> chartDataInMedicine(
+      List<DatumReportInOutMedicine> listCommodityGrafilDailys) {
+    return List<ChartDataPie>.generate(reportInOutMedicineList.length, (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < reportInOutMedicineList.length;
+      return ChartDataPie(
+        isDailyDataAvailable ? reportInOutMedicineList[index].namaObat : '',
+        isDailyDataAvailable ? reportInOutMedicineList[index].masuk : 0,
+      );
+    });
+  }
+
+  List<ChartDataPie> chartDataOutMedicine(
+      List<DatumReportInOutMedicine> listCommodityGrafilDailys) {
+    return List<ChartDataPie>.generate(reportInOutMedicineList.length, (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < reportInOutMedicineList.length;
+      return ChartDataPie(
+        isDailyDataAvailable ? reportInOutMedicineList[index].namaObat : '',
+        isDailyDataAvailable ? reportInOutMedicineList[index].keluar : 0,
+      );
+    });
   }
 }

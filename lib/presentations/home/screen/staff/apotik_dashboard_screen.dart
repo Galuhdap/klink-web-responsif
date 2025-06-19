@@ -11,7 +11,6 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_5_medicine_favorit_tabel.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_expired_30_days_table.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/transaction/complete_transaction_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
@@ -19,7 +18,10 @@ import 'package:klinik_web_responsif/presentations/home/screen/tabel/list_queue_
 import 'package:klinik_web_responsif/presentations/home/widgets/card_apotik_dashboard_widget.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
+import 'package:klinik_web_responsif/presentations/report/widget/graphic_widget.dart';
+import 'package:klinik_web_responsif/services/report/model/response/chart/daily_report_chart.dart';
 import 'package:number_paginator/number_paginator.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ApotikDashboardScreen extends StatelessWidget {
   const ApotikDashboardScreen({super.key});
@@ -28,6 +30,7 @@ class ApotikDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var controllerHome = Get.put(HomeController());
     var controllerRme = Get.put(RekamMedisController());
+
     return GetBuilder<ApotikController>(
       init: ApotikController(),
       builder: (controller) {
@@ -77,22 +80,44 @@ class ApotikDashboardScreen extends StatelessWidget {
                                             .isLoadingHasExpiredMedicine.value,
                                       ),
                                     ),
-                                    CustomTabelComponent(
-                                      label: '5 Obat Paling Laris',
-                                      sizeWidth:
-                                          MediaQuery.of(context).size.width /
-                                              3.8,
-                                      sizeRowTabel:
-                                          MediaQuery.of(context).size.width /
-                                              3.8,
-                                      listColumns:
-                                          getListMedicineFiveFavoritColumns(
-                                        data: controller.topFiveMedicineList,
+                                    AppSizes.s20.width,
+                                    Flexible(
+                                      child: GraphicWidget(
+                                        label: 'Top 5 Obat Paling Laris',
+                                        content: Obx(
+                                          () {
+                                            return controller
+                                                    .topFiveMedicineList.isEmpty
+                                                ? Center(
+                                                    child: Text('asdsad'),
+                                                  )
+                                                : SfCircularChart(
+                                                    tooltipBehavior: controller
+                                                        .tooltipBehavior,
+                                                    series: <CircularSeries>[
+                                                      // Render pie chart
+                                                      PieSeries<ChartDataPie,
+                                                          String>(
+                                                        dataSource: controller
+                                                            .dailyChartDatas,
+                                                        pointColorMapper:
+                                                            (ChartDataPie data,
+                                                                    _) =>
+                                                                data.color,
+                                                        xValueMapper:
+                                                            (ChartDataPie data,
+                                                                    _) =>
+                                                                data.x,
+                                                        yValueMapper:
+                                                            (ChartDataPie data,
+                                                                    _) =>
+                                                                data.y,
+                                                      )
+                                                    ],
+                                                  );
+                                          },
+                                        ),
                                       ),
-                                      listRows: getListMedicineFiveFavoritDays(
-                                          data: controller.topFiveMedicineList,
-                                          isLoadingExpiredMedicine: controller
-                                              .isLoadingExpiredMedicine.value),
                                     ),
                                   ],
                                 ),

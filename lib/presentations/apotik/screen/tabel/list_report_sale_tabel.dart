@@ -161,13 +161,17 @@ List<DataRow> getRowsMedicineReportSale({
           Center(
             child: InkWell(
               onTap: () {
-                // controller.noPurchaseReport.value = row.no;
-                // controller.noBuyDetailPurchaseReport.value = row.noPembelian;
-                // controller.dateBuyDetailPurchaseReport.value =
-                //     row.tanggalPembelian.toDateddmmmyyyyFormattedString();
-                // controller.supplierBuyDetailPurchaseReport.value = row.supplier;
-                // controller.petugasBuyDetailPurchaseReport.value = row.userInput;
-                controller.showDetail();
+                controller.invoice.value = row.invoice;
+                controller.date_transaction.value =
+                    row.tanggalTransaksi.toDateddmmmyyyyFormattedString();
+                controller.petugas_apotik.value = row.petugasApotik;
+                controller.name_pasien.value = row.namaPasien;
+                controller.fee_docter.value = row.feeDocter;
+                controller.noRekamMedis.value = row.noRekamMedis;
+                controller.alamatPasien.value = row.alamat;
+                controller.grandTotalSell.value = row.nominal;
+
+                controller.showDetailSell(row.detailObat);
               },
               child: Container(
                 width: 100,

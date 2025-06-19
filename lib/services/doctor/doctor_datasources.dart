@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/services/doctor/model/response/get_doctor_response.dart';
+import 'package:klinik_web_responsif/services/doctor/model/response/get_summary_doctor_response.dart';
 import 'package:klinik_web_responsif/services/lib/api_services.dart';
 import 'package:klinik_web_responsif/services/lib/network_constants.dart';
 
@@ -23,6 +25,23 @@ class DoctorDatasources extends ApiService {
           });
 
       return Right(GetDoctorResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failure, GetSummaryDocterResponse>> getSummaryDoctor() async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    var userData = JwtDecoder.decode(prefs!);
+    try {
+      final response = await get(
+          NetworkConstants.GET_SUMMARY_DOCTOR_URL(userData['id']),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+
+      return Right(GetSummaryDocterResponse.fromJson(response));
     } catch (e) {
       return left(Failure(false, 400, 'Data Tidak Masuk'));
     }
