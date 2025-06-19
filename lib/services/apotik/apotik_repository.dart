@@ -5,13 +5,16 @@ import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medi
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_daily_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_medicines_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_in_out_report_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_monthly_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_purchase_report_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_sale_report_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
@@ -87,6 +90,14 @@ class ApotikRepository {
     return source.getMedicineHasExpired(page: page, limit: limit);
   }
 
+  Future<Either<Failures, DeleteMedicineResponse>> deleteMedicineHasExpired({
+    required String id,
+  }) async {
+    return source.deleteMedicineHasExpired(
+      id: id,
+    );
+  }
+
   Future<Either<Failure, GetTopFiveMedicineResponse>>
       getTopFiveMedicine() async {
     return source.getMedicineTopFive();
@@ -95,6 +106,10 @@ class ApotikRepository {
   Future<Either<Failure, GetMonthlySummaryMedicineResponse>>
       getMonthlySummaryMedicine() async {
     return source.getMonthlySummaryMedicine();
+  }
+  Future<Either<Failure, GetDailySummaryMedicineResponse>>
+      getDailySummaryMedicine() async {
+    return source.getDailySummaryMedicine();
   }
 
   Future<Either<Failure, GetGroupStockMedicineResponse>> getGroupStockMedicine(
@@ -126,6 +141,43 @@ class ApotikRepository {
         end_date: end_date,
         no_buy: no_buy,
         name_supplier: name_supplier);
+  }
+
+  Future<Either<Failure, GetSaleReportMedicineResponse>> getSaleReportMedicine({
+    required int page,
+    required int limit,
+    required String start_date,
+    required String end_date,
+    required String invoice,
+    required String no_rekam_medis,
+    required String name,
+  }) async {
+    return source.getSaleReportMedicine(
+        page: page,
+        limit: limit,
+        start_date: start_date,
+        end_date: end_date,
+        invoice: invoice,
+        no_rekam_medis: no_rekam_medis,
+        name: name,
+        );
+  }
+
+  Future<Either<Failure, GetInOutReportMedicineResponse>>
+      getInOutReportMedicine({
+    required int page,
+    required int limit,
+    required String start_date,
+    required String end_date,
+    required String no_buy,
+  }) async {
+    return source.getInOutReportMedicine(
+      page: page,
+      limit: limit,
+      start_date: start_date,
+      end_date: end_date,
+      no_buy: no_buy,
+    );
   }
 
   Future<Either<Failure, GetNewMedicineResponse>> getNewMedicine(
@@ -172,9 +224,7 @@ class ApotikRepository {
   }
 
   Future<Either<Failure, GetUnitResponse>> getUnit(
-      {required int page,
-      required int limit,
-      required String name}) async {
+      {required int page, required int limit, required String name}) async {
     return source.getUnit(page: page, limit: limit, name: name);
   }
 

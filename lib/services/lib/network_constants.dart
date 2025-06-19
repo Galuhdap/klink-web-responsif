@@ -134,12 +134,20 @@ class NetworkConstants {
     return BASE_URL + "/apotik/hasexpired/medicine?page=${page}&limit=${limit}";
   }
 
+  static String DELETE_MEDICINE_HAS_EXPIRED_URL(String id) {
+    return BASE_URL + "/apotik/hasexpired/medicine/${id}";
+  }
+
   static String GET_MEDICINE_TOP_FIVE_URL() {
     return BASE_URL + "/apotik/topfive/medicine";
   }
 
   static String GET_MEDICINE_SUMMARY_MONTHLY_URL() {
     return BASE_URL + "/apotik/summary/medicine";
+  }
+
+  static String GET_MEDICINE_SUMMARY_DAILY_URL() {
+    return BASE_URL + "/apotik/report/daily/medicine";
   }
 
   static String GET_MEDICINE_GROUP_STOCK_URL(
@@ -188,6 +196,24 @@ class NetworkConstants {
         "/apotik/purchase/medicine?page=${page}&limit=${limit}&start_date=${start_date}&end_date=${end_date}&no_buy=${no_buy}&name_supplier=${name_supplier}";
   }
 
+  static String GET_SALE_MEDICINE_BUY_URL(
+      int page,
+      int limit,
+      String start_date,
+      String end_date,
+      String invoice,
+      String no_rekam_medis,
+      String name) {
+    return BASE_URL +
+        "/apotik/sale/medicine?page=${page}&limit=${limit}&start_date=${start_date}&end_date=${end_date}&invoice=${invoice}&no_rekam_medis=${no_rekam_medis}&name=${name}";
+  }
+
+  static String GET_IN_OUT_MEDICINE_BUY_URL(
+      int page, int limit, String start_date, String end_date, String no_buy) {
+    return BASE_URL +
+        "/apotik/report/inout/medicine?page=${page}&limit=${limit}&start_date=${start_date}&end_date=${end_date}";
+  }
+
   static String GET_NEW_MEDICINE_URL(
       int page, int limit, String name_medicine) {
     return BASE_URL +
@@ -197,5 +223,13 @@ class NetworkConstants {
   static String GET_UNIT_URL(int page, int limit, String name) {
     return BASE_URL +
         "/apotik/medicine/unit?page=${page}&limit=${limit}&name=${name}";
+  }
+
+  static String GET_CHART_REPORT_DAILY_URL() {
+    return BASE_URL + "/report/chart/report/daily/trend";
+  }
+
+  static String GET_CHART_REPORT_DAILY_SUMMARY_URL() {
+    return BASE_URL + "/report/chart/report/daily/summary";
   }
 }

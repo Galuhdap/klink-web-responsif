@@ -1,3 +1,4 @@
+import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -15,7 +16,9 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/string_casing_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
 import 'package:lottie/lottie.dart';
 import 'package:number_paginator/number_paginator.dart';
 
@@ -146,7 +149,7 @@ class TabMenuBuyScreen extends StatelessWidget {
             ),
           ),
           AppSizes.s20.height,
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -154,11 +157,11 @@ class TabMenuBuyScreen extends StatelessWidget {
                 () {
                   return CustomTabelComponent(
                     label: 'Pilih Obat',
-                    sizeWidth: MediaQuery.of(context).size.width / 3.2,
+                    sizeRowTabel: MediaQuery.of(context).size.width / 1.1,
+                    sizeWidth: MediaQuery.of(context).size.width / 1,
                     border: TableBorder.all(
                       color: AppColors.colorBaseSecondary.withAlpha(50),
                     ),
-                    sizeRowTabel: MediaQuery.of(context).size.width / 3.2,
                     customContentPagination: controller
                                 .numberOfPageMedicineStock.value ==
                             0
@@ -278,6 +281,16 @@ class TabMenuBuyScreen extends StatelessWidget {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
+                        label: Text(
+                          'SATUAN',
+                          style: Get.textTheme.labelLarge!.copyWith(
+                              fontSize: AppSizes.s14,
+                              color: AppColors.colorBaseBlack),
+                        ),
+                      ),
+                      DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
                           'ACTION',
                           style: Get.textTheme.labelLarge!.copyWith(
@@ -298,6 +311,7 @@ class TabMenuBuyScreen extends StatelessWidget {
                                   ),
                                 ),
                                 DataCell.empty,
+                                DataCell.empty,
                               ],
                             ),
                           ]
@@ -315,6 +329,7 @@ class TabMenuBuyScreen extends StatelessWidget {
                                       ],
                                     )),
                                     DataCell(Text('tidak Ditemukan')),
+                                    DataCell.empty,
                                     DataCell.empty,
                                   ],
                                 ),
@@ -350,6 +365,8 @@ class TabMenuBuyScreen extends StatelessWidget {
                                           row.nameMedicine,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ),
                                       DataCell(
@@ -357,6 +374,22 @@ class TabMenuBuyScreen extends StatelessWidget {
                                           row.totalStock.toString(),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            row.nameUnit
+                                                .split(' ')
+                                                .map((word) => word.isNotEmpty
+                                                    ? '${word[0].toUpperCase()}${word.substring(1)}'
+                                                    : '')
+                                                .join(' '),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
                                         ),
                                       ),
                                       DataCell(
@@ -380,12 +413,16 @@ class TabMenuBuyScreen extends StatelessWidget {
                   );
                 },
               ),
+              AppSizes.s20.height,
               Obx(
                 () {
                   return CustomTabelComponent(
                     label: 'Detail Pembelian',
-                    sizeWidth: MediaQuery.of(context).size.width / 1.7,
-                    sizeRowTabel: MediaQuery.of(context).size.width / 1.7,
+                    sizeRowTabel: MediaQuery.of(context).size.width / 1.1,
+                    sizeWidth: MediaQuery.of(context).size.width / 1,
+                    border: TableBorder.all(
+                      color: AppColors.colorBaseSecondary.withAlpha(50),
+                    ),
                     customContentBottom: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -443,7 +480,7 @@ class TabMenuBuyScreen extends StatelessWidget {
                     listColumns: [
                       DataColumn(
                         label: Text(
-                          'NAMA OBAT',
+                          'Nama Obat',
                           style: Get.textTheme.labelLarge!.copyWith(
                               fontSize: AppSizes.s14,
                               color: AppColors.colorBaseBlack),
@@ -467,6 +504,14 @@ class TabMenuBuyScreen extends StatelessWidget {
                       ),
                       DataColumn(
                         label: Text(
+                          'SATUAN',
+                          style: Get.textTheme.labelLarge!.copyWith(
+                              fontSize: AppSizes.s14,
+                              color: AppColors.colorBaseBlack),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
                           'TANGGAL EXPIRE',
                           style: Get.textTheme.labelLarge!.copyWith(
                               fontSize: AppSizes.s14,
@@ -482,6 +527,7 @@ class TabMenuBuyScreen extends StatelessWidget {
                         ),
                       ),
                       DataColumn(
+                        headingRowAlignment: MainAxisAlignment.center,
                         label: Text(
                           'ACTION',
                           style: Get.textTheme.labelLarge!.copyWith(
@@ -502,6 +548,7 @@ class TabMenuBuyScreen extends StatelessWidget {
                                     child: CircularProgressIndicator(),
                                   ),
                                 ),
+                                DataCell.empty,
                                 DataCell.empty,
                                 DataCell.empty,
                               ],
@@ -526,6 +573,7 @@ class TabMenuBuyScreen extends StatelessWidget {
                                     ),
                                     DataCell.empty,
                                     DataCell.empty,
+                                    DataCell.empty,
                                   ],
                                 ),
                               ]
@@ -543,6 +591,8 @@ class TabMenuBuyScreen extends StatelessWidget {
                                           row.nameMedicine,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
+                                          // overflow: TextOverflow.ellipsis,
+                                          // maxLines: 1,
                                         ),
                                       ),
                                       DataCell(
@@ -584,6 +634,149 @@ class TabMenuBuyScreen extends StatelessWidget {
                                         ),
                                       ),
                                       DataCell(
+                                        row.conversion.isEmpty
+                                            ? Text(
+                                                row.nameUnit.toTitleCase(),
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            : Padding(
+                                                padding:
+                                                    AppSizes.symmetricPadding(
+                                                  vertical: AppSizes.s5,
+                                                ),
+                                                child: DropDownSearchFormField(
+                                                  textFieldConfiguration:
+                                                      TextFieldConfiguration(
+                                                          decoration:
+                                                              InputDecoration(
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        vertical:
+                                                                            12,
+                                                                        horizontal:
+                                                                            12),
+                                                            suffixIcon: Icon(
+                                                                Iconsax
+                                                                    .arrow_down_1),
+                                                            enabledBorder:
+                                                                OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          AppSizes
+                                                                              .s4),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: AppColors
+                                                                    .colorSecondary400,
+                                                                width:
+                                                                    AppSizes.s1,
+                                                              ),
+                                                            ),
+                                                            focusedBorder:
+                                                                OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          AppSizes
+                                                                              .s4),
+                                                              borderSide: BorderSide(
+                                                                  color: AppColors
+                                                                      .colorSecondary400,
+                                                                  width:
+                                                                      AppSizes
+                                                                          .s2),
+                                                            ),
+                                                          ),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                AppSizes.s14,
+                                                            color: Colors.black,
+                                                          ),
+                                                          controller: controller
+                                                                  .unitTextControllers[
+                                                              index]),
+                                                  suggestionsCallback:
+                                                      (pattern) {
+                                                    return row.conversion
+                                                        .map((conv) =>
+                                                            DatumUnit.fromUnit(
+                                                                conv.unit))
+                                                        .where(
+                                                          (unit) => unit.name
+                                                              .toLowerCase()
+                                                              .contains(
+                                                                pattern
+                                                                    .toLowerCase(),
+                                                              ),
+                                                        )
+                                                        .toList();
+                                                  },
+                                                  itemBuilder: (context,
+                                                      DatumUnit suggestion) {
+                                                    return ListTile(
+                                                      title: Text(
+                                                        suggestion.name
+                                                            .split(' ')
+                                                            .map((word) => word
+                                                                    .isNotEmpty
+                                                                ? '${word[0].toUpperCase()}${word.substring(1)}'
+                                                                : '')
+                                                            .join(' '),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              AppSizes.s14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  itemSeparatorBuilder:
+                                                      (context, index) {
+                                                    return const Divider();
+                                                  },
+                                                  transitionBuilder: (context,
+                                                      suggestionsBox,
+                                                      controller) {
+                                                    return suggestionsBox;
+                                                  },
+                                                  onSuggestionSelected:
+                                                      (DatumUnit suggestion) {
+                                                    controller
+                                                            .selectedUnitsPerRow[
+                                                        index] = [suggestion];
+                                                    controller
+                                                        .unitTextControllers[
+                                                            index]
+                                                        .text = suggestion.name;
+                                                    controller
+                                                            .unitTextControllers[
+                                                                index]
+                                                            .text =
+                                                        suggestion.name
+                                                            .toTitleCase();
+
+                                                    // ✅ Update ID juga
+                                                    controller.selectedUnitIds[
+                                                        index] = suggestion.id;
+                                                  },
+                                                  suggestionsBoxController:
+                                                      controller
+                                                          .suggestionBoxController,
+                                                  validator: (value) =>
+                                                      value!.isEmpty
+                                                          ? ''
+                                                          : null,
+                                                  onSaved: (value) {},
+                                                  displayAllSuggestionWhenTap:
+                                                      true,
+                                                ),
+                                              ),
+                                      ),
+                                      DataCell(
                                         Padding(
                                           padding: AppSizes.symmetricPadding(
                                             vertical: AppSizes.s5,
@@ -604,50 +797,52 @@ class TabMenuBuyScreen extends StatelessWidget {
                                               }
                                             },
                                             child: Container(
-                                                padding:
-                                                    AppSizes.symmetricPadding(
-                                                  vertical: AppSizes.s5,
-                                                  horizontal: AppSizes.s5,
+                                              padding:
+                                                  AppSizes.symmetricPadding(
+                                                vertical: AppSizes.s10,
+                                                horizontal: AppSizes.s16,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: AppColors
+                                                      .colorSecondary400,
                                                 ),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppSizes.s4),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.calendar_month,
+                                                    weight: AppSizes.s20,
+                                                    size: AppSizes.s20,
                                                     color: AppColors
-                                                        .colorSecondary400,
+                                                        .colorNeutrals100,
                                                   ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          AppSizes.s4),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.calendar_month,
-                                                      weight: AppSizes.s20,
-                                                      size: AppSizes.s20,
+                                                  AppSizes.s5.width,
+                                                  Text(
+                                                    controller.tglKadaluarsaList[
+                                                                index] !=
+                                                            []
+                                                        ? controller
+                                                            .tglKadaluarsaList[
+                                                                index]
+                                                            .toDateyyyymmddFormattedString()
+                                                        : 'Pilih Tanggal',
+                                                    style: Get
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                      fontSize: AppSizes.s12,
                                                       color: AppColors
-                                                          .colorNeutrals100,
+                                                          .colorNeutrals400,
                                                     ),
-                                                    AppSizes.s10.width,
-                                                    Text(
-                                                      controller.tglKadaluarsaList[
-                                                                  index] !=
-                                                              []
-                                                          ? controller
-                                                              .tglKadaluarsaList[
-                                                                  index]
-                                                              .toDateyyyymmddFormattedString()
-                                                          : 'Pilih Tanggal',
-                                                      style: Get
-                                                          .textTheme.bodySmall!
-                                                          .copyWith(
-                                                        fontSize: AppSizes.s12,
-                                                        color: AppColors
-                                                            .colorNeutrals400,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ).paddingSymmetric(
-                                                    vertical: AppSizes.s5)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),

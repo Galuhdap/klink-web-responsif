@@ -42,7 +42,7 @@ class PatientController extends GetxController {
   RxBool isLoadingCreate = false.obs;
   RxBool isPostLoading = false.obs;
   RxBool readOnly = true.obs;
-  RxInt numberOfPage = 1.obs;
+  RxInt numberOfPageGetPasien = 1.obs;
 
   final formKey = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
@@ -96,18 +96,16 @@ class PatientController extends GetxController {
           nik: nik,
           umur: umur,
           norme: norme);
-
+      inspect(response);
       response.fold(
         (failure) {
           inspect(failure.code);
         },
         (response) async {
-          if (response.data.data.length < limit) {
-            hasMore.value = false;
-          }
           pasienList.clear();
+          numberOfPageGetPasien.value = 0;
           pasienList.addAll(response.data.data);
-          numberOfPage.value = response.data.pagination.totalPages;
+          numberOfPageGetPasien.value = response.data.pagination.totalPages;
         },
       );
       isLoading.value = false;

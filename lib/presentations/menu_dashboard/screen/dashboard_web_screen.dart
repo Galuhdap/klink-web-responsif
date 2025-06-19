@@ -8,7 +8,7 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_has_expired_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine/medicine_screen.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/menu_report_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/report/menu_report_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
@@ -38,13 +38,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return [
           const QueueScreen(),
           const PatientScreen(),
-         // const DataPatientScreen(),
+          // const DataPatientScreen(),
           // const DocterScreen(),
         ];
       case UserRole.DOKTER:
         return [
           const QueueScreen(),
-          //const DataAntrianPasienDocterScreen(),
+          const PatientScreen(),
         ];
       case UserRole.APOTEKER:
         return [
@@ -138,6 +138,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 iconPath: Assets.icons.rsDashboard.path,
                 isActive: _selectedIndex == 0,
                 onTap: () => _onItemTapped(0),
+              ),
+              NavItem(
+                iconPath: Assets.icons.pasien.path,
+                isActive: _selectedIndex == 1,
+                onTap: () => _onItemTapped(1),
               ),
               // NavItem(
               //   iconPath: Assets.icons.pasien.path,

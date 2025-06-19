@@ -6,13 +6,12 @@ import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_has_expired_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine/medicine_screen.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/menu_report_screen.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/report/menu_report_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stackholder_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/apotik_dashboard_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/staff/queue_screen.dart';
-import 'package:klinik_web_responsif/presentations/home/screen/staff/staff_screen.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/nav_item.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/patient_screen.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
@@ -42,7 +41,8 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
         ];
       case UserRole.DOKTER:
         return [
-          const StaffScreen(),
+          const QueueScreen(),
+          const PatientScreen(),
           //const DataAntrianPasienDocterScreen(),
         ];
       case UserRole.APOTEKER:
@@ -130,6 +130,11 @@ class _DashboardMobileScreenState extends State<DashboardMobileScreen> {
             iconPath: Assets.icons.rsDashboard.path,
             isActive: _selectedIndex == 0,
             onTap: () => _onItemTapped(0),
+          ),
+          NavItem(
+            iconPath: Assets.icons.pasien.path,
+            isActive: _selectedIndex == 1,
+            onTap: () => _onItemTapped(1),
           ),
           // NavItem(
           //   iconPath: Assets.icons.pasien.path,

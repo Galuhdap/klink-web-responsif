@@ -25,31 +25,31 @@ class CardApotikDashbordWidget extends StatelessWidget {
                     children: [
                       Flexible(
                           child: CardDashbordComponent(
-                        title: 'Pembelian Bulan Ini',
+                        title: 'Pembelian Obat Bulan Ini',
                         changeIcon: false,
                         iconSaxChange: Iconsax.shopping_cart4,
                         count: controller.isLoadingSummaryMonthMedicine.value
                             ? 'Load....'
                             : controller.summaryMonthlyMedicine.value!
-                                        .totalPembelian ==
+                                        .pembelianObatBulanIni ==
                                     0
                                 ? 0.currencyFormatRp
                                 : controller.summaryMonthlyMedicine.value!
-                                    .totalPembelian.currencyFormatRp,
+                                    .pembelianObatBulanIni.currencyFormatRp,
                       )),
                       Flexible(
                           child: CardDashbordComponent(
-                        title: 'Penjualan Bulan Ini',
+                        title: 'Penjualan Obat Bulan Ini',
                         changeIcon: false,
                         iconSaxChange: Iconsax.shopping_cart4,
                         count: controller.isLoadingSummaryMonthMedicine.value
                             ? 'Load....'
                             : controller.summaryMonthlyMedicine.value!
-                                        .totalPenjualan ==
+                                        .penjualanObatBulanIni ==
                                     0
                                 ? 0.currencyFormatRp
                                 : controller.summaryMonthlyMedicine.value!
-                                    .totalPenjualan.currencyFormatRp,
+                                    .penjualanObatBulanIni.currencyFormatRp,
                       )),
                     ],
                   ),
@@ -65,25 +65,25 @@ class CardApotikDashbordWidget extends StatelessWidget {
                           iconSaxChange: Iconsax.dollar_circle4,
                           count: controller.isLoadingSummaryMonthMedicine.value
                               ? 'Load....'
-                              : controller.summaryMonthlyMedicine.value!.hpp ==
+                              : controller.summaryMonthlyMedicine.value!.hppBulanIni ==
                                       0
                                   ? 0.currencyFormatRp
-                                  : controller.summaryMonthlyMedicine.value!.hpp
+                                  : controller.summaryMonthlyMedicine.value!.hppBulanIni
                                       .currencyFormatRp,
                         ),
                       ),
                       Flexible(
                         child: CardDashbordComponent(
-                          title: 'Laba Bulan Ini',
+                          title: 'Laba Bersih Bulan Ini',
                           changeIcon: false,
                           iconSaxChange: Iconsax.dollar_circle4,
                           count: controller.isLoadingSummaryMonthMedicine.value
                               ? 'Load....'
-                              : controller.summaryMonthlyMedicine.value!.laba ==
+                              : controller.summaryMonthlyMedicine.value!.labaBersihBulanIni ==
                                       0
                                   ? 0.currencyFormatRp
                                   : controller.summaryMonthlyMedicine.value!
-                                      .laba.currencyFormatRp,
+                                      .labaBersihBulanIni.currencyFormatRp,
                         ),
                       ),
                     ],
@@ -104,11 +104,11 @@ class CardApotikDashbordWidget extends StatelessWidget {
                     count: controller.isLoadingSummaryMonthMedicine.value
                         ? 'Load....'
                         : controller.summaryMonthlyMedicine.value!
-                                    .totalPembelian ==
+                                    .pembelianObatBulanIni ==
                                 0
                             ? 0.currencyFormatRp
                             : controller.summaryMonthlyMedicine.value!
-                                .totalPembelian.currencyFormatRp,
+                                .pembelianObatBulanIni.currencyFormatRp,
                   ),
                   CardDashbordComponent(
                     title: 'Penjualan Bulan Ini',
@@ -117,11 +117,11 @@ class CardApotikDashbordWidget extends StatelessWidget {
                     count: controller.isLoadingSummaryMonthMedicine.value
                         ? 'Load....'
                         : controller.summaryMonthlyMedicine.value!
-                                    .totalPenjualan ==
+                                    .penjualanObatBulanIni ==
                                 0
                             ? 0.currencyFormatRp
                             : controller.summaryMonthlyMedicine.value!
-                                .totalPenjualan.currencyFormatRp,
+                                .penjualanObatBulanIni.currencyFormatRp,
                   ),
                   CardDashbordComponent(
                     title: 'HPP Bulan Ini',
@@ -129,20 +129,20 @@ class CardApotikDashbordWidget extends StatelessWidget {
                     iconSaxChange: Iconsax.dollar_circle4,
                     count: controller.isLoadingSummaryMonthMedicine.value
                         ? 'Load....'
-                        : controller.summaryMonthlyMedicine.value!.hpp == 0
+                        : controller.summaryMonthlyMedicine.value!.hppBulanIni == 0
                             ? 0.currencyFormatRp
-                            : controller.summaryMonthlyMedicine.value!.hpp
+                            : controller.summaryMonthlyMedicine.value!.hppBulanIni
                                 .currencyFormatRp,
                   ),
                   CardDashbordComponent(
-                    title: 'Laba Bulan Ini',
+                    title: 'Laba Bersih Bulan Ini',
                     changeIcon: false,
                     iconSaxChange: Iconsax.dollar_circle4,
                     count: controller.isLoadingSummaryMonthMedicine.value
                         ? 'Load....'
-                        : controller.summaryMonthlyMedicine.value!.laba == 0
+                        : controller.summaryMonthlyMedicine.value!.labaBersihBulanIni == 0
                             ? 0.currencyFormatRp
-                            : controller.summaryMonthlyMedicine.value!.laba
+                            : controller.summaryMonthlyMedicine.value!.labaBersihBulanIni
                                 .currencyFormatRp,
                   ),
                 ],

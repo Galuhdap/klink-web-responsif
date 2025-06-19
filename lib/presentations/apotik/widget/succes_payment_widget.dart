@@ -34,7 +34,8 @@ class SuccesPaymentWidget extends StatelessWidget {
         AppSizes.s25.height,
         SvgPicture.asset(
           Assets.icons.success.path,
-          width: Responsive.isMobile(context) ? AppSizes.s80 : AppSizes.s100,
+          width:
+              Responsive.isMobile(context) ? AppSizes.s80 : AppSizes.s100,
         ),
         AppSizes.s20.height,
         Center(
@@ -42,8 +43,9 @@ class SuccesPaymentWidget extends StatelessWidget {
             'Pembayaran Sukses!',
             style: Get.textTheme.labelMedium!.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize:
-                  Responsive.isMobile(context) ? AppSizes.s20 : AppSizes.s28,
+              fontSize: Responsive.isMobile(context)
+                  ? AppSizes.s20
+                  : AppSizes.s28,
             ),
           ),
         ),
@@ -53,8 +55,9 @@ class SuccesPaymentWidget extends StatelessWidget {
             invoice,
             style: Get.textTheme.labelMedium!.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize:
-                  Responsive.isMobile(context) ? AppSizes.s15 : AppSizes.s20,
+              fontSize: Responsive.isMobile(context)
+                  ? AppSizes.s15
+                  : AppSizes.s20,
             ),
           ),
         ),
@@ -175,6 +178,7 @@ class SuccesPaymentWidget extends StatelessWidget {
         ),
       ],
     ).paddingSymmetric(
-        horizontal: Responsive.isMobile(context) ? AppSizes.s0 : AppSizes.s100);
+        horizontal:
+            Responsive.isMobile(context) ? AppSizes.s0 : AppSizes.s100);
   }
 }

@@ -4,6 +4,7 @@ import 'package:klinik_web_responsif/services/auth/auth_repository.dart';
 import 'package:klinik_web_responsif/services/doctor/doctor_repository.dart';
 import 'package:klinik_web_responsif/services/owner/owner_repository.dart';
 import 'package:klinik_web_responsif/services/pasien/pasien_repository.dart';
+import 'package:klinik_web_responsif/services/report/report_repository.dart';
 import 'package:klinik_web_responsif/services/rme/rme_repository.dart';
 
 void initRepositoriesModule(GetIt locator) {
@@ -18,4 +19,6 @@ void initRepositoriesModule(GetIt locator) {
       () => ApotikRepository(locator()));
   locator.registerLazySingleton<OwnerRepository>(
       () => OwnerRepository(locator()));
+  locator.registerLazySingleton<ReportRepository>(
+      () => ReportRepository(locator()));
 }

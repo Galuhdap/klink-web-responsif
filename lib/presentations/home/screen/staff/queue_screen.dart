@@ -335,7 +335,7 @@ class QueueScreen extends StatelessWidget {
                                   controllerRme: controllerRme,
                                 ),
                               ),
-                              if (controller.role.value == 'ADMIN' &&
+                              if (controller.role.value == 'ADMIN' ||
                                   controller.role.value == 'APOTIK') ...[
                                 AppSizes.s50.height,
                                 CustomTabelComponent(

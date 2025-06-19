@@ -55,7 +55,7 @@ class MedicineResponse {
     final String keluhan;
     final String terapiTindakan;
     final String dx;
-    final int total;
+    final int feeDocter;
     final String idPasien;
     final String userId;
 
@@ -65,7 +65,7 @@ class MedicineResponse {
         required this.keluhan,
         required this.terapiTindakan,
         required this.dx,
-        required this.total,
+        required this.feeDocter,
         required this.idPasien,
         required this.userId,
     });
@@ -76,7 +76,7 @@ class MedicineResponse {
         String? keluhan,
         String? terapiTindakan,
         String? dx,
-        int? total,
+        int? feeDocter,
         String? idPasien,
         String? userId,
     }) => 
@@ -86,7 +86,7 @@ class MedicineResponse {
             keluhan: keluhan ?? this.keluhan,
             terapiTindakan: terapiTindakan ?? this.terapiTindakan,
             dx: dx ?? this.dx,
-            total: total ?? this.total,
+            feeDocter: feeDocter ?? this.feeDocter,
             idPasien: idPasien ?? this.idPasien,
             userId: userId ?? this.userId,
         );
@@ -97,7 +97,7 @@ class MedicineResponse {
         keluhan: json["keluhan"],
         terapiTindakan: json["terapi_tindakan"],
         dx: json["dx"],
-        total: json["total"],
+        feeDocter: json["fee_docter"],
         idPasien: json["id_pasien"],
         userId: json["userId"],
     );
@@ -108,7 +108,7 @@ class MedicineResponse {
         "keluhan": keluhan,
         "terapi_tindakan": terapiTindakan,
         "dx": dx,
-        "total": total,
+        "fee_docter": feeDocter,
         "id_pasien": idPasien,
         "userId": userId,
     };

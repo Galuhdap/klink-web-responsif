@@ -45,12 +45,14 @@ class MedicineRequest {
   String medicineId;
   int stock;
   DateTime dateExpired;
+  String unitId;
   int priceBuy;
 
   MedicineRequest({
     required this.medicineId,
     required this.stock,
     required this.dateExpired,
+    required this.unitId,
     required this.priceBuy,
   });
 
@@ -58,6 +60,7 @@ class MedicineRequest {
       MedicineRequest(
         medicineId: json["medicineId"],
         stock: json["stock"],
+        unitId: json["unitId"],
         dateExpired: DateTime.parse(json["date_expired"]),
         priceBuy: json["price_buy"],
       );
@@ -65,6 +68,7 @@ class MedicineRequest {
   Map<String, dynamic> toJson() => {
         "medicineId": medicineId,
         "stock": stock,
+        "unitId": unitId,
         "date_expired":
             "${dateExpired.year.toString().padLeft(4, '0')}-${dateExpired.month.toString().padLeft(2, '0')}-${dateExpired.day.toString().padLeft(2, '0')}",
         "price_buy": priceBuy,

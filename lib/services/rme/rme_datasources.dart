@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_notempty_medicine_response.dart';
 import 'package:klinik_web_responsif/services/lib/api_services.dart';
 import 'package:klinik_web_responsif/services/lib/network_constants.dart';
 import 'package:klinik_web_responsif/services/rme/model/request/post_rme_request.dart';
@@ -51,7 +51,7 @@ class RmeDatasources extends ApiService {
         "dx": data.dx,
         "id_pasien": data.idPasien,
         "obat": data.obat,
-        "total": data.total,
+        "fee_docter": data.feeDocter,
         "id_user": userData['id']
       }, header: {
         "Content-Type": "application/json",
@@ -66,7 +66,7 @@ class RmeDatasources extends ApiService {
     }
   }
 
-  Future<Either<Failure, GetGroupStockMedicineResponse>>
+  Future<Either<Failure, GetGroupStockNotEmptyMedicineResponse>>
       getGroupStockMedicineZero(
           {required int page,
           required int limit,
@@ -82,7 +82,7 @@ class RmeDatasources extends ApiService {
             "Authorization": "Bearer ${prefs}",
           });
 
-      return Right(GetGroupStockMedicineResponse.fromJson(response));
+      return Right(GetGroupStockNotEmptyMedicineResponse.fromJson(response));
     } catch (e) {
       return left(Failure(false, 400, 'Data Tidak Masuk'));
     }

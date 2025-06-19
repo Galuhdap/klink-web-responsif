@@ -14,6 +14,7 @@ import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/string_casing_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
 import 'package:lottie/lottie.dart';
@@ -24,12 +25,14 @@ class AddRmeScreen extends StatelessWidget {
   final RekamMedisController controllerRme;
   final String norme;
   final String name;
+  final String idPasien;
   const AddRmeScreen({
     super.key,
     required this.controller,
     required this.controllerRme,
     required this.norme,
     required this.name,
+    required this.idPasien,
   });
 
   @override
@@ -190,11 +193,11 @@ class AddRmeScreen extends StatelessWidget {
               () {
                 return CustomTabelComponent(
                   label: 'Pilih Obat',
-                  sizeWidth: MediaQuery.of(context).size.width / 3.2,
+                  sizeWidth: MediaQuery.of(context).size.width / 3.1,
                   border: TableBorder.all(
                     color: AppColors.colorBaseSecondary.withAlpha(50),
                   ),
-                  sizeRowTabel: MediaQuery.of(context).size.width / 3.2,
+                  sizeRowTabel: MediaQuery.of(context).size.width / 3.1,
                   customContentPagination:
                       controller.numberOfPageMedicineStock.value == 0
                           ? Container()
@@ -313,6 +316,7 @@ class AddRmeScreen extends StatelessWidget {
                       ),
                     ),
                     DataColumn(
+                      headingRowAlignment: MainAxisAlignment.center,
                       label: Text(
                         'ACTION',
                         style: Get.textTheme.labelLarge!.copyWith(
@@ -388,7 +392,7 @@ class AddRmeScreen extends StatelessWidget {
                                     ),
                                     DataCell(
                                       Text(
-                                        row.totalStock.toString(),
+                                        "${row.totalStock.toString()} ${row.nameUnit.toTitleCase()}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -397,6 +401,8 @@ class AddRmeScreen extends StatelessWidget {
                                       Center(
                                         child: IconButton(
                                           onPressed: () {
+                                            // controllerRme.idPasienRme.value =
+                                            //     row.id;
                                             controllerRme
                                                 .addSelectedMedicineRme(row.id);
                                           },
@@ -451,7 +457,7 @@ class AddRmeScreen extends StatelessWidget {
                                   controllerRme.selectedMedicineListRme.isEmpty
                                       ? true
                                       : false,
-                              controller: controllerRme.totalController,
+                              controller: controllerRme.feeDocterController,
                               keyboardType: TextInputType.text,
                               horizontal: 10,
                               vertical: 10,
@@ -475,33 +481,32 @@ class AddRmeScreen extends StatelessWidget {
                         width: 150,
                         child: Button.filled(
                             onPressed: () {
-                              // showModalCenter(
-                              //   context,
-                              //   Obx(
-                              //     () {
-                              //       return controller
-                              //               .isLoadingPostBuyMedicine.value
-                              //           ? Center(
-                              //               child: SizedBox(
-                              //                 width: 400,
-                              //                 height: 400,
-                              //                 child: Lottie.asset(
-                              //                     Assets.lottie.hospital),
-                              //               ),
-                              //             )
-                              //           : ShowModalTandaTanyaComponent(
-                              //               label: 'Apakah anda sudah yakin ?',
-                              //               onTapNo: () {
-                              //                 Get.back();
-                              //               },
-                              //               onTapYes: () async {
-                              //                 await controller
-                              //                     .postBuyMedicine();
-                              //               },
-                              //             );
-                              //     },
-                              //   ),
-                              // );
+                              showModalCenter(
+                                context,
+                                Obx(
+                                  () {
+                                    return controllerRme.isLoadingCreate.value
+                                        ? Center(
+                                            child: SizedBox(
+                                              width: 400,
+                                              height: 400,
+                                              child: Lottie.asset(
+                                                  Assets.lottie.hospital),
+                                            ),
+                                          )
+                                        : ShowModalTandaTanyaComponent(
+                                            label: 'Apakah anda sudah yakin ?',
+                                            onTapNo: () {
+                                              Get.back();
+                                            },
+                                            onTapYes: () async {
+                                              await controllerRme
+                                                  .postRme(idPasien);
+                                            },
+                                          );
+                                  },
+                                ),
+                              );
                             },
                             label: 'Simpan'),
                       ),
@@ -534,6 +539,14 @@ class AddRmeScreen extends StatelessWidget {
                     ),
                     DataColumn(
                       label: Text(
+                        'SATUAN',
+                        style: Get.textTheme.labelLarge!.copyWith(
+                            fontSize: AppSizes.s14,
+                            color: AppColors.colorBaseBlack),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
                         'TOTAL',
                         style: Get.textTheme.labelLarge!.copyWith(
                             fontSize: AppSizes.s14,
@@ -541,6 +554,7 @@ class AddRmeScreen extends StatelessWidget {
                       ),
                     ),
                     DataColumn(
+                      headingRowAlignment: MainAxisAlignment.center,
                       label: Text(
                         'ACTION',
                         style: Get.textTheme.labelLarge!.copyWith(
@@ -562,6 +576,7 @@ class AddRmeScreen extends StatelessWidget {
                               ),
                               DataCell.empty,
                               DataCell.empty,
+                              DataCell.empty,
                             ],
                           ),
                         ]
@@ -581,6 +596,7 @@ class AddRmeScreen extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  DataCell.empty,
                                   DataCell.empty,
                                   DataCell.empty,
                                 ],
@@ -627,6 +643,13 @@ class AddRmeScreen extends StatelessWidget {
                                           },
                                           fontSize: 10,
                                         ),
+                                      ),
+                                    ),
+                                    DataCell(
+                                      Text(
+                                        row.nameUnit.toTitleCase(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     DataCell(

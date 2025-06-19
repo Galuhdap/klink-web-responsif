@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_notempty_medicine_response.dart';
 import 'package:klinik_web_responsif/services/rme/model/request/post_rme_request.dart';
 import 'package:klinik_web_responsif/services/rme/model/response/get_rme_id_response.dart';
 import 'package:klinik_web_responsif/services/rme/model/response/post_rme_response.dart';
@@ -32,7 +32,7 @@ class RmeRepository {
     return source.postRme(data);
   }
 
-   Future<Either<Failure, GetGroupStockMedicineResponse>> getGroupStockMedicineZero(
+   Future<Either<Failure, GetGroupStockNotEmptyMedicineResponse>> getGroupStockMedicineZero(
       {required int page,
       required int limit,
       required String name_medicine}) async {

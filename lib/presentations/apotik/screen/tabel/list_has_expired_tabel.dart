@@ -151,7 +151,7 @@ List<DataRow> getRowsMedicineExpired({
                     context,
                     Obx(
                       () {
-                        return controller.isLoadingPostNewMedicine.value
+                        return controller.isLoadingHasExpiredMedicine.value
                             ? Center(
                                 child: SizedBox(
                                   width: 400,
@@ -166,7 +166,8 @@ List<DataRow> getRowsMedicineExpired({
                                   Get.back();
                                 },
                                 onTapYes: () async {
-                                  // await controller.deleteNewMedicine(row.id);
+                                  await controller
+                                      .deleteHasMedicineExpired(row.id);
                                 },
                               );
                       },

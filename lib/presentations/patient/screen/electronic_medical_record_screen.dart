@@ -22,11 +22,13 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
       {super.key,
       required this.name,
       required this.rme,
+      this.addRme = true,
       required this.id_pasien});
 
   final String name;
   final String rme;
   final String id_pasien;
+  final bool addRme;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +62,13 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                 controllerRme: controller,
                                 norme: rme,
                                 name: name,
+                                idPasien: id_pasien,
                               )
                             : CustomTabelComponent(
                                 label: AppConstants.LABEL_DAFTAR_REKAM_MEDIS,
                                 labelName: name,
                                 sizeRowTabel:
-                                    MediaQuery.of(context).size.width / 1.1,
+                                    MediaQuery.of(context).size.width / 1.05,
                                 sizeWidth:
                                     MediaQuery.of(context).size.width / 1,
                                 border: TableBorder.all(
@@ -82,9 +85,11 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                   ),
                                 ),
                                 customContentButton: InkWell(
-                                  onTap: () {
-                                    controller.showDetail();
-                                  },
+                                  onTap: addRme
+                                      ? () {
+                                          controller.showDetail();
+                                        }
+                                      : () {},
                                   child: Container(
                                     padding: AppSizes.symmetricPadding(
                                       vertical: AppSizes.s5,
@@ -98,11 +103,15 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         Icon(
-                                          Icons.add_outlined,
+                                          addRme
+                                              ? Icons.add_outlined
+                                              : Icons.print,
                                           color: AppColors.colorBaseWhite,
                                         ),
                                         Text(
-                                          'Catat Rekam Medis',
+                                          addRme
+                                              ? 'Catat Rekam Medis'
+                                              : 'Cetak Rekam Medis',
                                           style: Get.textTheme.labelLarge!
                                               .copyWith(
                                             fontSize: AppSizes.s11,
@@ -215,20 +224,20 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                                 DateFormat('yyyy-MM-dd');
 
                                             controller.getRmePasien(
-                                              keluhan: keluhan,
-                                              start_date: controller
-                                                      .selectedDateRange
-                                                      .isNotEmpty
-                                                  ? dateFormat.format(controller
-                                                      .selectedDateRange[0]!)
-                                                  : "",
-                                              end_date: controller
-                                                      .selectedDateRange
-                                                      .isNotEmpty
-                                                  ? dateFormat.format(controller
-                                                      .selectedDateRange[1]!)
-                                                  : "",
-                                            );
+                                                keluhan: keluhan,
+                                                start_date: controller
+                                                        .selectedDateRange
+                                                        .isNotEmpty
+                                                    ? dateFormat.format(controller
+                                                        .selectedDateRange[0]!)
+                                                    : "",
+                                                end_date: controller
+                                                        .selectedDateRange
+                                                        .isNotEmpty
+                                                    ? dateFormat.format(controller
+                                                        .selectedDateRange[1]!)
+                                                    : "",
+                                                id: id_pasien);
                                           },
                                         ),
                                       ),
@@ -257,16 +266,20 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                               selectedDates;
                                           final dateFormat =
                                               DateFormat('yyyy-MM-dd');
-                                          controller.getRmePasien(
-                                            keluhan:
-                                                controller.keluhanSearch.value,
-                                            start_date: dateFormat.format(
-                                                controller
-                                                    .selectedDateRange[0]!),
-                                            end_date: dateFormat.format(
-                                                controller
-                                                    .selectedDateRange[1]!),
-                                          );
+                                          print(dateFormat.format(controller
+                                              .selectedDateRange[0]!));
+                                          print(dateFormat.format(controller
+                                              .selectedDateRange[1]!));
+                                          await controller.getRmePasien(
+                                              keluhan: controller
+                                                  .keluhanSearch.value,
+                                              start_date: dateFormat.format(
+                                                  controller
+                                                      .selectedDateRange[0]!),
+                                              end_date: dateFormat.format(
+                                                  controller
+                                                      .selectedDateRange[1]!),
+                                              id: id_pasien);
                                         }
                                       },
                                       child: Container(
@@ -317,9 +330,9 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                                           .selectedDateRange
                                                           .value = [];
                                                       controller.getRmePasien(
-                                                        start_date: "",
-                                                        end_date: "",
-                                                      );
+                                                          start_date: "",
+                                                          end_date: "",
+                                                          id: id_pasien);
                                                     },
                                                     icon: Icon(
                                                       Icons.delete,
@@ -336,7 +349,7 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                   context: context,
                                   controller: controller,
                                   data: controller.rmePasientList,
-                                  isLoading: controller.isLoading.value,
+                                  isLoading: controller.isLoadingRMEId.value,
                                 ),
                               )
                         : Container()

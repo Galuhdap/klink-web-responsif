@@ -8,13 +8,16 @@ import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medi
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_daily_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_medicines_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_in_out_report_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_monthly_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_purchase_report_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_sale_report_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
@@ -166,11 +169,9 @@ class ApotikDatasources extends ApiService {
     try {
       final response =
           await post(NetworkConstants.POST_TRANSACTION_PASIEN(), body: {
-        "payment_method": data.paymentMethod,
-        "nominal_payment": data.nominalPayment,
-        "change_given": data.changeGiven,
-        "amount_paid": data.amountPaid,
-        "id_rekam_medis": data.idRekamMedis,
+        "payment_method": data.paymentMethod, // atau "qris", "debit", dll
+        "amount_paid": data.amountPaid, // nominal uang yang dibayarkan pasien
+        "id_rekam_medis": data.idRekamMedis, // ID dari rekam medis pasien
         "id_user": userData['id']
       }, header: {
         "Content-Type": "application/json",
@@ -227,6 +228,26 @@ class ApotikDatasources extends ApiService {
     }
   }
 
+  Future<Either<Failures, DeleteMedicineResponse>> deleteMedicineHasExpired({
+    required String id,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response = await delete(
+          NetworkConstants.DELETE_MEDICINE_HAS_EXPIRED_URL(id),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(DeleteMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
   Future<Either<Failure, GetTopFiveMedicineResponse>>
       getMedicineTopFive() async {
     final prefs = await SharedPreferencesUtils.getAuthToken();
@@ -257,6 +278,23 @@ class ApotikDatasources extends ApiService {
           });
 
       return Right(GetMonthlySummaryMedicineResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failure, GetDailySummaryMedicineResponse>>
+      getDailySummaryMedicine() async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response =
+          await get(NetworkConstants.GET_MEDICINE_SUMMARY_DAILY_URL(), header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+
+      return Right(GetDailySummaryMedicineResponse.fromJson(response));
     } catch (e) {
       return left(Failure(false, 400, 'Data Tidak Masuk'));
     }
@@ -331,6 +369,62 @@ class ApotikDatasources extends ApiService {
           });
 
       return Right(GetPurchaseReportMedicineResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failure, GetSaleReportMedicineResponse>> getSaleReportMedicine({
+    required int page,
+    required int limit,
+    required String start_date,
+    required String end_date,
+    required String invoice,
+    required String no_rekam_medis,
+    required String name,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response = await get(
+          NetworkConstants.GET_SALE_MEDICINE_BUY_URL(
+              page, limit, start_date, end_date, invoice, no_rekam_medis, name),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+
+      return Right(GetSaleReportMedicineResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failure, GetInOutReportMedicineResponse>>
+      getInOutReportMedicine({
+    required int page,
+    required int limit,
+    required String start_date,
+    required String end_date,
+    required String no_buy,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response = await get(
+          NetworkConstants.GET_IN_OUT_MEDICINE_BUY_URL(
+            page,
+            limit,
+            start_date,
+            end_date,
+            no_buy,
+          ),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+
+      return Right(GetInOutReportMedicineResponse.fromJson(response));
     } catch (e) {
       return left(Failure(false, 400, 'Data Tidak Masuk'));
     }

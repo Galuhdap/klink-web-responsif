@@ -9,10 +9,10 @@ PostTransactionResponse postTransactionResponseFromJson(String str) => PostTrans
 String postTransactionResponseToJson(PostTransactionResponse data) => json.encode(data.toJson());
 
 class PostTransactionResponse {
-    final bool success;
-    final int code;
-    final String message;
-    final TransactionPost data;
+    bool success;
+    int code;
+    String message;
+    TransactionPost data;
 
     PostTransactionResponse({
         required this.success,
@@ -20,19 +20,6 @@ class PostTransactionResponse {
         required this.message,
         required this.data,
     });
-
-    PostTransactionResponse copyWith({
-        bool? success,
-        int? code,
-        String? message,
-        TransactionPost? data,
-    }) => 
-        PostTransactionResponse(
-            success: success ?? this.success,
-            code: code ?? this.code,
-            message: message ?? this.message,
-            data: data ?? this.data,
-        );
 
     factory PostTransactionResponse.fromJson(Map<String, dynamic> json) => PostTransactionResponse(
         success: json["success"],
@@ -50,72 +37,169 @@ class PostTransactionResponse {
 }
 
 class TransactionPost {
-    final String id;
-    final String invoce;
-    final String paymentMethod;
-    final int nominalPayment;
-    final int changeGiven;
-    final int amountPaid;
-    final String rekamMedisid;
-    final DateTime createdAt;
-    final String userId;
+    String id;
+    String invoice;
+    String paymentMethod;
+    int nominalPayment;
+    int doctorFee;
+    int totalPayment;
+    DateTime createdAt;
+    String rekamMedisid;
+    String userId;
+    List<DetailSellMedicine> detailSellMedicine;
+    int amountPaid;
+    int changeGiven;
 
     TransactionPost({
         required this.id,
-        required this.invoce,
+        required this.invoice,
         required this.paymentMethod,
         required this.nominalPayment,
-        required this.changeGiven,
-        required this.amountPaid,
-        required this.rekamMedisid,
+        required this.doctorFee,
+        required this.totalPayment,
         required this.createdAt,
+        required this.rekamMedisid,
         required this.userId,
+        required this.detailSellMedicine,
+        required this.amountPaid,
+        required this.changeGiven,
     });
-
-    TransactionPost copyWith({
-        String? id,
-        String? invoce,
-        String? paymentMethod,
-        int? nominalPayment,
-        int? changeGiven,
-        int? amountPaid,
-        String? rekamMedisid,
-        DateTime? createdAt,
-        String? userId,
-    }) => 
-        TransactionPost(
-            id: id ?? this.id,
-            invoce: invoce ?? this.invoce,
-            paymentMethod: paymentMethod ?? this.paymentMethod,
-            nominalPayment: nominalPayment ?? this.nominalPayment,
-            changeGiven: changeGiven ?? this.changeGiven,
-            amountPaid: amountPaid ?? this.amountPaid,
-            rekamMedisid: rekamMedisid ?? this.rekamMedisid,
-            createdAt: createdAt ?? this.createdAt,
-            userId: userId ?? this.userId,
-        );
 
     factory TransactionPost.fromJson(Map<String, dynamic> json) => TransactionPost(
         id: json["id"],
-        invoce: json["invoce"],
+        invoice: json["invoice"],
         paymentMethod: json["payment_method"],
         nominalPayment: json["nominal_payment"],
-        changeGiven: json["change_given"],
-        amountPaid: json["amount_paid"],
-        rekamMedisid: json["rekam_medisid"],
+        doctorFee: json["doctorFee"],
+        totalPayment: json["totalPayment"],
         createdAt: DateTime.parse(json["createdAt"]),
+        rekamMedisid: json["rekam_medisid"],
         userId: json["userId"],
+        detailSellMedicine: List<DetailSellMedicine>.from(json["detailSellMedicine"].map((x) => DetailSellMedicine.fromJson(x))),
+        amountPaid: json["amount_paid"],
+        changeGiven: json["change_given"],
     );
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "invoce": invoce,
+        "invoice": invoice,
         "payment_method": paymentMethod,
         "nominal_payment": nominalPayment,
-        "change_given": changeGiven,
-        "amount_paid": amountPaid,
-        "rekam_medisid": rekamMedisid,
+        "doctorFee": doctorFee,
+        "totalPayment": totalPayment,
         "createdAt": createdAt.toIso8601String(),
+        "rekam_medisid": rekamMedisid,
         "userId": userId,
+        "detailSellMedicine": List<dynamic>.from(detailSellMedicine.map((x) => x.toJson())),
+        "amount_paid": amountPaid,
+        "change_given": changeGiven,
+    };
+}
+
+class DetailSellMedicine {
+    String id;
+    int amountMedicine;
+    int priceSell;
+    int totalSell;
+    DateTime createdAt;
+    String medicineId;
+    String sellMedicineId;
+    String unitId;
+    Medicine medicine;
+
+    DetailSellMedicine({
+        required this.id,
+        required this.amountMedicine,
+        required this.priceSell,
+        required this.totalSell,
+        required this.createdAt,
+        required this.medicineId,
+        required this.sellMedicineId,
+        required this.unitId,
+        required this.medicine,
+    });
+
+    factory DetailSellMedicine.fromJson(Map<String, dynamic> json) => DetailSellMedicine(
+        id: json["id"],
+        amountMedicine: json["amount_medicine"],
+        priceSell: json["price_sell"],
+        totalSell: json["total_sell"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        medicineId: json["medicineId"],
+        sellMedicineId: json["sellMedicineId"],
+        unitId: json["unitId"],
+        medicine: Medicine.fromJson(json["Medicine"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "amount_medicine": amountMedicine,
+        "price_sell": priceSell,
+        "total_sell": totalSell,
+        "createdAt": createdAt.toIso8601String(),
+        "medicineId": medicineId,
+        "sellMedicineId": sellMedicineId,
+        "unitId": unitId,
+        "Medicine": medicine.toJson(),
+    };
+}
+
+class Medicine {
+    String id;
+    String nameMedicine;
+    String baseUnitId;
+    int priceSell;
+    DateTime createdAt;
+    BaseUnit baseUnit;
+
+    Medicine({
+        required this.id,
+        required this.nameMedicine,
+        required this.baseUnitId,
+        required this.priceSell,
+        required this.createdAt,
+        required this.baseUnit,
+    });
+
+    factory Medicine.fromJson(Map<String, dynamic> json) => Medicine(
+        id: json["id"],
+        nameMedicine: json["name_medicine"],
+        baseUnitId: json["baseUnitId"],
+        priceSell: json["price_sell"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        baseUnit: BaseUnit.fromJson(json["baseUnit"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name_medicine": nameMedicine,
+        "baseUnitId": baseUnitId,
+        "price_sell": priceSell,
+        "createdAt": createdAt.toIso8601String(),
+        "baseUnit": baseUnit.toJson(),
+    };
+}
+
+class BaseUnit {
+    String id;
+    String name;
+    int level;
+
+    BaseUnit({
+        required this.id,
+        required this.name,
+        required this.level,
+    });
+
+    factory BaseUnit.fromJson(Map<String, dynamic> json) => BaseUnit(
+        id: json["id"],
+        name: json["name"],
+        level: json["level"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "level": level,
     };
 }

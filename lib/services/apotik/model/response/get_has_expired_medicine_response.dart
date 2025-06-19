@@ -64,6 +64,7 @@ class Data {
 
 class DatumHasExpiredMedicine {
   int no;
+  String id;
   String nameMedicine;
   int stock;
   String noBuy;
@@ -71,6 +72,7 @@ class DatumHasExpiredMedicine {
 
   DatumHasExpiredMedicine({
     required this.no,
+    required this.id,
     required this.nameMedicine,
     required this.stock,
     required this.noBuy,
@@ -80,6 +82,7 @@ class DatumHasExpiredMedicine {
   factory DatumHasExpiredMedicine.fromJson(Map<String, dynamic> json) =>
       DatumHasExpiredMedicine(
         no: json["no"],
+        id: json["id"],
         nameMedicine: json["name_medicine"],
         stock: json["stock"],
         noBuy: json["no_buy"],
@@ -88,6 +91,7 @@ class DatumHasExpiredMedicine {
 
   Map<String, dynamic> toJson() => {
         "no": no,
+        "id": id,
         "name_medicine": nameMedicine,
         "stock": stock,
         "no_buy": noBuy,

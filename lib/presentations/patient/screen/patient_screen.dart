@@ -18,6 +18,7 @@ import 'package:klinik_web_responsif/core/utils/helpers/validation_helper.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/patient_controller.dart';
+import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/mobile/patient_list_mobile.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/tabel/list_patient_tabel.dart';
 import 'package:lottie/lottie.dart';
@@ -28,6 +29,8 @@ class PatientScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var homeController = Get.put(HomeController());
+    var rmeController = Get.put(RekamMedisController());
     return GetBuilder<PatientController>(
         init: PatientController(),
         builder: (controller) {
@@ -43,7 +46,7 @@ class PatientScreen extends StatelessWidget {
                 searchController: TextEditingController(),
                 searchHint: 'Cari Pasien',
                 searchChanged: (_) {},
-                isMake: true,
+                isMake: homeController.role.value == "DOKTER" ? false : true,
                 onTapButton: () {
                   showModalCenter(
                     context,
@@ -329,7 +332,7 @@ class PatientScreen extends StatelessWidget {
                               color: AppColors.colorBaseSecondary.withAlpha(50),
                             ),
                             customContentPagination: controller
-                                        .numberOfPage.value <=
+                                        .numberOfPageGetPasien.value <=
                                     1
                                 ? Container()
                                 : Container(
@@ -347,11 +350,12 @@ class PatientScreen extends StatelessWidget {
                                           ),
                                           child: Obx(() {
                                             return NumberPaginator(
-                                              numberPages:
-                                                  controller.numberOfPage.value,
-                                              onPageChange: (int index) {
+                                              numberPages: controller
+                                                  .numberOfPageGetPasien.value,
+                                              onPageChange: (int index) async {
                                                 final page = index + 1;
-                                                controller.getPasien(
+
+                                                await controller.getPasien(
                                                   page: page,
                                                   name: controller
                                                       .namesearchController
@@ -466,6 +470,8 @@ class PatientScreen extends StatelessWidget {
                             listRows: getRowsPatient(
                               context: context,
                               controller: controller,
+                              homeController: homeController,
+                              rmeController: rmeController,
                               data: controller.pasienList,
                               isLoading: controller.isLoading.value,
                             ),
@@ -573,7 +579,7 @@ class PatientScreen extends StatelessWidget {
                                           (BuildContext context, index) {
                                         var datas =
                                             controller.pasienList[index];
-                                       return PatientListMobile(
+                                        return PatientListMobile(
                                           datas: datas,
                                           controller: controller,
                                         );

@@ -137,22 +137,25 @@ class MedicineHasExpiredScreen extends StatelessWidget {
                             ListMobileContainerComponent(
                               label: 'Obat Expired',
                               height: 480,
-                              children: controller
-                                      .isLoadingExpiredMedicine.value
-                                  ? Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : ListView.builder(
-                                      itemCount:
-                                          controller.medicineExpiredList.length,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        var datas = controller
-                                            .medicineExpiredList[index];
-                                        return MedicineHasExpiredListMobile(
-                                            datas: datas);
-                                      },
-                                    ),
+                              children:
+                                  controller.isLoadingHasExpiredMedicine.value
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      :controller
+                                              .medicineHasExpiredList.isEmpty ? Center(child: Text('Data Kosong'),)  :ListView.builder(
+                                          itemCount: controller
+                                              .medicineHasExpiredList.length,
+                                          itemBuilder:
+                                              (BuildContext context, index) {
+                                            var datas = controller
+                                                .medicineHasExpiredList[index];
+                                            return MedicineHasExpiredListMobile(
+                                                datas: datas,
+                                                controller: controller,
+                                                );
+                                          },
+                                        ),
                             ),
                           ],
                         )

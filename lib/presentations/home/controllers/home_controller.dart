@@ -204,6 +204,13 @@ class HomeController extends GetxController {
     role.value = userData['role'];
   }
 
+  bool isPasienSedangDalamAntrian(String idPasien) {
+    final existing = antrianPasienList.where((item) =>
+        item.idPasien == idPasien && item.status.toUpperCase() != 'FINISHED');
+    getAntrianPasien();
+    return existing.isNotEmpty;
+  }
+
   Future<void> getAntrianPasien({
     int page = 1,
     int limit = 10,
@@ -225,12 +232,10 @@ class HomeController extends GetxController {
           inspect(failure.code);
         },
         (response) async {
+          antrianPasienList.clear();
           final allData = response.data.data;
 
           if (role == 'DOKTER') {
-            antrianPasienList.clear();
-
-            numberOfPage.value = response.data.pagination.totalPages;
             final processingOnly = allData
                 .where((item) => item.status == "PROCESSING")
                 .toList()
@@ -238,34 +243,21 @@ class HomeController extends GetxController {
                   .compareTo(int.parse(b.nomerAntrian)));
 
             antrianPasienList.addAll(processingOnly);
-            processingPatients.value = processingOnly;
-            waitingPatients.clear();
-          } else if (role == 'APOTEKER') {
-            antrianPasienList.clear();
-
             numberOfPage.value = response.data.pagination.totalPages;
-
+            // processingPatients.value = processingOnly;
+            // waitingPatients.clear();
+          } else if (role == 'APOTEKER') {
             final processingOnly = allData
                 .where((item) => item.status == "TAKE_MEDICINE")
                 .toList()
               ..sort((a, b) => int.parse(a.nomerAntrian)
                   .compareTo(int.parse(b.nomerAntrian)));
 
-            // final takeMedicineOnly = allData
-            //     .where((item) =>
-            //         item.status == "TAKE_MEDICINE" || item.status == "FINISHED")
-            //     .toList()
-            //   ..sort((a, b) {
-            //     // Prioritaskan TAKE_MEDICINE, letakkan FINISHED di bawah
-            //     if (a.status == "FINISHED" && b.status != "FINISHED") return 1;
-            //     if (a.status != "FINISHED" && b.status == "FINISHED") return -1;
-            //     return int.parse(a.nomerAntrian)
-            //         .compareTo(int.parse(b.nomerAntrian));
-            //   });
             antrianPasienList.addAll(processingOnly);
-            takeMedicinePatients.value = processingOnly;
+            numberOfPage.value = response.data.pagination.totalPages;
+            // takeMedicinePatients.value = processingOnly;
 
-            waitingPatients.clear();
+            // waitingPatients.clear();
           } else {
             final statusOrder = {
               'WAITING': 0,
@@ -274,8 +266,6 @@ class HomeController extends GetxController {
               'PENDING': 3,
               'CANCELLED': 4,
             };
-
-// Ambil hanya yang bukan 'FINISHED' dan termasuk dalam statusOrder
             final sortedData = allData
                 .where((item) =>
                     statusOrder.containsKey(item.status.toUpperCase()))
@@ -292,9 +282,7 @@ class HomeController extends GetxController {
                     .compareTo(int.parse(b.nomerAntrian));
               });
 
-            antrianPasienList
-              ..clear()
-              ..addAll(sortedData);
+            antrianPasienList.addAll(sortedData);
             numberOfPage.value = response.data.pagination.totalPages;
           }
         },

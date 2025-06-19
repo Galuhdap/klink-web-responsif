@@ -6,8 +6,8 @@ import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart'
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
-import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/string_casing_ext.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/widget/patient_action_widget.dart';
 import 'package:klinik_web_responsif/services/rme/model/response/get_rme_id_response.dart';
@@ -153,24 +153,24 @@ List<DataRow> getRowsRME({
         )),
         DataCell(Center(
           child: Text(
-            row.keluhan,
+            row.keluhan.toTitleCase(),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         )),
         DataCell(Center(
           child: Text(
-            row.terapiTindakan,
+            row.terapiTindakan.toTitleCase(),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         )),
         DataCell(Center(
           child: Text(
-            row.dx,
+            row.dx.toTitleCase(),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         )),
         DataCell(Text(
-          row.user.name,
+          row.user.name.toTitleCase(),
           style: const TextStyle(fontWeight: FontWeight.bold),
         )),
         DataCell(
@@ -328,28 +328,28 @@ List<DataRow> getRowsRME({
                                   },
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Total',
-                                    style: Get.textTheme.bodyMedium!.copyWith(
-                                      fontSize: AppSizes.s20,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.colorBaseBlack,
-                                    ),
-                                  ),
-                                  Text(
-                                    row.total.currencyFormatRp,
-                                    style: Get.textTheme.bodyMedium!.copyWith(
-                                      fontSize: AppSizes.s20,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.colorBaseBlack,
-                                    ),
-                                  ),
-                                ],
-                              )
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     Text(
+                              //       'Fee Docter',
+                              //       style: Get.textTheme.bodyMedium!.copyWith(
+                              //         fontSize: AppSizes.s20,
+                              //         fontWeight: FontWeight.bold,
+                              //         color: AppColors.colorBaseBlack,
+                              //       ),
+                              //     ),
+                              //     Text(
+                              //       row.total.currencyFormatRp,
+                              //       style: Get.textTheme.bodyMedium!.copyWith(
+                              //         fontSize: AppSizes.s20,
+                              //         fontWeight: FontWeight.bold,
+                              //         color: AppColors.colorBaseBlack,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // )
                             ],
                           ),
                         ),

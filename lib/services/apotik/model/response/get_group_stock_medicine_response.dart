@@ -68,6 +68,9 @@ class DatumGroupStockMedicine {
   String nameMedicine;
   int priceSell;
   int totalStock;
+  String idUnit;
+  String nameUnit;
+  List<Conversion> conversion;
 
   DatumGroupStockMedicine({
     required this.no,
@@ -75,6 +78,9 @@ class DatumGroupStockMedicine {
     required this.nameMedicine,
     required this.priceSell,
     required this.totalStock,
+    required this.idUnit,
+    required this.nameUnit,
+    required this.conversion,
   });
 
   factory DatumGroupStockMedicine.fromJson(Map<String, dynamic> json) =>
@@ -84,6 +90,10 @@ class DatumGroupStockMedicine {
         nameMedicine: json["name_medicine"],
         priceSell: json["price_sell"],
         totalStock: json["total_stock"],
+        idUnit: json["id_unit"],
+        nameUnit: json["name_unit"],
+        conversion: List<Conversion>.from(
+            json["conversion"].map((x) => Conversion.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -92,7 +102,68 @@ class DatumGroupStockMedicine {
         "name_medicine": nameMedicine,
         "price_sell": priceSell,
         "total_stock": totalStock,
+        "name_unit": nameUnit,
+        "id_unit": idUnit,
+        "conversion": List<dynamic>.from(conversion.map((x) => x.toJson())),
       };
+}
+
+class Conversion {
+  String id;
+  String medicineId;
+  String unitId;
+  int multiplier;
+  UnitS unit;
+
+  Conversion({
+    required this.id,
+    required this.medicineId,
+    required this.unitId,
+    required this.multiplier,
+    required this.unit,
+  });
+
+  factory Conversion.fromJson(Map<String, dynamic> json) => Conversion(
+        id: json["id"],
+        medicineId: json["medicineId"],
+        unitId: json["unitId"],
+        multiplier: json["multiplier"],
+        unit: UnitS.fromJson(json["unit"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "medicineId": medicineId,
+        "unitId": unitId,
+        "multiplier": multiplier,
+        "unit": unit.toJson(),
+      };
+}
+
+class UnitS {
+  String id;
+  String name;
+  int level;
+
+  UnitS({
+    required this.id,
+    required this.name,
+    required this.level,
+  });
+
+  factory UnitS.fromJson(Map<String, dynamic> json) => UnitS(
+        id: json["id"],
+        name: json["name"],
+        level: json["level"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "level": level,
+      };
+
+
 }
 
 class Pagination {

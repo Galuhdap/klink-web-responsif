@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'dart:math';
-
 import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/string_casing_ext.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/apotik/apotik_repository.dart';
@@ -14,13 +14,16 @@ import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medi
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_daily_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_medicines_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_in_out_report_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_monthly_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_purchase_report_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_sale_report_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
@@ -63,11 +66,18 @@ class ApotikController extends GetxController {
       <DatumGroupStockMedicine>[].obs;
   RxList<DatumReportPurchase> reportPurchaseMedicineList =
       <DatumReportPurchase>[].obs;
+  RxList<DatumReportSale> reportSaleMedicineList = <DatumReportSale>[].obs;
+  RxList<DatumReportInOutMedicine> reportInOutMedicineList =
+      <DatumReportInOutMedicine>[].obs;
   RxList<TopFiveMedicine> topFiveMedicineList = <TopFiveMedicine>[].obs;
   Rx<DeleteMedicineResponse?> deleteMedicine =
       Rx<DeleteMedicineResponse?>(null);
+  Rx<DeleteMedicineResponse?> deleteMedicineHasExpired =
+      Rx<DeleteMedicineResponse?>(null);
   Rx<DataSummaryMontlyMedicine?> summaryMonthlyMedicine =
       Rx<DataSummaryMontlyMedicine?>(null);
+  Rx<DataSummaryDailyMedicine?> summaryDailyMedicine =
+      Rx<DataSummaryDailyMedicine?>(null);
   RxList<DatumGroupStockMedicine> selectedMedicineList =
       <DatumGroupStockMedicine>[].obs;
   RxList<TextEditingController> priceBuyControllers =
@@ -105,8 +115,11 @@ class ApotikController extends GetxController {
   RxBool isLoadingExpiredMedicine = false.obs;
   RxBool isLoadingHasExpiredMedicine = false.obs;
   RxBool isLoadingSummaryMonthMedicine = false.obs;
+  RxBool isLoadingSummaryDailyMedicine = false.obs;
   RxBool isLoadingGroupStock = false.obs;
   RxBool isLoadingReportPurchase = false.obs;
+  RxBool isLoadingReportSale = false.obs;
+  RxBool isLoadingReportInOut = false.obs;
   RxBool isLoadingNewMedicine = false.obs;
   RxBool isLoadingPostBuyMedicine = false.obs;
   RxBool isLoadingPostNewMedicine = false.obs;
@@ -144,11 +157,19 @@ class ApotikController extends GetxController {
   TextEditingController priceBuyController = TextEditingController();
   TextEditingController priceSellController = TextEditingController();
   final TextEditingController dropdownUnitController = TextEditingController();
+  RxList<List<DatumUnit>> selectedUnitsPerRow = <List<DatumUnit>>[].obs;
+  RxList<String> selectedUnitIds = <String>[].obs;
+
   Rx<DateTime> dateBuyMedicineController = DateTime.now().obs;
   RxInt numberOfPageReportPurchase = 0.obs;
+  RxInt numberOfPageReportSale = 0.obs;
+  RxInt numberOfPageReportInOut = 0.obs;
   RxInt numberOfPageNewMedicine = 0.obs;
   RxInt numberOfPageMedicineStock = 0.obs;
   RxInt totalPurchaseReport = 0.obs;
+  RxInt totalSaleReport = 0.obs;
+  RxInt totalInReport = 0.obs;
+  RxInt totalOutReport = 0.obs;
   RxInt noPurchaseReport = 0.obs;
   RxInt grandTotalDetailPurchaseReport = 0.obs;
   RxList<DateTime?> selectedDateRange = <DateTime?>[].obs;
@@ -161,6 +182,7 @@ class ApotikController extends GetxController {
   var isAddUnitMedicineView = false.obs;
   var isEditMedicineView = false.obs;
   var isEditUnitMedicineView = false.obs;
+  var isTransactionView = false.obs;
 
   //How To Search With Pagination
   final nameSupplierSearch = ''.obs;
@@ -169,6 +191,9 @@ class ApotikController extends GetxController {
   final nameUnit = ''.obs;
   final nameMedicineNew = ''.obs;
   final nameUnitMedicineNew = ''.obs;
+  final namePasienSearch = ''.obs;
+  final noInvSearch = ''.obs;
+  final noRmeSearch = ''.obs;
   RxString selectedUnitId = ''.obs;
   RxString idMedicine = ''.obs;
   RxString idUnitMedicine = ''.obs;
@@ -185,6 +210,10 @@ class ApotikController extends GetxController {
 
   void showAddUnitMedicine() {
     isAddUnitMedicineView.value = true;
+  }
+
+  void showAddTransaction() {
+    isTransactionView.value = true;
   }
 
   void showEditMedicine() {
@@ -215,6 +244,10 @@ class ApotikController extends GetxController {
     isEditUnitMedicineView.value = false;
   }
 
+  void backToTransaction() {
+    isTransactionView.value = false;
+  }
+
   void toggleLight(bool value) {
     isLightOn.value = value;
   }
@@ -228,11 +261,14 @@ class ApotikController extends GetxController {
     getExpiredMedicines();
     getTopFiveMedicines();
     getMonthlySummaryMedicine();
+    getDailySummaryMedicine();
     getHasExpiredMedicines();
     getGroupStockMedicine();
     getPurchaseReportMedicine();
     getNewMedicine();
     getUnit();
+    getSaleReportMedicine();
+    getInOutReportMedicine();
     purchaseNumber.value = generatePurchaseNumber();
   }
 
@@ -243,6 +279,8 @@ class ApotikController extends GetxController {
     final random = Random().nextInt(90) + 10; // Angka random 10 - 99
     return 'BUY-$formattedDate$random';
   }
+
+  List<TextEditingController> unitTextControllers = [];
 
   void addSelectedMedicine(String medicineId) {
     bool isAlreadySelected =
@@ -256,9 +294,24 @@ class ApotikController extends GetxController {
       final stockController = TextEditingController();
 
       priceBuyControllers.add(TextEditingController());
-      stockControllers.add(TextEditingController());
+      stockControllers.add(TextEditingController(text: '1'));
       tglKadaluarsaList.add(DateTime.now());
       totalSelectedMedicineList.add(0.obs);
+
+      // Ambil unit dari conversion → jadi List<DatumUnit>
+      final List<DatumUnit> units = selected.conversion
+          .map((conversion) => DatumUnit.fromUnit(conversion.unit))
+          .toList();
+
+      selectedUnitsPerRow.add(units);
+
+      // Tampilkan default satuan pertama jika tersedia
+      final defaultUnitText =
+          units.isNotEmpty ? units.first.name : selected.nameUnit;
+
+      unitTextControllers
+          .add(TextEditingController(text: defaultUnitText.toTitleCase()));
+      selectedUnitIds.add(units.isNotEmpty ? units.first.id : selected.idUnit);
 
       // Dengarkan perubahan untuk update total
       void updateRowTotal() {
@@ -283,6 +336,9 @@ class ApotikController extends GetxController {
       stockControllers.removeAt(index);
       tglKadaluarsaList.removeAt(index);
       totalSelectedMedicineList.removeAt(index);
+      selectedUnitsPerRow.remove(index);
+      unitTextControllers.remove(index);
+      selectedUnitIds.remove(index);
 
       // Update grand total setelah penghapusan
       updateGrandTotal();
@@ -454,7 +510,7 @@ class ApotikController extends GetxController {
           //  medicineList.clear();
           inspect(response.data);
           dataPasienIdRme.value = response.data;
-          totalBayar.value = response.data.total;
+          totalBayar.value = response.data.totalSemua;
         },
       );
       isLoadingPasienIdRme.value = false;
@@ -464,7 +520,9 @@ class ApotikController extends GetxController {
     }
   }
 
-  Future<void> postTransaction({required PostTransactionRequest data}) async {
+  Future<void> postTransaction(
+      {required PostTransactionRequest data,
+      required BuildContext context}) async {
     isLoadingPostTransaction.value = true;
     try {
       final response = await apotikRepository.postTransaction(data);
@@ -474,11 +532,34 @@ class ApotikController extends GetxController {
         errorCreateTransaction.value = failures;
         await Future.delayed(Duration(seconds: 3));
         isLoadingPostTransaction.value = false;
+        Get.back();
+        final Map<String, String>? messages = failures.message;
+        final errorText = messages!.values.map((e) => e.toString()).join('\n');
+        Get.snackbar(
+          "Gagal Melakukan Transaction",
+          errorText,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.withOpacity(0.9),
+          colorText: Colors.white,
+          duration: Duration(seconds: 5),
+        );
+        isLoadingPostTransaction.value = false;
       }, (response) async {
         inspect(response);
         createTransaction.value = response;
+        nominalController.text = "";
+        selectedPaymentMethod.value = null;
         await Future.delayed(Duration(seconds: 3));
         isLoadingPostTransaction.value = false;
+        //Get.back();
+        // Get.snackbar(
+        //   "Berhasil Menambah Obat",
+        //   'Obat berhasil ditambahkan !',
+        //   snackPosition: SnackPosition.BOTTOM,
+        //   backgroundColor: AppColors.colorBaseSuccess,
+        //   colorText: Colors.white,
+        //   duration: Duration(seconds: 5),
+        // );
       });
     } catch (e) {
       print('e:$e');
@@ -693,6 +774,54 @@ class ApotikController extends GetxController {
     }
   }
 
+  Future<void> deleteHasMedicineExpired(String id) async {
+    isLoadingHasExpiredMedicine.value = true;
+    try {
+      final response = await apotikRepository.deleteMedicineHasExpired(
+        id: id,
+      );
+
+      response.fold(
+        (failures) async {
+          await Future.delayed(Duration(seconds: 2));
+
+          isLoadingHasExpiredMedicine.value = false;
+          final Map<String, String>? messages = failures.message;
+
+          final errorText =
+              messages!.values.map((e) => e.toString()).join('\n');
+          Get.back();
+          Get.snackbar(
+            "Gagal Melakukan Penghapusan Obat Expired",
+            errorText,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red.withOpacity(0.9),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+        (response) async {
+          deleteMedicineHasExpired.value = response;
+          await Future.delayed(Duration(seconds: 2));
+          getHasExpiredMedicines();
+          isLoadingHasExpiredMedicine.value = false;
+          Get.back();
+          Get.back();
+          Get.snackbar(
+            "Berhasil Melakukan Penghapusan Obat Expired",
+            '',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 3),
+          );
+        },
+      );
+    } catch (e) {
+      isLoadingHasExpiredMedicine.value = true;
+    }
+  }
+
   Future<void> getTopFiveMedicines() async {
     isLoadingExpiredMedicine.value = true;
     try {
@@ -739,6 +868,29 @@ class ApotikController extends GetxController {
     }
   }
 
+  Future<void> getDailySummaryMedicine() async {
+    isLoadingSummaryDailyMedicine.value = true;
+    try {
+      final response = await apotikRepository.getDailySummaryMedicine();
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          // medicineExpiredList.clear();
+          summaryDailyMedicine.value = response.data;
+
+          //  numberOfPage.value = response.data.pagination.totalPages;
+        },
+      );
+      isLoadingSummaryDailyMedicine.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingSummaryDailyMedicine.value = false;
+    }
+  }
+
   Future<void> getGroupStockMedicine({
     int page = 1,
     int limit = 5,
@@ -772,9 +924,18 @@ class ApotikController extends GetxController {
       List<MedicineRequest> datas = [];
 
       for (int i = 0; i < selectedMedicineList.length; i++) {
+        final selectedMedicine = selectedMedicineList[i];
+
         int priceBuy = int.tryParse(priceBuyControllers[i].text) ?? 0;
         int stock = int.tryParse(stockControllers[i].text) ?? 0;
         DateTime expireDate = tglKadaluarsaList[i];
+
+        String unitId;
+        if (selectedMedicine.conversion.isEmpty) {
+          unitId = selectedMedicine.idUnit;
+        } else {
+          unitId = selectedUnitIds[i];
+        }
 
         if (stock > 0) {
           MedicineRequest item = MedicineRequest(
@@ -782,6 +943,7 @@ class ApotikController extends GetxController {
             priceBuy: priceBuy,
             stock: stock,
             dateExpired: expireDate,
+            unitId: unitId,
           );
           datas.add(item);
         }
@@ -793,6 +955,7 @@ class ApotikController extends GetxController {
         dateBuy: dateBuyMedicineController.value,
         medicines: datas,
       );
+      inspect(data);
       final response = await apotikRepository.postBuyeMedicine(data);
 
       response.fold(
@@ -804,6 +967,9 @@ class ApotikController extends GetxController {
           stockControllers.value = [];
           tglKadaluarsaList.value = [];
           totalSelectedMedicineList = [];
+          selectedUnitsPerRow.value = [];
+          unitTextControllers = [];
+          selectedUnitIds.value = [];
           grandTotal.value = 0;
           dateBuyMedicineController.value = DateTime.now();
           supplierController.text = "";
@@ -831,6 +997,9 @@ class ApotikController extends GetxController {
           stockControllers.value = [];
           tglKadaluarsaList.value = [];
           totalSelectedMedicineList = [];
+          selectedUnitsPerRow.value = [];
+          unitTextControllers = [];
+          selectedUnitIds.value = [];
           grandTotal.value = 0;
           dateBuyMedicineController.value = DateTime.now();
           supplierController.text = "";
@@ -887,6 +1056,81 @@ class ApotikController extends GetxController {
     } catch (e) {
       print('e:$e');
       isLoadingReportPurchase.value = false;
+    }
+  }
+
+  Future<void> getSaleReportMedicine({
+    int page = 1,
+    int limit = 10,
+    String start_date = "",
+    String end_date = "",
+    String invoice = "",
+    String no_rekam_medis = "",
+    String name = "",
+  }) async {
+    isLoadingReportSale.value = true;
+    try {
+      final response = await apotikRepository.getSaleReportMedicine(
+          page: page,
+          limit: limit,
+          start_date: start_date,
+          end_date: end_date,
+          invoice: invoice,
+          no_rekam_medis: no_rekam_medis,
+          name: name);
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          reportSaleMedicineList.clear();
+          reportSaleMedicineList.addAll(response.data.data);
+          totalSaleReport.value = response.data.totalNominal;
+          numberOfPageReportSale.value = response.data.pagination.totalPages;
+        },
+      );
+      isLoadingReportSale.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingReportSale.value = false;
+    }
+  }
+
+  Future<void> getInOutReportMedicine({
+    int page = 1,
+    int limit = 10,
+    String start_date = "",
+    String end_date = "",
+    String no_buy = "",
+    String name_supplier = "",
+  }) async {
+    isLoadingReportInOut.value = true;
+    try {
+      final response = await apotikRepository.getInOutReportMedicine(
+        page: page,
+        limit: limit,
+        start_date: start_date,
+        end_date: end_date,
+        no_buy: no_buy,
+      );
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          reportInOutMedicineList.clear();
+          reportInOutMedicineList.addAll(response.data.data);
+          totalInReport.value = response.data.totalMasuk;
+          totalOutReport.value = response.data.totalKeluar;
+          numberOfPageReportInOut.value = response.data.pagination.totalPages;
+        },
+      );
+      isLoadingReportInOut.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingReportInOut.value = false;
     }
   }
 

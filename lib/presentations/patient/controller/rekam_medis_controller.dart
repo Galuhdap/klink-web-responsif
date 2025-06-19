@@ -5,7 +5,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/apotik/apotik_repository.dart';
-import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_notempty_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/rme/model/request/post_rme_request.dart';
 import 'package:klinik_web_responsif/services/rme/model/response/get_rme_id_response.dart';
@@ -20,20 +20,23 @@ class RekamMedisController extends GetxController {
 
   RxList<RmeData> rmePasientList = <RmeData>[].obs;
   RxList<DataMedicine> medicineList = <DataMedicine>[].obs;
-  RxList<DataMedicine> selectedMedicineList = <DataMedicine>[].obs;
   Rx<PostRmeResponse?> createRme = Rx<PostRmeResponse?>(null);
   RxList<DateTime?> selectedDateRange = <DateTime?>[].obs;
-  RxList<DatumGroupStockMedicine> medicineGroupStockList =
-      <DatumGroupStockMedicine>[].obs;
+  RxList<DatumGroupStockNotEmptyMedicine> medicineGroupStockList =
+      <DatumGroupStockNotEmptyMedicine>[].obs;
 
-  final TextEditingController dropdownObatController = TextEditingController();
   final TextEditingController keluhanController = TextEditingController();
   final TextEditingController terapiTindakanController =
       TextEditingController();
   final TextEditingController dxController = TextEditingController();
   final TextEditingController idPasienController = TextEditingController();
-  final TextEditingController totalController = TextEditingController();
-  RxList<TextEditingController> qtyControllers = <TextEditingController>[].obs;
+  final TextEditingController feeDocterController = TextEditingController();
+  RxList<DatumGroupStockNotEmptyMedicine> selectedMedicineListRme =
+      <DatumGroupStockNotEmptyMedicine>[].obs;
+  RxList<TextEditingController> stockControllersRme =
+      <TextEditingController>[].obs;
+  List<RxInt> totalSelectedMedicineListRme = <RxInt>[].obs;
+  RxInt grandTotalRme = 0.obs;
 
   final searchController = TextEditingController();
   final namesearchController = TextEditingController();
@@ -41,15 +44,9 @@ class RekamMedisController extends GetxController {
   final umursearchController = TextEditingController();
   final normeearchController = TextEditingController();
 
-  RxList<DatumGroupStockMedicine> selectedMedicineListRme =
-      <DatumGroupStockMedicine>[].obs;
-  RxList<TextEditingController> stockControllersRme =
-      <TextEditingController>[].obs;
-  List<RxInt> totalSelectedMedicineListRme = <RxInt>[].obs;
-  RxInt grandTotalRme = 0.obs;
-
   RxString role = ''.obs;
   RxBool isLoading = false.obs;
+  RxBool isLoadingRMEId = false.obs;
   RxBool isLoadingCreate = false.obs;
   RxInt numberOfPage = 1.obs;
   RxString selectedObatId = ''.obs;
@@ -63,7 +60,7 @@ class RekamMedisController extends GetxController {
   void onInit() {
     super.onInit();
     getMedicine();
-    getGroupStockMedicine();
+    getGroupStockZeroMedicine();
     //getRmePasien();
     //getPasienById();
   }
@@ -76,45 +73,7 @@ class RekamMedisController extends GetxController {
     isDetailView.value = false;
   }
 
-  void addSelectedMedicine(String medicineId) {
-    bool isMedicineAlreadySelected =
-        selectedMedicineList.any((medicine) => medicine.id == medicineId);
-
-    if (!isMedicineAlreadySelected) {
-      var selectedMedicine =
-          medicineList.firstWhere((medicine) => medicine.id == medicineId);
-
-      // Tambahkan ke selectedTrashList
-      selectedMedicineList.add(
-        DataMedicine(
-          id: selectedMedicine.id,
-          namaObat: selectedMedicine.namaObat,
-          stock: selectedMedicine.stock,
-          tglKadaluarsa: selectedMedicine.tglKadaluarsa,
-          statusObat: selectedMedicine.statusObat,
-        ),
-      );
-
-      qtyControllers.add(TextEditingController());
-      print('selectedMedicineList: ${selectedMedicineList.length}');
-      print('qtyControllers: ${qtyControllers.length}');
-    } else {
-      print('Sampah dengan ID $medicineId sudah dipilih.');
-    }
-  }
-
-  void removeSelectedMedicine(String medicineId) {
-    int index = selectedMedicineList
-        .indexWhere((medicine) => medicine.id == medicineId);
-
-    if (index != -1) {
-      // Hapus dari selectedTrashList
-      selectedMedicineList.removeAt(index);
-      qtyControllers.removeAt(index);
-    }
-  }
-
-  Future<void> getRmePasien({
+  Future getRmePasien({
     int page = 1,
     int limit = 10,
     String start_date = '',
@@ -122,11 +81,8 @@ class RekamMedisController extends GetxController {
     String keluhan = '',
     String id = '',
   }) async {
-    isLoading.value = true;
+    isLoadingRMEId.value = true;
     try {
-      final prefs = await SharedPreferencesUtils.getAuthToken();
-      var userData = JwtDecoder.decode(prefs!);
-      role.value = userData['role'];
       final response = await rmeRepository.getRmeId(
           page: page,
           limit: limit,
@@ -134,24 +90,26 @@ class RekamMedisController extends GetxController {
           end_date: end_date,
           keluhan: keluhan,
           id: id);
-
+      print(id);
       response.fold(
         (failure) {
           inspect(failure.code);
         },
         (response) async {
           rmePasientList.clear();
+
           inspect(response.data.data);
-          // rmePasientList.clear();
           rmePasientList.addAll(response.data.data);
-          //  medicineList.addAll(response.data.data.expand((rme) => rme.obat));
           numberOfPage.value = response.data.pagination.totalPages;
+          print(start_date);
+          print(end_date);
+          print(id);
         },
       );
-      isLoading.value = false;
+      isLoadingRMEId.value = false;
     } catch (e) {
       print('e:$e');
-      isLoading.value = false;
+      isLoadingRMEId.value = false;
     }
   }
 
@@ -160,14 +118,15 @@ class RekamMedisController extends GetxController {
     try {
       List<ObatRequest> datas = [];
 
-      for (int i = 0; i < qtyControllers.length; i++) {
-        String qtyText = qtyControllers[i].value.text;
+      for (int i = 0; i < stockControllersRme.length; i++) {
+        String qtyText = stockControllersRme[i].value.text;
         int qty = int.tryParse(qtyText) ?? 0;
 
         if (qty > 0) {
           ObatRequest item = ObatRequest(
-            idObat: selectedMedicineList[i].id,
+            medicineId: selectedMedicineListRme[i].id,
             qty: qty,
+            unitId: selectedMedicineListRme[i].unitId,
           );
           datas.add(item);
         }
@@ -178,7 +137,7 @@ class RekamMedisController extends GetxController {
           terapiTindakan: terapiTindakanController.text,
           dx: dxController.text,
           idPasien: idPasien,
-          total: int.tryParse(totalController.text) ?? 0,
+          feeDocter: int.tryParse(feeDocterController.text) ?? 0,
           obat: datas);
       final response = await rmeRepository.postRme(data);
 
@@ -188,8 +147,6 @@ class RekamMedisController extends GetxController {
         (failures) async {
           inspect(failures.code);
           await Future.delayed(Duration(seconds: 3));
-          selectedMedicineList.clear();
-          qtyControllers.value = [];
           isLoadingCreate.value = false;
           final Map<String, String>? messages = failures.message;
 
@@ -210,15 +167,13 @@ class RekamMedisController extends GetxController {
           inspect(response);
           createRme.value = response;
           await Future.delayed(Duration(seconds: 3));
-          qtyControllers.value = [];
           medicineList.clear();
-          selectedMedicineList.clear();
-          dropdownObatController.clear();
+          selectedMedicineListRme.clear();
           keluhanController.clear();
           terapiTindakanController.clear();
           dxController.clear();
           idPasienController.clear();
-          totalController.clear();
+          feeDocterController.clear();
           isLoadingCreate.value = false;
           getRmePasien(id: response.data.idPasien);
           isLoadingCreate.value = false;
@@ -263,7 +218,7 @@ class RekamMedisController extends GetxController {
     }
   }
 
-  Future<void> getGroupStockMedicine({
+  Future<void> getGroupStockZeroMedicine({
     int page = 1,
     int limit = 5,
     String name_medicine = '',
@@ -326,8 +281,8 @@ class RekamMedisController extends GetxController {
       selectedMedicineListRme.removeAt(index);
       stockControllersRme.removeAt(index);
       totalSelectedMedicineListRme.removeAt(index);
-      if(selectedMedicineListRme.isEmpty){
-        totalController.text = "";
+      if (selectedMedicineListRme.isEmpty) {
+        feeDocterController.text = "";
       }
       // Update grand total setelah penghapusan
       updateGrandTotalRme();
@@ -348,7 +303,7 @@ class RekamMedisController extends GetxController {
       0,
       (sum, item) => sum + item.value,
     );
-    final extraFee = int.tryParse(totalController.text) ?? 0;
+    final extraFee = int.tryParse(feeDocterController.text) ?? 0;
 
     grandTotalRme.value = total + extraFee;
   }

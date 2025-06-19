@@ -111,7 +111,8 @@ class CustomTabelComponent extends StatelessWidget {
             ),
           ],
           SingleChildScrollView(
-            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            scrollDirection: Axis.horizontal,
             child: Theme(
               data:
                   Theme.of(context).copyWith(dividerColor: Colors.transparent),

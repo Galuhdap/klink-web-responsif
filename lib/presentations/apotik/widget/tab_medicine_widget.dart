@@ -40,7 +40,7 @@ class TabMedicineWidget extends StatelessWidget {
                   label,
                   style: Get.textTheme.labelLarge!.copyWith(
                     fontSize: AppSizes.s17,
-                    color: indexSelect.value == index
+                    color: controller.selectedIndexReport.value == index
                         ? AppColors.colorBaseBlack
                         : AppColors.colorBaseSecondary,
                   ),
@@ -49,7 +49,7 @@ class TabMedicineWidget extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   height: 2,
-                  color: indexSelect.value == index
+                  color: controller.selectedIndexReport.value == index
                       ? AppColors.colorBasePrimary
                       : AppColors.colorBaseSecondary.withAlpha(50),
                 ),
