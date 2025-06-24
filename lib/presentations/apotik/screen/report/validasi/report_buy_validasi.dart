@@ -12,403 +12,319 @@ import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_report_buy_tabel.dart';
+import 'package:klinik_web_responsif/presentations/report/controller/report_controller.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 class ReportBuyValidasi extends StatelessWidget {
-  const ReportBuyValidasi({
-    super.key,
-    required this.controller
-  });
+  const ReportBuyValidasi(
+      {super.key,
+      required this.controller,
+      this.owner = false,
+      required this.controllerReport});
 
   final ApotikController controller;
+  final ReportController controllerReport;
+  final bool owner;
 
   @override
   Widget build(BuildContext context) {
-    return CustomTabelComponent(
-      label: 'Laporan Pembelian',
-      sizeRowTabel:
-          MediaQuery.of(context)
-                  .size
-                  .width /
-              1.1,
-      sizeWidth: MediaQuery.of(context)
-              .size
-              .width /
-          1,
-      border: TableBorder.all(
-        color: AppColors
-            .colorBaseSecondary
-            .withAlpha(50),
-      ),
-      customContentPagination: controller
-                  .numberOfPageReportPurchase
-                  .value ==
-              0
-          ? Container()
-          : Container(
-              width: double.infinity,
-              padding:
-                  AppSizes.onlyPadding(
-                      bottom:
-                          AppSizes.s50),
-              child: Column(
-                children: [
-                  Container(
-                    //width: 400,
-                    decoration:
-                        BoxDecoration(
-                      color: AppColors
-                          .colorBaseWhite,
-                      borderRadius:
-                          BorderRadius
-                              .circular(
-                                  AppSizes
-                                      .s4),
-                    ),
-                    child: Obx(() {
-                      return NumberPaginator(
-                        numberPages:
-                            controller
-                                .numberOfPageReportPurchase
-                                .value,
-                        onPageChange:
-                            (int
-                                index) {
-                          final page =
-                              index + 1;
-                          final dateFormat =
-                              DateFormat(
-                                  'yyyy-MM-dd');
-                          controller
-                              .getPurchaseReportMedicine(
-                            page: page,
-                            name_supplier:
-                                controller
-                                    .nameSupplierSearch
-                                    .value,
-                            no_buy: controller
-                                .noBuySearch
-                                .value,
-                            start_date: controller
-                                    .selectedDateRange
-                                    .isNotEmpty
-                                ? dateFormat
-                                    .format(controller.selectedDateRange[0]!)
-                                : "",
-                            end_date: controller
-                                    .selectedDateRange
-                                    .isNotEmpty
-                                ? dateFormat
-                                    .format(controller.selectedDateRange[1]!)
-                                : "",
-                          );
-                        },
-                        child:
-                            const SizedBox(
-                          height: 48,
-                          width: 300,
-                          child: Row(
-                            children: [
-                              PrevButton(),
-                              Expanded(
-                                child:
-                                    NumberContent(),
-                              ),
-                              NextButton(),
-                            ],
+    return Column(
+      children: [
+        // if (owner == true) ...[
+        //   GraphicWidget(
+        //       label: 'Penjualan, HPP & Laba Harian',
+        //       content: Obx(() {
+        //         return controllerReport.dailyTrendChartList.isEmpty
+        //             ? Center(
+        //                 child: Text('Data Kosong'),
+        //               )
+        //             : SfCartesianChart(
+        //                 tooltipBehavior: controller.tooltipBehavior,
+        //                 primaryXAxis: DateTimeAxis(
+        //                   interval: 1,
+        //                   majorGridLines: MajorGridLines(
+        //                       width: 0, color: Colors.transparent),
+        //                   axisLine: AxisLine(color: Colors.transparent),
+        //                   labelStyle: Get.textTheme.labelMedium,
+        //                   intervalType: DateTimeIntervalType.days,
+        //                   dateFormat: DateFormat('d MMM'), // butuh import intl
+        //                   majorTickLines: MajorTickLines(width: 0, size: 10),
+        //                 ),
+        //                 primaryYAxis: NumericAxis(
+        //                   majorGridLines: MajorGridLines(
+        //                       width: AppSizes.s1, color: Color(0xfffE5E5EF)),
+        //                   axisLine: AxisLine(
+        //                       width: AppSizes.s0, color: Colors.transparent),
+        //                   isVisible: true,
+        //                   majorTickLines:
+        //                       MajorTickLines(width: AppSizes.s0, size: 5),
+        //                 ),
+        //                 series: <LineSeries<DailyReportChart, DateTime>>[
+        //                   LineSeries<DailyReportChart, DateTime>(
+        //                     // Bind data source
+        //                     name: 'Pembelian',
+        //                     dataSource: controller.dailyChartDataBuy,
+        //                     xValueMapper: (DailyReportChart sales, _) =>
+        //                         sales.time,
+        //                     yValueMapper: (DailyReportChart sales, _) =>
+        //                         sales.y,
+        //                     markerSettings: MarkerSettings(
+        //                       isVisible: true, // Aktifkan titik (dot)
+        //                       shape: DataMarkerType
+        //                           .circle, // Bentuk dot (bisa square, diamond, dll)
+        //                       width: 10, // Ukuran dot
+        //                       height: 10,
+        //                       borderColor: AppColors.colorBaseSuccess,
+        //                       borderWidth: 2,
+        //                     ),
+        //                   ),
+        //                 ],
+        //               );
+        //       })),
+        //   AppSizes.s20.height,
+        // ],
+        CustomTabelComponent(
+          label: 'Laporan Pembelian',
+          sizeRowTabel: MediaQuery.of(context).size.width / 1.1,
+          sizeWidth: MediaQuery.of(context).size.width / 1,
+          border: TableBorder.all(
+            color: AppColors.colorBaseSecondary.withAlpha(50),
+          ),
+          customContentPagination:
+              controller.numberOfPageReportPurchase.value == 0
+                  ? Container()
+                  : Container(
+                      width: double.infinity,
+                      padding: AppSizes.onlyPadding(bottom: AppSizes.s50),
+                      child: Column(
+                        children: [
+                          Container(
+                            //width: 400,
+                            decoration: BoxDecoration(
+                              color: AppColors.colorBaseWhite,
+                              borderRadius: BorderRadius.circular(AppSizes.s4),
+                            ),
+                            child: Obx(() {
+                              return NumberPaginator(
+                                numberPages:
+                                    controller.numberOfPageReportPurchase.value,
+                                onPageChange: (int index) {
+                                  final page = index + 1;
+                                  final dateFormat = DateFormat('yyyy-MM-dd');
+                                  controller.getPurchaseReportMedicine(
+                                    page: page,
+                                    name_supplier:
+                                        controller.nameSupplierSearch.value,
+                                    no_buy: controller.noBuySearch.value,
+                                    start_date: controller
+                                            .selectedDateRange.isNotEmpty
+                                        ? dateFormat.format(
+                                            controller.selectedDateRange[0]!)
+                                        : "",
+                                    end_date: controller
+                                            .selectedDateRange.isNotEmpty
+                                        ? dateFormat.format(
+                                            controller.selectedDateRange[1]!)
+                                        : "",
+                                  );
+                                },
+                                child: const SizedBox(
+                                  height: 48,
+                                  width: 300,
+                                  child: Row(
+                                    children: [
+                                      PrevButton(),
+                                      Expanded(
+                                        child: NumberContent(),
+                                      ),
+                                      NextButton(),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              ),
-            ),
-      customContentBottom: Column(
-        children: [
-          Container(
-            width:
-                MediaQuery.of(context)
-                        .size
-                        .width /
-                    1,
-            height: 1,
-            color: AppColors
-                .colorBaseSecondary,
-          ),
-          AppSizes.s20.height,
-          Row(
-            mainAxisAlignment:
-                MainAxisAlignment.end,
+                        ],
+                      ),
+                    ),
+          customContentBottom: Column(
             children: [
-              Text(
-                'Total Keseluruhan Pembelian',
-                style: Get.textTheme
-                    .labelMedium!
-                    .copyWith(
-                  fontSize:
-                      AppSizes.s16,
-                  fontWeight:
-                      FontWeight.bold,
-                  color: AppColors
-                      .colorBaseBlack,
-                ),
+              Container(
+                width: MediaQuery.of(context).size.width / 1,
+                height: 1,
+                color: AppColors.colorBaseSecondary,
               ),
-              AppSizes.s100.width,
-              Obx(() => Text(
-                    controller
-                        .totalPurchaseReport
-                        .value
-                        .currencyFormatRp,
-                    style: Get.textTheme
-                        .labelMedium!
-                        .copyWith(
-                      fontSize:
-                          AppSizes.s16,
-                      fontWeight:
-                          FontWeight
-                              .bold,
-                      color: AppColors
-                          .colorBaseBlack,
-                    ),
-                  )),
-            ],
-          ).paddingOnly(
-              right: AppSizes.s70,
-              bottom: AppSizes.s10),
-        ],
-      ),
-      customContent: Row(
-        children: [
-          Flexible(
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    offset:
-                        const Offset(
-                            0, 0),
-                    blurRadius: 15,
-                    spreadRadius: 0,
-                    color: AppColors
-                        .colorNeutrals300
-                        .withAlpha(40),
-                  ),
-                ],
-              ),
-              child: SearchNewComponent(
-                controller: controller
-                    .searchController,
-                keyboardType:
-                    TextInputType.name,
-                hintText: AppConstants
-                    .LABEL_CARI,
-                suffixIcon: const Icon(
-                  Icons.search,
-                  color: AppColors
-                      .colorSecondary500,
-                ),
-                onChanged: (value) {
-                  final input =
-                      value.trim();
-                  final parts = input
-                      .split(',')
-                      .map((e) =>
-                          e.trim())
-                      .toList();
-    
-                  String name = '';
-                  String no_buy = '';
-    
-                  for (var part
-                      in parts) {
-                    if (RegExp(
-                            r'^(BUY-\d+|\d{3,})$')
-                        .hasMatch(
-                            part)) {
-                      no_buy = part;
-                    } else {
-                      name += '$part ';
-                    }
-                  }
-                  controller
-                      .nameSupplierSearch
-                      .value = name;
-                  controller.noBuySearch
-                      .value = no_buy;
-                  name = name.trim();
-                  final dateFormat =
-                      DateFormat(
-                          'yyyy-MM-dd');
-    
-                  controller
-                      .getPurchaseReportMedicine(
-                    name_supplier: name,
-                    no_buy: no_buy,
-                    start_date: controller
-                            .selectedDateRange
-                            .isNotEmpty
-                        ? dateFormat.format(
-                            controller
-                                .selectedDateRange[0]!)
-                        : "",
-                    end_date: controller
-                            .selectedDateRange
-                            .isNotEmpty
-                        ? dateFormat.format(
-                            controller
-                                .selectedDateRange[1]!)
-                        : "",
-                  );
-                },
-              ),
-            ),
-          ),
-          AppSizes.s10.width,
-          InkWell(
-            onTap: () async {
-              List<DateTime?>?
-                  selectedDates =
-                  await showCalendarDatePicker2Dialog(
-                context: context,
-                config:
-                    CalendarDatePicker2WithActionButtonsConfig(
-                  calendarType:
-                      CalendarDatePicker2Type
-                          .range,
-                  firstDate:
-                      DateTime(2000),
-                  lastDate:
-                      DateTime.now(),
-                ),
-                dialogSize: const Size(
-                    325, 400),
-                value: controller
-                    .selectedDateRange,
-                borderRadius:
-                    BorderRadius
-                        .circular(15),
-              );
-    
-              if (selectedDates !=
-                  null) {
-                controller
-                        .selectedDateRange
-                        .value =
-                    selectedDates;
-                final dateFormat =
-                    DateFormat(
-                        'yyyy-MM-dd');
-                controller
-                    .getPurchaseReportMedicine(
-                  name_supplier: controller
-                      .nameSupplierSearch
-                      .value,
-                  no_buy: controller
-                      .noBuySearch
-                      .value,
-                  start_date: dateFormat
-                      .format(controller
-                              .selectedDateRange[
-                          0]!),
-                  end_date: dateFormat
-                      .format(controller
-                              .selectedDateRange[
-                          1]!),
-                );
-              }
-            },
-            child: Container(
-              width: 300,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            AppSizes
-                                .s4),
-                border: Border.all(
-                    color: Color(
-                        0xfffF0F0F0)),
-                color: AppColors
-                    .colorBaseWhite,
-                boxShadow: [
-                  BoxShadow(
-                    offset:
-                        const Offset(
-                            0, 0),
-                    blurRadius: 15,
-                    spreadRadius: 0,
-                    color: AppColors
-                        .colorNeutrals300
-                        .withAlpha(40),
-                  ),
-                ],
-              ),
-              child: Row(
-                spacing: 20,
+              AppSizes.s20.height,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  AppSizes.s10.width,
-                  Icon(Icons
-                      .calendar_month_rounded),
                   Text(
-                    controller.selectedDateRange
-                                .isNotEmpty &&
-                            controller.selectedDateRange[
-                                    0] !=
-                                null
-                        ? '${controller.selectedDateRange[0]!.toDateddmmFormattedString()} - ${controller.selectedDateRange[1]!.toDateddmmFormattedString()}'
-                        : 'Pilih Range Tanggal',
-                    style: Get.textTheme
-                        .labelMedium!
-                        .copyWith(
-                      fontSize:
-                          AppSizes.s14,
-                      fontWeight:
-                          FontWeight
-                              .w100,
-                      color: AppColors
-                          .colorBaseBlack,
+                    'Total Keseluruhan Pembelian',
+                    style: Get.textTheme.labelMedium!.copyWith(
+                      fontSize: AppSizes.s16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.colorBaseBlack,
                     ),
                   ),
-                  AppSizes.s10.width,
-                  controller
-                          .selectedDateRange
-                          .isNotEmpty
-                      ? IconButton(
-                          onPressed:
-                              () {
-                            controller
-                                .selectedDateRange
-                                .value = [];
-                            controller
-                                .getPurchaseReportMedicine(
-                              start_date:
-                                  "",
-                              end_date:
-                                  "",
-                            );
-                          },
-                          icon: Icon(
-                            Icons
-                                .delete,
-                          ))
-                      : Container(),
+                  AppSizes.s100.width,
+                  Obx(() => Text(
+                        controller.totalPurchaseReport.value.currencyFormatRp,
+                        style: Get.textTheme.labelMedium!.copyWith(
+                          fontSize: AppSizes.s16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.colorBaseBlack,
+                        ),
+                      )),
                 ],
-              ),
-            ),
+              ).paddingOnly(right: AppSizes.s70, bottom: AppSizes.s10),
+            ],
           ),
-        ],
-      ),
-      listColumns:
-          getListMedicineReportBuyColumns(),
-      listRows: getRowsMedicineReportBuy(
-          data: controller
-              .reportPurchaseMedicineList,
-          isLoading: controller
-              .isLoadingReportPurchase
-              .value,
-          controller: controller),
+          customContent: Row(
+            children: [
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(0, 0),
+                        blurRadius: 15,
+                        spreadRadius: 0,
+                        color: AppColors.colorNeutrals300.withAlpha(40),
+                      ),
+                    ],
+                  ),
+                  child: SearchNewComponent(
+                    controller: controller.searchController,
+                    keyboardType: TextInputType.name,
+                    hintText: AppConstants.LABEL_CARI,
+                    suffixIcon: const Icon(
+                      Icons.search,
+                      color: AppColors.colorSecondary500,
+                    ),
+                    onChanged: (value) {
+                      final input = value.trim();
+                      final parts =
+                          input.split(',').map((e) => e.trim()).toList();
+
+                      String name = '';
+                      String no_buy = '';
+
+                      for (var part in parts) {
+                        if (RegExp(r'^(BUY-\d+|\d{3,})$').hasMatch(part)) {
+                          no_buy = part;
+                        } else {
+                          name += '$part ';
+                        }
+                      }
+                      controller.nameSupplierSearch.value = name;
+                      controller.noBuySearch.value = no_buy;
+                      name = name.trim();
+                      final dateFormat = DateFormat('yyyy-MM-dd');
+
+                      controller.getPurchaseReportMedicine(
+                        name_supplier: name,
+                        no_buy: no_buy,
+                        start_date: controller.selectedDateRange.isNotEmpty
+                            ? dateFormat
+                                .format(controller.selectedDateRange[0]!)
+                            : "",
+                        end_date: controller.selectedDateRange.isNotEmpty
+                            ? dateFormat
+                                .format(controller.selectedDateRange[1]!)
+                            : "",
+                      );
+                    },
+                  ),
+                ),
+              ),
+              AppSizes.s10.width,
+              InkWell(
+                onTap: () async {
+                  List<DateTime?>? selectedDates =
+                      await showCalendarDatePicker2Dialog(
+                    context: context,
+                    config: CalendarDatePicker2WithActionButtonsConfig(
+                      calendarType: CalendarDatePicker2Type.range,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime.now(),
+                    ),
+                    dialogSize: const Size(325, 400),
+                    value: controller.selectedDateRange,
+                    borderRadius: BorderRadius.circular(15),
+                  );
+
+                  if (selectedDates != null) {
+                    controller.selectedDateRange.value = selectedDates;
+                    final dateFormat = DateFormat('yyyy-MM-dd');
+                    controller.getPurchaseReportMedicine(
+                      name_supplier: controller.nameSupplierSearch.value,
+                      no_buy: controller.noBuySearch.value,
+                      start_date:
+                          dateFormat.format(controller.selectedDateRange[0]!),
+                      end_date:
+                          dateFormat.format(controller.selectedDateRange[1]!),
+                    );
+                  }
+                },
+                child: Container(
+                  width: 300,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppSizes.s4),
+                    border: Border.all(color: Color(0xfffF0F0F0)),
+                    color: AppColors.colorBaseWhite,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(0, 0),
+                        blurRadius: 15,
+                        spreadRadius: 0,
+                        color: AppColors.colorNeutrals300.withAlpha(40),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    spacing: 20,
+                    children: [
+                      AppSizes.s10.width,
+                      Icon(Icons.calendar_month_rounded),
+                      Text(
+                        controller.selectedDateRange.isNotEmpty &&
+                                controller.selectedDateRange[0] != null
+                            ? '${controller.selectedDateRange[0]!.toDateddmmFormattedString()} - ${controller.selectedDateRange[1]!.toDateddmmFormattedString()}'
+                            : 'Pilih Range Tanggal',
+                        style: Get.textTheme.labelMedium!.copyWith(
+                          fontSize: AppSizes.s14,
+                          fontWeight: FontWeight.w100,
+                          color: AppColors.colorBaseBlack,
+                        ),
+                      ),
+                      AppSizes.s10.width,
+                      controller.selectedDateRange.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                controller.selectedDateRange.value = [];
+                                controller.getPurchaseReportMedicine(
+                                  start_date: "",
+                                  end_date: "",
+                                );
+                              },
+                              icon: Icon(
+                                Icons.delete,
+                              ))
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          listColumns: getListMedicineReportBuyColumns(),
+          listRows: getRowsMedicineReportBuy(
+              data: controller.reportPurchaseMedicineList,
+              isLoading: controller.isLoadingReportPurchase.value,
+              controller: controller),
+        ),
+      ],
     );
   }
 }

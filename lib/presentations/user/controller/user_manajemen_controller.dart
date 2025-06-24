@@ -13,38 +13,15 @@ import 'package:klinik_web_responsif/services/owner/model/response/post_user_res
 import 'package:klinik_web_responsif/services/owner/owner_repository.dart';
 
 class UserManajemenController extends GetxController {
-  RxList riwayatTransaksi = [
-    {
-      "no": "1",
-      "nama": "monaji",
-      "email": "P@gmail.com",
-      "jenis_kelamin": "laki-laki",
-      "no_telp": "089647826",
-      "role": "Dokter",
-    },
-    {
-      "no": "2",
-      "email": "P@gmail.com",
-      "nama": "monaji",
-      "jenis_kelamin": "laki-laki",
-      "no_telp": "089647826",
-      "role": "Dokter",
-    },
-    {
-      "no": "3",
-      "email": "P@gmail.com",
-      "nama": "monaji",
-      "jenis_kelamin": "laki-laki",
-      "no_telp": "089647826",
-      "role": "Dokter",
-    },
-  ].obs;
-
   final searchController = TextEditingController();
 
   final OwnerRepository ownerRepository = locator();
+  var selectedIndex = 0.obs;
 
-  RxList<UserData> userList = <UserData>[].obs;
+  RxList<UserData> userAdmin = <UserData>[].obs;
+  RxList<UserData> userDokter = <UserData>[].obs;
+  RxList<UserData> userApotik = <UserData>[].obs;
+  RxList<UserData> userOwner = <UserData>[].obs;
   RxList<RoleData> roleList = <RoleData>[].obs;
   Rx<PostUserResponse?> createUser = Rx<PostUserResponse?>(null);
   Rx<Failures?> errorCreateUser = Rx<Failures?>(null);
@@ -63,10 +40,19 @@ class UserManajemenController extends GetxController {
   SuggestionsBoxController suggestionBoxController = SuggestionsBoxController();
   final formKey = GlobalKey<FormState>();
 
+  var isAddUser = false.obs;
+  var isEditUser = false.obs;
+  RxString idUser = ''.obs;
+
   RxBool isLoading = false.obs;
   RxBool isLoadingCreate = false.obs;
+  RxBool isLoadingUpdate = false.obs;
   RxBool isLoadingRole = false.obs;
   RxInt numberOfPage = 1.obs;
+
+  RxString name = ''.obs;
+
+  get isLoadingPostNewMedicine => null;
 
   @override
   void onInit() {
@@ -75,11 +61,30 @@ class UserManajemenController extends GetxController {
     getRole();
   }
 
+  void selectTab(int index) {
+    selectedIndex.value = index;
+  }
+
+  void showAddUser() {
+    isAddUser.value = true;
+  }
+
+  void showEditUser() {
+    isEditUser.value = true;
+  }
+
+  void backToAddUser() {
+    isAddUser.value = false;
+  }
+
+  void backToEditUser() {
+    isEditUser.value = false;
+  }
+
   Future<void> getUser({
     int page = 1,
     int limit = 10,
     String name = '',
-    String nik = '',
   }) async {
     isLoading.value = true;
     try {
@@ -87,7 +92,6 @@ class UserManajemenController extends GetxController {
         page: page,
         limit: limit,
         name: name,
-        nik: nik,
       );
 
       response.fold(
@@ -95,8 +99,27 @@ class UserManajemenController extends GetxController {
           inspect(failure.code);
         },
         (response) async {
-          userList.clear();
-          userList.addAll(response.data.data);
+          userAdmin.clear();
+          userDokter.clear();
+          userApotik.clear();
+          userOwner.clear();
+          for (var user in response.data.data) {
+            switch (user.role.name) {
+              case 'ADMIN':
+                user.no = userAdmin.length + 1;
+                userAdmin.add(user);
+                break;
+              case 'DOKTER':
+                userDokter.add(user);
+                break;
+              case 'APOTEKER':
+                userApotik.add(user);
+                break;
+              case 'PEMILIK':
+                userOwner.add(user);
+                break;
+            }
+          }
           numberOfPage.value = response.data.pagination.totalPages;
         },
       );
@@ -135,7 +158,7 @@ class UserManajemenController extends GetxController {
         .toList();
   }
 
-  Future<void> postPasien() async {
+  Future<void> postUser() async {
     isLoadingCreate.value = true;
     try {
       var data = PostUserRequest(
@@ -210,8 +233,8 @@ class UserManajemenController extends GetxController {
     }
   }
 
-  Future<void> putPasien(String id) async {
-    isLoadingCreate.value = true;
+  Future<void> putUser(String id) async {
+    isLoadingUpdate.value = true;
     try {
       var data = PostUserRequest(
           username: usernameController.text,
@@ -239,7 +262,7 @@ class UserManajemenController extends GetxController {
           nikController.clear();
           noTelpController.clear();
           await Future.delayed(Duration(seconds: 3));
-          isLoadingCreate.value = false;
+          isLoadingUpdate.value = false;
           Get.back();
           final Map<String, String>? messages = failures.message;
           final errorText =
@@ -267,7 +290,7 @@ class UserManajemenController extends GetxController {
           noTelpController.clear();
           await Future.delayed(Duration(seconds: 3));
           getUser();
-          isLoadingCreate.value = false;
+          isLoadingUpdate.value = false;
           Get.back();
           Get.snackbar(
             "Berhasil Mendaftar User",
@@ -281,7 +304,7 @@ class UserManajemenController extends GetxController {
       );
     } catch (e) {
       print('e:$e');
-      isLoadingCreate.value = false;
+      isLoadingUpdate.value = false;
     }
   }
 }

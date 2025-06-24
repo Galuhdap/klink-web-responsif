@@ -151,93 +151,97 @@ List<DataRow> getRowsMedicine({
           child: Text(row.baseUnit.toUpperCase(),
               style: const TextStyle(fontWeight: FontWeight.bold)),
         )),
-        DataCell(Center(
-          child: Row(
-            spacing: 10,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.colorWarning300,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    List<DatumUnit> data =
-                        row.conversions.map<DatumUnit>((conv) {
-                      return DatumUnit(
-                        id: conv.id,
-                        name: conv.unitName,
-                        level: conv.multiplier,
-                      );
-                    }).toList();
-                    controller.idMedicine.value = row.id;
-                    controller.nameMedicineController.text = row.nameMedicine;
-                    controller.priceSellController.text =
-                        row.priceSell.toString();
-                    controller.dropdownUnitController.text = row.baseUnit;
-                    controller.selectedUnitId.value = row.idBaseUnit;
-                    controller.selectedMedicineListUnit.value = data;
-                    controller.unitControllers.value = data
-                        .map((unit) =>
-                            TextEditingController(text: unit.level.toString()))
-                        .toList();
-                    if (controller.selectedMedicineListUnit.isNotEmpty) {
-                      controller.isLightOn.value = true;
-                    } else {
-                      controller.isLightOn.value = false;
-                    }
+        DataCell(
+          Center(
+            child: Row(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.colorWarning300,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      List<DatumUnit> data =
+                          row.conversions.map<DatumUnit>((conv) {
+                        return DatumUnit(
+                          id: conv.id,
+                          name: conv.unitName,
+                          level: conv.multiplier,
+                        );
+                      }).toList();
+                      controller.idMedicine.value = row.id;
+                      controller.nameMedicineController.text = row.nameMedicine;
+                      controller.priceSellController.text =
+                          row.priceSell.toString();
+                      controller.dropdownUnitController.text = row.baseUnit;
+                      controller.selectedUnitId.value = row.idBaseUnit;
+                      controller.selectedMedicineListUnit.value = data;
+                      controller.unitControllers.value = data
+                          .map((unit) => TextEditingController(
+                              text: unit.level.toString()))
+                          .toList();
+                      if (controller.selectedMedicineListUnit.isNotEmpty) {
+                        controller.isLightOn.value = true;
+                      } else {
+                        controller.isLightOn.value = false;
+                      }
 
-                    controller.showEditMedicine();
-                  },
-                  icon: Icon(
-                    Icons.edit_square,
-                    color: AppColors.colorBaseWhite,
+                      controller.showEditMedicine();
+                    },
+                    icon: Icon(
+                      Icons.edit_square,
+                      color: AppColors.colorBaseWhite,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.colorError300,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    showModalCenter(
-                      context,
-                      Obx(
-                        () {
-                          return controller.isLoadingPostNewMedicine.value
-                              ? Center(
-                                  child: SizedBox(
-                                    width: 400,
-                                    height: 400,
-                                    child: Lottie.asset(Assets.lottie.hospital),
-                                  ),
-                                )
-                              : ShowModalTandaTanyaComponent(
-                                  label:
-                                      'Apakah Anda Akan Menghapus Obat ${row.nameMedicine} ?',
-                                  onTapNo: () {
-                                    Get.back();
-                                  },
-                                  onTapYes: () async {
-                                    await controller.deleteNewMedicine(row.id);
-                                  },
-                                );
-                        },
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.delete_rounded,
-                    color: AppColors.colorBaseWhite,
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.colorError300,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: IconButton(
+                    onPressed: () async {
+                      showModalCenter(
+                        context,
+                        Obx(
+                          () {
+                            return controller.isLoadingPostNewMedicine.value
+                                ? Center(
+                                    child: SizedBox(
+                                      width: 400,
+                                      height: 400,
+                                      child:
+                                          Lottie.asset(Assets.lottie.hospital),
+                                    ),
+                                  )
+                                : ShowModalTandaTanyaComponent(
+                                    label:
+                                        'Apakah Anda Akan Menghapus Obat ${row.nameMedicine} ?',
+                                    onTapNo: () {
+                                      Get.back();
+                                    },
+                                    onTapYes: () async {
+                                      await controller
+                                          .deleteNewMedicine(row.id);
+                                    },
+                                  );
+                          },
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.delete_rounded,
+                      color: AppColors.colorBaseWhite,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )), // Ganti sesuai kebutuhan
+        ),
       ],
     );
   }).toList();

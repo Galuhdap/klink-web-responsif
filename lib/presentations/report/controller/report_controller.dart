@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/report/model/response/chart/daily_report_chart.dart';
+import 'package:klinik_web_responsif/services/report/model/response/get/ger_report_count_patient_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/get/get_daily_sale_medicine_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/get/get_daily_summery_chart_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/get/get_daily_trend_chart.dart';
+import 'package:klinik_web_responsif/services/report/model/response/get/get_report_docter_fee_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/get/get_report_medicine_low_stock_response.dart';
 import 'package:klinik_web_responsif/services/report/report_repository.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -31,6 +33,12 @@ class ReportController extends GetxController {
       <DatumLowStockMedicine>[].obs;
   RxList<DailyReportChart> getMedicineStockLow = <DailyReportChart>[].obs;
 
+  RxList<DatumCountPatient> getCountPatientList = <DatumCountPatient>[].obs;
+  RxList<DailyReportChart> getCountPatient = <DailyReportChart>[].obs;
+
+  RxList<DatumDocterFee> getDoterFeeList = <DatumDocterFee>[].obs;
+  RxList<DailyReportChart> getDocterFee = <DailyReportChart>[].obs;
+
   RxInt buyMedicineToday = 0.obs;
 
   RxBool isLoadingDailyTrendChart = false.obs;
@@ -47,6 +55,8 @@ class ReportController extends GetxController {
     getDailySummaryBar();
     getDailySellMedicine();
     getReportMedicineStcokLow();
+    getReportCountPatient();
+    getReportDocterFee();
   }
 
   Future<void> getDailyTrendChart() async {
@@ -65,9 +75,6 @@ class ReportController extends GetxController {
           dailyChartDataLaba.value = chartDataLabaTrend(dailyTrendChartList);
           dailyChartDataSale.value =
               chartDataSaleDailyTrend(dailyTrendChartList);
-          inspect(dailyChartDatasHpp);
-          inspect(dailyChartDataLaba);
-          inspect(dailyChartDataLaba);
         },
       );
       isLoadingDailyTrendChart.value = false;
@@ -235,6 +242,80 @@ class ReportController extends GetxController {
         x: index,
         y: isDailyDataAvailable ? getMedicineStockLowList[index].totalStock : 0,
         label: isDailyDataAvailable ? getMedicineStockLowList[index].name : '',
+      );
+    });
+  }
+
+/////////////////////////////////////////////////////////////////////////////////
+  Future<void> getReportCountPatient() async {
+    isLoadingDailyTrendChart.value = true;
+    try {
+      final response = await reportRepository.getReportCountPatient();
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          getCountPatientList.clear();
+          getCountPatientList.addAll(response.data);
+          getCountPatient.value = chartDataCountPatient(response.data);
+        },
+      );
+    } catch (e) {
+      print('e:$e');
+    } finally {
+      isLoadingDailyTrendChart.value = false;
+    }
+  }
+
+  List<DailyReportChart> chartDataCountPatient(
+      List<DatumCountPatient> listCommodityGrafilDailys) {
+    return List<DailyReportChart>.generate(getCountPatientList.length, (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < getCountPatientList.length;
+      return DailyReportChart(
+        x: index,
+        y: isDailyDataAvailable ? getCountPatientList[index].count : 0,
+        time: isDailyDataAvailable
+            ? getCountPatientList[index].date
+            : DateTime.now().subtract(Duration(days: 7)),
+      );
+    });
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  Future<void> getReportDocterFee() async {
+    isLoadingDailyTrendChart.value = true;
+    try {
+      final response = await reportRepository.getReportDocterFee();
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          getDoterFeeList.clear();
+          getDoterFeeList.addAll(response.data);
+          getDocterFee.value = chartDataDocterFee(response.data);
+        },
+      );
+    } catch (e) {
+      print('e:$e');
+    } finally {
+      isLoadingDailyTrendChart.value = false;
+    }
+  }
+
+  List<DailyReportChart> chartDataDocterFee(
+      List<DatumDocterFee> listCommodityGrafilDailys) {
+    return List<DailyReportChart>.generate(getDoterFeeList.length, (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < getDoterFeeList.length;
+      return DailyReportChart(
+        x: index,
+        y: isDailyDataAvailable ? getDoterFeeList[index].totalFee : 0,
+        label: isDailyDataAvailable ? getDoterFeeList[index].doctorName : '',
       );
     });
   }

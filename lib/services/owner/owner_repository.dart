@@ -15,9 +15,9 @@ class OwnerRepository {
     required int page,
     required int limit,
     required String name,
-    required String nik,
+    
   }) async {
-    return source.getUser(page: page, limit: limit, name: name, nik: nik);
+    return source.getUser(page: page, limit: limit, name: name,);
   }
 
   Future<Either<Failure, GetRoleResponse>> getRole() async {

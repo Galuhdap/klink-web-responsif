@@ -80,6 +80,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/logout.svg
   SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
 
+  /// File path: assets/icons/mail.svg
+  SvgGenImage get mail => const SvgGenImage('assets/icons/mail.svg');
+
   /// File path: assets/icons/obat.svg
   SvgGenImage get obat => const SvgGenImage('assets/icons/obat.svg');
 
@@ -138,6 +141,7 @@ class $AssetsIconsGen {
     folder,
     logo,
     logout,
+    mail,
     obat,
     pasien,
     pasienIcon,

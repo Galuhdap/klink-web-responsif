@@ -42,45 +42,57 @@ class MenuReportScreen extends StatelessWidget {
           body: Expanded(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: TabMedicineWidget(
-                        label: 'Grafik Laporan',
-                        controller: controller,
-                        index: 0,
-                        indexSelect: controller.selectedIndexReport.value.obs,
-                        onTap: () => controller.selectTabReport(0),
-                      ),
-                    ),
-                    Flexible(
-                      child: TabMedicineWidget(
-                        label: 'Pembelian',
-                        controller: controller,
-                        index: 1,
-                        indexSelect: controller.selectedIndexReport.value.obs,
-                        onTap: () => controller.selectTabReport(1),
-                      ),
-                    ),
-                    Flexible(
-                      child: TabMedicineWidget(
-                        label: 'Penjualan',
-                        controller: controller,
-                        index: 2,
-                        indexSelect: controller.selectedIndexReport.value.obs,
-                        onTap: () => controller.selectTabReport(2),
-                      ),
-                    ),
-                    Flexible(
-                      child: TabMedicineWidget(
-                        label: 'Stock Obat',
-                        controller: controller,
-                        index: 3,
-                        indexSelect: controller.selectedIndexReport.value.obs,
-                        onTap: () => controller.selectTabReport(3),
-                      ),
-                    ),
-                  ],
+                Obx(
+                  () {
+                    return Row(
+                      children: [
+                        Flexible(
+                          child: TabMedicineWidget(
+                            label: 'Grafik Laporan',
+                            controller: controller,
+                            index: 0,
+                            indexSelect:
+                                controller.selectedIndexReport.value.obs,
+                            onTap: () => controller.selectTabReport(0),
+                          ),
+                        ),
+                        Flexible(
+                          child: TabMedicineWidget(
+                            label: 'Pembelian',
+                            controller: controller,
+                            index: 1,
+                            indexSelect:
+                                controller.selectedIndexReport.value.obs,
+                            onTap: () => controller.selectTabReport(1),
+                          ),
+                        ),
+                        Flexible(
+                          child: TabMedicineWidget(
+                            label: 'Penjualan',
+                            controller: controller,
+                            index: 2,
+                            indexSelect:
+                                controller.selectedIndexReport.value.obs,
+                            onTap: () => controller.selectTabReport(2),
+                          ),
+                        ),
+                        // Obx(() {
+                        //   return controller.role.value == "PEMILIK"
+                        //       ? Flexible(
+                        //           child: TabMedicineWidget(
+                        //             label: 'Biaya Dokter',
+                        //             controller: controller,
+                        //             index: 4,
+                        //             indexSelect:
+                        //                 controller.selectedIndexReport.value.obs,
+                        //             onTap: () => controller.selectTabReport(4),
+                        //           ),
+                        //         )
+                        //       : Container();
+                        // })
+                      ],
+                    );
+                  },
                 ),
                 AppSizes.s20.height,
                 Responsive.isDesktop(context)
@@ -102,6 +114,9 @@ class MenuReportScreen extends StatelessWidget {
                                           children: [
                                             ReportBuyValidasi(
                                               controller: controller,
+                                              controllerReport:
+                                                  controllerReport,
+                                              owner: true,
                                             ),
                                           ],
                                         ),

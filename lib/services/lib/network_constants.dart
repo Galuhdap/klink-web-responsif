@@ -108,9 +108,12 @@ class NetworkConstants {
     return BASE_URL + "/apotik/transaction";
   }
 
-  static String GET_USER_URL(int page, int limit, String name, String nik) {
-    return BASE_URL +
-        "/owner/user?page=${page}&limit=${limit}&name=${name}&nik=${nik}";
+  static String GET_USER_URL(
+    int page,
+    int limit,
+    String name,
+  ) {
+    return BASE_URL + "/owner/user?page=${page}&limit=${limit}&name=${name}";
   }
 
   static String POST_USER_URL() {
@@ -243,5 +246,40 @@ class NetworkConstants {
 
   static String GET_REPORT_SELL_LOW_MEDICINE_URL() {
     return BASE_URL + "/report/chart/report/low/stock/medicine";
+  }
+
+  static String GET_REPORT_COUNT_PATIENT_URL() {
+    return BASE_URL + "/report/chart/report/patient/count";
+  }
+
+  static String GET_REPORT_DOCTER_FEE_URL() {
+    return BASE_URL + "/report/chart/report/doctor/fee";
+  }
+
+////////////////////////// LETTER SICK /////////////////////////
+  static String GET_LETTER_SICK_URL(int page, int limit, String no_letter) {
+    return BASE_URL +
+        "/apotik/letter/sick?page=${page}&limit=${limit}&no_latter=${no_letter}";
+  }
+
+  static String POST_LETTER_SICK_URL() {
+    return BASE_URL + "/apotik/letter/sick";
+  }
+
+  static String PUT_LETTER_SICK_URL(String id) {
+    return BASE_URL + "/apotik/letter/sick/${id}";
+  }
+
+  static String GET_LETTER_HEALT_URL(int page, int limit, String no_letter) {
+    return BASE_URL +
+        "/apotik/letter/healt?page=${page}&limit=${limit}&no_letter=${no_letter}";
+  }
+
+  static String POST_LETTER_HEALT_URL() {
+    return BASE_URL + "/apotik/letter/healt";
+  }
+
+  static String PUT_LETTER_HEALT_URL(String id) {
+    return BASE_URL + "/apotik/letter/healt/${id}";
   }
 }

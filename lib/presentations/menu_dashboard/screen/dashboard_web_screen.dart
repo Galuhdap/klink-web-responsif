@@ -6,11 +6,11 @@ import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/letter/letter_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine_has_expired_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/medicine/medicine_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/report/menu_report_screen.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/menu_transaksi_screen.dart';
-import 'package:klinik_web_responsif/presentations/apotik/screen/riwayat_transaksi_screen.dart';
 import 'package:klinik_web_responsif/presentations/docter/screen/summery_doctor_screen.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/screen/stackholder/stackholder_screen.dart';
@@ -55,12 +55,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const MedicineHasExpiredScreen(),
           const MenuTransaksiScreen(),
           const MenuReportScreen(),
+          const LetterScreen(),
         ];
       case UserRole.PEMILIK:
         return [
           const StackholderScreen(),
           const UserManajemenScreen(),
-          const RiwayatTransaksiScreen(),
+          const MenuReportScreen(),
         ];
     }
   }
@@ -194,6 +195,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 iconPath: Assets.icons.transaksi.path,
                 isActive: _selectedIndex == 4,
                 onTap: () => _onItemTapped(4),
+              ),
+              NavItem(
+                iconPath: Assets.icons.mail.path,
+                isActive: _selectedIndex == 5,
+                onTap: () => _onItemTapped(5),
               ),
               // NavItem(
               //   iconPath: Assets.icons.chartPie.path,

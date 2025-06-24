@@ -182,134 +182,271 @@ class GraphReportWidget extends StatelessWidget {
           ],
         ),
         AppSizes.s20.height,
-        GraphicWidget(
-            label: 'Penjualan, HPP & Laba Harian',
-            content: Obx(() {
-              return controllerReport.dailyTrendChartList.isEmpty
-                  ? Center(
-                      child: Text('Data Kosong'),
-                    )
-                  : SfCartesianChart(
-                      tooltipBehavior: controllerReport.tooltipBehavior,
-                      primaryXAxis: DateTimeAxis(
-                        majorGridLines:
-                            MajorGridLines(width: 0, color: Colors.transparent),
-                        axisLine: AxisLine(color: Colors.transparent),
-                        labelStyle: Get.textTheme.labelMedium,
-                        intervalType: DateTimeIntervalType.days,
-                        dateFormat: DateFormat('dd/MM'), // butuh import intl
-                        majorTickLines: MajorTickLines(width: 0, size: 10),
-                      ),
-                      primaryYAxis: NumericAxis(
-                        majorGridLines: MajorGridLines(
-                            width: AppSizes.s1, color: Color(0xfffE5E5EF)),
-                        axisLine: AxisLine(
-                            width: AppSizes.s0, color: Colors.transparent),
-                        isVisible: true,
-                        majorTickLines:
-                            MajorTickLines(width: AppSizes.s0, size: 5),
-                      ),
-                      series: <LineSeries<DailyReportChart, DateTime>>[
-                        LineSeries<DailyReportChart, DateTime>(
-                          // Bind data source
-                          name: 'Penjualan',
-                          dataSource: controllerReport.dailyChartDataSale,
-                          xValueMapper: (DailyReportChart sales, _) =>
-                              sales.time,
-                          yValueMapper: (DailyReportChart sales, _) => sales.y,
-                          markerSettings: MarkerSettings(
-                            isVisible: true, // Aktifkan titik (dot)
-                            shape: DataMarkerType
-                                .circle, // Bentuk dot (bisa square, diamond, dll)
-                            width: 10, // Ukuran dot
-                            height: 10,
-                            borderColor: AppColors.colorBaseSuccess,
-                            borderWidth: 2,
-                          ),
-                        ),
-                        LineSeries<DailyReportChart, DateTime>(
-                          // Bind data source
-                          name: 'HPP',
-                          dataSource: controllerReport.dailyChartDatasHpp,
-                          xValueMapper: (DailyReportChart sales, _) =>
-                              sales.time,
-                          yValueMapper: (DailyReportChart sales, _) => sales.y,
-                          markerSettings: MarkerSettings(
-                            isVisible: true, // Aktifkan titik (dot)
-                            shape: DataMarkerType
-                                .circle, // Bentuk dot (bisa square, diamond, dll)
-                            width: 10, // Ukuran dot
-                            height: 10,
-                            borderColor: AppColors.colorBasePrimary,
-                            borderWidth: 2,
-                          ),
-                        ),
-                        LineSeries<DailyReportChart, DateTime>(
-                          // Bind data source
-                          name: 'LABA',
-                          dataSource: controllerReport.dailyChartDataLaba,
-                          xValueMapper: (DailyReportChart sales, _) =>
-                              sales.time,
-                          yValueMapper: (DailyReportChart sales, _) => sales.y,
-                          markerSettings: MarkerSettings(
-                            isVisible: true, // Aktifkan titik (dot)
-                            shape: DataMarkerType
-                                .circle, // Bentuk dot (bisa square, diamond, dll)
-                            width: 10, // Ukuran dot
-                            height: 10,
-                            borderColor: Color(0xfffC893FD),
-                            borderWidth: 2,
-                          ),
-                        ),
-                      ],
-                    );
-            })),
+        Row(
+          children: [
+            Flexible(
+              child: GraphicWidget(
+                label: 'Penjualan, HPP & Laba Harian',
+                content: Obx(
+                  () {
+                    return controllerReport.dailyTrendChartList.isEmpty
+                        ? Center(
+                            child: Text('Data Kosong'),
+                          )
+                        : SfCartesianChart(
+                            tooltipBehavior: controllerReport.tooltipBehavior,
+                            primaryXAxis: DateTimeAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: 0, color: Colors.transparent),
+                              axisLine: AxisLine(color: Colors.transparent),
+                              labelStyle: Get.textTheme.labelMedium,
+                              intervalType: DateTimeIntervalType.days,
+                              dateFormat:
+                                  DateFormat('dd/MM'), // butuh import intl
+                              majorTickLines:
+                                  MajorTickLines(width: 0, size: 10),
+                            ),
+                            primaryYAxis: NumericAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: AppSizes.s1,
+                                  color: Color(0xfffE5E5EF)),
+                              axisLine: AxisLine(
+                                  width: AppSizes.s0,
+                                  color: Colors.transparent),
+                              isVisible: true,
+                              majorTickLines:
+                                  MajorTickLines(width: AppSizes.s0, size: 5),
+                            ),
+                            series: <LineSeries<DailyReportChart, DateTime>>[
+                              LineSeries<DailyReportChart, DateTime>(
+                                // Bind data source
+                                name: 'Penjualan',
+                                dataSource: controllerReport.dailyChartDataSale,
+                                xValueMapper: (DailyReportChart sales, _) =>
+                                    sales.time,
+                                yValueMapper: (DailyReportChart sales, _) =>
+                                    sales.y,
+                                markerSettings: MarkerSettings(
+                                  isVisible: true, // Aktifkan titik (dot)
+                                  shape: DataMarkerType
+                                      .circle, // Bentuk dot (bisa square, diamond, dll)
+                                  width: 10, // Ukuran dot
+                                  height: 10,
+                                  borderColor: AppColors.colorBaseSuccess,
+                                  borderWidth: 2,
+                                ),
+                              ),
+                              LineSeries<DailyReportChart, DateTime>(
+                                // Bind data source
+                                name: 'HPP',
+                                dataSource: controllerReport.dailyChartDatasHpp,
+                                xValueMapper: (DailyReportChart sales, _) =>
+                                    sales.time,
+                                yValueMapper: (DailyReportChart sales, _) =>
+                                    sales.y,
+                                markerSettings: MarkerSettings(
+                                  isVisible: true, // Aktifkan titik (dot)
+                                  shape: DataMarkerType
+                                      .circle, // Bentuk dot (bisa square, diamond, dll)
+                                  width: 10, // Ukuran dot
+                                  height: 10,
+                                  borderColor: AppColors.colorBasePrimary,
+                                  borderWidth: 2,
+                                ),
+                              ),
+                              LineSeries<DailyReportChart, DateTime>(
+                                // Bind data source
+                                name: 'LABA',
+                                dataSource: controllerReport.dailyChartDataLaba,
+                                xValueMapper: (DailyReportChart sales, _) =>
+                                    sales.time,
+                                yValueMapper: (DailyReportChart sales, _) =>
+                                    sales.y,
+                                markerSettings: MarkerSettings(
+                                  isVisible: true, // Aktifkan titik (dot)
+                                  shape: DataMarkerType
+                                      .circle, // Bentuk dot (bisa square, diamond, dll)
+                                  width: 10, // Ukuran dot
+                                  height: 10,
+                                  borderColor: Color(0xfffC893FD),
+                                  borderWidth: 2,
+                                ),
+                              ),
+                            ],
+                          );
+                  },
+                ),
+              ),
+            ),
+            AppSizes.s20.width,
+            Flexible(
+              child: GraphicWidget(
+                label: 'Daily Summary',
+                content: Obx(
+                  () {
+                    return controllerReport.dailyTrendChartList.isEmpty
+                        ? Center(
+                            child: Text('Data Kosong'),
+                          )
+                        : SfCartesianChart(
+                            tooltipBehavior: controllerReport.tooltipBehavior,
+                            primaryXAxis: CategoryAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: 0, color: Colors.transparent),
+                              axisLine: AxisLine(color: Colors.transparent),
+                              labelStyle: Get.textTheme.labelMedium,
+                              majorTickLines:
+                                  MajorTickLines(width: 0, size: 10),
+                            ),
+                            primaryYAxis: NumericAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: AppSizes.s1,
+                                  color: Color(0xfffE5E5EF)),
+                              axisLine: AxisLine(
+                                  width: AppSizes.s0,
+                                  color: Colors.transparent),
+                              isVisible: true,
+                              majorTickLines:
+                                  MajorTickLines(width: AppSizes.s0, size: 5),
+                            ),
+                            series: <CartesianSeries<DailyReportChart, String>>[
+                              BarSeries<DailyReportChart, String>(
+                                dataSource:
+                                    controllerReport.dailySummarySaleChart,
+                                xValueMapper: (DailyReportChart item, _) =>
+                                    item.label ?? '',
+                                yValueMapper: (DailyReportChart item, _) =>
+                                    item.y,
+                                name: 'Summary',
+                                color: Color.fromRGBO(8, 142, 255, 1),
+                                dataLabelSettings: DataLabelSettings(
+                                    isVisible: true), // optional
+                              )
+                            ],
+                          );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
         AppSizes.s20.height,
-        GraphicWidget(
-          label: 'Daily Summary',
-          content: Obx(
-            () {
-              return controllerReport.dailyTrendChartList.isEmpty
-                  ? Center(
-                      child: Text('Data Kosong'),
-                    )
-                  : SfCartesianChart(
-                      tooltipBehavior: controllerReport.tooltipBehavior,
-                      primaryXAxis: CategoryAxis(
-                        majorGridLines:
-                            MajorGridLines(width: 0, color: Colors.transparent),
-                        axisLine: AxisLine(color: Colors.transparent),
-                        labelStyle: Get.textTheme.labelMedium,
-                        majorTickLines: MajorTickLines(width: 0, size: 10),
-                      ),
-                      primaryYAxis: NumericAxis(
-                        majorGridLines: MajorGridLines(
-                            width: AppSizes.s1, color: Color(0xfffE5E5EF)),
-                        axisLine: AxisLine(
-                            width: AppSizes.s0, color: Colors.transparent),
-                        isVisible: true,
-                        majorTickLines:
-                            MajorTickLines(width: AppSizes.s0, size: 5),
-                      ),
-                      series: <CartesianSeries<DailyReportChart, String>>[
-                        BarSeries<DailyReportChart, String>(
-                          dataSource: controllerReport.dailySummarySaleChart,
-                          xValueMapper: (DailyReportChart item, _) =>
-                              item.label ?? '',
-                          yValueMapper: (DailyReportChart item, _) => item.y,
-                          name: 'Summary',
-                          color: Color.fromRGBO(8, 142, 255, 1),
-                          dataLabelSettings:
-                              DataLabelSettings(isVisible: true), // optional
-                        )
-                      ],
-                    );
-            },
-          ),
+        Row(
+          children: [
+            Flexible(
+              child: GraphicWidget(
+                label: 'Obat Stock Menipis',
+                content: Obx(
+                  () {
+                    return controllerReport.getMedicineStockLowList.isEmpty
+                        ? Center(
+                            child: Text('Data Kosong'),
+                          )
+                        : SfCartesianChart(
+                            tooltipBehavior: controllerReport.tooltipBehavior,
+                            primaryXAxis: CategoryAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: 0, color: Colors.transparent),
+                              axisLine: AxisLine(color: Colors.transparent),
+                              labelStyle: Get.textTheme.labelMedium,
+                              majorTickLines:
+                                  MajorTickLines(width: 0, size: 10),
+                            ),
+                            primaryYAxis: NumericAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: AppSizes.s1,
+                                  color: Color(0xfffE5E5EF)),
+                              axisLine: AxisLine(
+                                  width: AppSizes.s0,
+                                  color: Colors.transparent),
+                              isVisible: true,
+                              majorTickLines:
+                                  MajorTickLines(width: AppSizes.s0, size: 5),
+                            ),
+                            series: <CartesianSeries<DailyReportChart, String>>[
+                              ColumnSeries<DailyReportChart, String>(
+                                dataSource:
+                                    controllerReport.getMedicineStockLow,
+                                xValueMapper: (DailyReportChart item, _) =>
+                                    item.label ?? '',
+                                yValueMapper: (DailyReportChart item, _) =>
+                                    item.y,
+                                name: 'Obat',
+                                color: AppColors.colorBasePrimary,
+                                dataLabelSettings: DataLabelSettings(
+                                    isVisible: true), // optional
+                              )
+                            ],
+                          );
+                  },
+                ),
+              ),
+            ),
+            AppSizes.s20.width,
+            Flexible(
+              child: GraphicWidget(
+                label: 'Total Penjualan Obat Selama 7 Hari',
+                content: Obx(
+                  () {
+                    return controllerReport.dailySellMedicineList.isEmpty
+                        ? Center(
+                            child: Text('Data Kosong'),
+                          )
+                        : SfCartesianChart(
+                            tooltipBehavior: controllerReport.tooltipBehavior,
+                            primaryXAxis: DateTimeAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: 0, color: Colors.transparent),
+                              axisLine: AxisLine(color: Colors.transparent),
+                              labelStyle: Get.textTheme.labelMedium,
+                              intervalType: DateTimeIntervalType.days,
+                              dateFormat:
+                                  DateFormat('dd/MM'), // butuh import intl
+                              majorTickLines:
+                                  MajorTickLines(width: 0, size: 10),
+                            ),
+                            primaryYAxis: NumericAxis(
+                              majorGridLines: MajorGridLines(
+                                  width: AppSizes.s1,
+                                  color: Color(0xfffE5E5EF)),
+                              axisLine: AxisLine(
+                                  width: AppSizes.s0,
+                                  color: Colors.transparent),
+                              isVisible: true,
+                              majorTickLines:
+                                  MajorTickLines(width: AppSizes.s0, size: 5),
+                            ),
+                            series: <LineSeries<DailyReportChart, DateTime>>[
+                              LineSeries<DailyReportChart, DateTime>(
+                                // Bind data source
+                                name: 'Penjualan Obat',
+                                dataSource:
+                                    controllerReport.dailySellMedicineChart,
+                                xValueMapper: (DailyReportChart sales, _) =>
+                                    sales.time,
+                                yValueMapper: (DailyReportChart sales, _) =>
+                                    sales.y,
+                                markerSettings: MarkerSettings(
+                                  isVisible: true, // Aktifkan titik (dot)
+                                  shape: DataMarkerType
+                                      .circle, // Bentuk dot (bisa square, diamond, dll)
+                                  width: 10, // Ukuran dot
+                                  height: 10,
+                                  borderColor: AppColors.colorBasePrimary,
+                                  borderWidth: 2,
+                                ),
+                              ),
+                            ],
+                          );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
         AppSizes.s20.height,
         GraphicWidget(
-          label: 'Obat Stock Menipis',
+          label: 'Biaya Dokter',
           content: Obx(
             () {
               return controllerReport.getMedicineStockLowList.isEmpty
@@ -336,67 +473,15 @@ class GraphReportWidget extends StatelessWidget {
                       ),
                       series: <CartesianSeries<DailyReportChart, String>>[
                         ColumnSeries<DailyReportChart, String>(
-                          dataSource: controllerReport.getMedicineStockLow,
+                          dataSource: controllerReport.getDocterFee,
                           xValueMapper: (DailyReportChart item, _) =>
                               item.label ?? '',
-                          yValueMapper: (DailyReportChart item, _) => item.y,
-                          name: 'Obat',
+                          yValueMapper: (DailyReportChart item, _) => item.y!,
+                          name: 'Dokter',
                           color: AppColors.colorBasePrimary,
                           dataLabelSettings:
                               DataLabelSettings(isVisible: true), // optional
                         )
-                      ],
-                    );
-            },
-          ),
-        ),
-        AppSizes.s20.height,
-        GraphicWidget(
-          label: 'Total Penjualan Obat Selama 7 Hari',
-          content: Obx(
-            () {
-              return controllerReport.dailySellMedicineList.isEmpty
-                  ? Center(
-                      child: Text('Data Kosong'),
-                    )
-                  : SfCartesianChart(
-                      tooltipBehavior: controllerReport.tooltipBehavior,
-                      primaryXAxis: DateTimeAxis(
-                        majorGridLines:
-                            MajorGridLines(width: 0, color: Colors.transparent),
-                        axisLine: AxisLine(color: Colors.transparent),
-                        labelStyle: Get.textTheme.labelMedium,
-                        intervalType: DateTimeIntervalType.days,
-                        dateFormat: DateFormat('dd/MM'), // butuh import intl
-                        majorTickLines: MajorTickLines(width: 0, size: 10),
-                      ),
-                      primaryYAxis: NumericAxis(
-                        majorGridLines: MajorGridLines(
-                            width: AppSizes.s1, color: Color(0xfffE5E5EF)),
-                        axisLine: AxisLine(
-                            width: AppSizes.s0, color: Colors.transparent),
-                        isVisible: true,
-                        majorTickLines:
-                            MajorTickLines(width: AppSizes.s0, size: 5),
-                      ),
-                      series: <LineSeries<DailyReportChart, DateTime>>[
-                        LineSeries<DailyReportChart, DateTime>(
-                          // Bind data source
-                          name: 'Penjualan Obat',
-                          dataSource: controllerReport.dailySellMedicineChart,
-                          xValueMapper: (DailyReportChart sales, _) =>
-                              sales.time,
-                          yValueMapper: (DailyReportChart sales, _) => sales.y,
-                          markerSettings: MarkerSettings(
-                            isVisible: true, // Aktifkan titik (dot)
-                            shape: DataMarkerType
-                                .circle, // Bentuk dot (bisa square, diamond, dll)
-                            width: 10, // Ukuran dot
-                            height: 10,
-                            borderColor: AppColors.colorBasePrimary,
-                            borderWidth: 2,
-                          ),
-                        ),
                       ],
                     );
             },

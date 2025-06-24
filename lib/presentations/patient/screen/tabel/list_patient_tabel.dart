@@ -5,6 +5,7 @@ import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart'
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
+import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/patient_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
@@ -92,8 +93,9 @@ List<DataRow> getRowsPatient({
   required PatientController controller,
   required HomeController homeController,
   required RekamMedisController rmeController,
+  ApotikController? apotikController,
   required BuildContext context,
-  required List<ListPasien> data, // ganti dengan model aslimu
+  required List<ListPasien> data,
   required bool isLoading,
 }) {
   if (isLoading) {
@@ -184,97 +186,140 @@ List<DataRow> getRowsPatient({
           ),
         )),
         DataCell(
-          homeController.role.value == "DOKTER"
+          homeController.role.value == "APOTEKER"
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 10,
                   children: [
                     PatientActionWidget(
-                      onTap: () {
-                        showModalCenter(
-                          context,
-                          EditPatientAction(
-                            datas: row,
-                            controller: controller,
-                          ),
-                        );
+                      onTap: () async {
+                        apotikController!.alamatLetter.value = row.alamat;
+                        apotikController.namePasienLetter.value = row.name;
+                        apotikController.idPasienLetter.value = row.id;
+                        apotikController.jenisKelaminLetter.value =
+                            row.jenisKelamin;
+                        apotikController.noRekamMedisLetter.value =
+                            row.noRekamMedis;
+                        apotikController.selectedIndexMail.value == 0;
+                        apotikController.backToLetter();
+                        apotikController.showAddMailSick();
                       },
                       colorBackground: AppColors.colorBasePrimary,
-                      label: 'Detail',
-                      vertical: 10,
-                      horizontal: 10,
+                      iconData: Icons.add_outlined,
+                      label: 'Tambah Surat Sakit',
                     ),
                     PatientActionWidget(
-                      onTap: () {
-                        rmeController.getRmePasien(id: row.id);
-                        Get.to(ElectronicMedicalRecordScreen(
-                          name: row.name,
-                          rme: row.noRekamMedis,
-                          id_pasien: row.id,
-                          addRme: false,
-                        ));
+                      onTap: () async {
+                        apotikController!.selectedIndexMail.value = 1;
+                        apotikController.alamatLetter.value = row.alamat;
+                        apotikController.namePasienLetter.value = row.name;
+                        apotikController.idPasienLetter.value = row.id;
+                        apotikController.jenisKelaminLetter.value =
+                            row.jenisKelamin;
+                        apotikController.noRekamMedisLetter.value =
+                            row.noRekamMedis;
+
+                        apotikController.backToLetter();
+                        apotikController.showAddMailHealt();
                       },
-                      colorBackground: AppColors.colorWarning300,
-                      label: 'Rekam Medis',
-                      vertical: 10,
-                      horizontal: 10,
+                      colorBackground: AppColors.colorSuccess300,
+                      iconData: Icons.add_outlined,
+                      label: 'Tambah Surat Sehat',
                     ),
                   ],
                 )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 10,
-                  children: [
-                    PatientActionWidget(
-                      onTap: () {
-                        showModalCenter(
-                          context,
-                          EditPatientAction(
-                            datas: row,
-                            controller: controller,
-                          ),
-                        );
-                      },
-                      colorBackground: AppColors.colorBasePrimary,
-                      label: 'Detail',
-                      vertical: 10,
-                      horizontal: 10,
+              : homeController.role.value == "DOKTER"
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        PatientActionWidget(
+                          onTap: () {
+                            showModalCenter(
+                              context,
+                              EditPatientAction(
+                                datas: row,
+                                controller: controller,
+                              ),
+                            );
+                          },
+                          colorBackground: AppColors.colorBasePrimary,
+                          label: 'Detail',
+                          vertical: 10,
+                          horizontal: 10,
+                        ),
+                        PatientActionWidget(
+                          onTap: () {
+                            rmeController.getRmePasien(id: row.id);
+                            Get.to(ElectronicMedicalRecordScreen(
+                              name: row.name,
+                              rme: row.noRekamMedis,
+                              id_pasien: row.id,
+                              addRme: false,
+                            ));
+                          },
+                          colorBackground: AppColors.colorWarning300,
+                          label: 'Rekam Medis',
+                          vertical: 10,
+                          horizontal: 10,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        PatientActionWidget(
+                          onTap: () {
+                            showModalCenter(
+                              context,
+                              EditPatientAction(
+                                datas: row,
+                                controller: controller,
+                              ),
+                            );
+                          },
+                          colorBackground: AppColors.colorBasePrimary,
+                          label: 'Detail',
+                          vertical: 10,
+                          horizontal: 10,
+                        ),
+                        PatientActionWidget(
+                          onTap:
+                              homeController.isPasienSedangDalamAntrian(row.id)
+                                  ? null
+                                  : () {
+                                      showModalCenter(
+                                        context,
+                                        AddQueuePatientAction(
+                                          datas: row,
+                                          controller: controller,
+                                        ),
+                                      );
+                                    },
+                          colorBackground:
+                              homeController.isPasienSedangDalamAntrian(row.id)
+                                  ? AppColors.colorBaseSecondary
+                                  : AppColors.colorWarning300,
+                          iconData: Icons.add_outlined,
+                          label: 'Tambahkan Ke Antrian',
+                        ),
+                        PatientActionWidget(
+                          onTap: () {
+                            showModalCenter(
+                              context,
+                              CardClinicPatientActionMobile(
+                                datas: row,
+                                controller: controller,
+                              ),
+                            );
+                          },
+                          colorBackground: AppColors.colorSuccess300,
+                          iconData: Icons.wallet,
+                          label: 'Kartu Berobat',
+                        ),
+                      ],
                     ),
-                    PatientActionWidget(
-                      onTap: homeController.isPasienSedangDalamAntrian(row.id)
-                          ? null
-                          : () {
-                              showModalCenter(
-                                context,
-                                AddQueuePatientAction(
-                                  datas: row,
-                                  controller: controller,
-                                ),
-                              );
-                            },
-                      colorBackground:
-                          homeController.isPasienSedangDalamAntrian(row.id)
-                              ? AppColors.colorBaseSecondary
-                              : AppColors.colorWarning300,
-                      iconData: Icons.add_outlined,
-                      label: 'Tambahkan Ke Antrian',
-                    ),
-                    PatientActionWidget(
-                      onTap: () {
-                        showModalCenter(
-                          context,
-                          CardClinicPatientActionMobile(
-                            datas: row,
-                            controller: controller,
-                          ),
-                        );
-                      },
-                      colorBackground: AppColors.colorSuccess300,
-                      iconData: Icons.wallet,
-                      label: 'Kartu Berobat',
-                    ),
-                  ],
-                ),
         ),
       ],
     );

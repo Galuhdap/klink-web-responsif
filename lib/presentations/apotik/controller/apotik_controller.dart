@@ -11,6 +11,8 @@ import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_u
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/apotik/apotik_repository.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medicine_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/request/post_letter_healt_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/request/post_letter_sick_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
@@ -19,6 +21,8 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_in_out_report_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_letter_healt_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_monthly_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
@@ -28,11 +32,15 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_latter_healt_resposne.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post/post_unit_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put/put_letter_healt_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put/put_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/report/model/response/chart/daily_report_chart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -97,6 +105,16 @@ class ApotikController extends GetxController {
   Rx<PostNewMedicineResponse?> putNewMedicineResponse =
       Rx<PostNewMedicineResponse?>(null);
   RxList<DatumUnit> unitList = <DatumUnit>[].obs;
+  RxList<DatumLetterSick> sickLetterList = <DatumLetterSick>[].obs;
+  Rx<PostLetterSickResponse?> postLetterSickResponse =
+      Rx<PostLetterSickResponse?>(null);
+  Rx<PutLetterSickResponse?> putLetterSickResponse =
+      Rx<PutLetterSickResponse?>(null);
+  RxList<DatumLetterHealt> healtLetterList = <DatumLetterHealt>[].obs;
+  Rx<PostLetterHealtResponse?> postLetterHealtResponse =
+      Rx<PostLetterHealtResponse?>(null);
+  Rx<PutLetterHealtResponse?> putLetterHealtResponse =
+      Rx<PutLetterHealtResponse?>(null);
 
   RxBool isLoading = false.obs;
   RxBool isLoadingTransaction = false.obs;
@@ -104,9 +122,17 @@ class ApotikController extends GetxController {
   RxBool isLoadingPasienIdRme = false.obs;
   RxBool isLoadingPostTransaction = false.obs;
   RxBool isLoadingUnit = false.obs;
+  RxBool isLoadingSickLetter = false.obs;
+  RxBool isLoadingPostSickLetter = false.obs;
+  RxBool isLoadingUpdateSickLetter = false.obs;
+  RxBool isLoadingHealtLetter = false.obs;
+  RxBool isLoadingPostHealtLetter = false.obs;
+  RxBool isLoadingUpdateHealtLetter = false.obs;
   RxInt numberOfPage = 1.obs;
   RxInt numberOfPageTransaction = 1.obs;
   RxInt numberOfPageUnit = 1.obs;
+  RxInt numberOfPageLetterSick = 1.obs;
+  RxInt numberOfPageLetterHealt = 1.obs;
   RxBool readOnly = true.obs;
   RxBool buttonTransaksi = true.obs;
   var totalBayar = 0.obs; // contoh total
@@ -129,6 +155,7 @@ class ApotikController extends GetxController {
   RxBool isLoadingPostUnitNewMedicine = false.obs;
   var selectedIndex = 0.obs;
   var selectedIndexReport = 0.obs;
+  var selectedIndexMail = 0.obs;
   RxInt selectedIndexMedicine = 0.obs;
 
   final TextEditingController dropdownObatController = TextEditingController();
@@ -163,6 +190,14 @@ class ApotikController extends GetxController {
   final TextEditingController dropdownUnitController = TextEditingController();
   RxList<List<DatumUnit>> selectedUnitsPerRow = <List<DatumUnit>>[].obs;
   RxList<String> selectedUnitIds = <String>[].obs;
+  TextEditingController jobController = TextEditingController();
+  TextEditingController keluhanController = TextEditingController();
+  TextEditingController diagnosaController = TextEditingController();
+
+  TextEditingController perihalController = TextEditingController();
+  TextEditingController tdController = TextEditingController();
+  TextEditingController nController = TextEditingController();
+  TextEditingController sController = TextEditingController();
 
   Rx<DateTime> dateBuyMedicineController = DateTime.now().obs;
   RxInt numberOfPageReportPurchase = 0.obs;
@@ -181,8 +216,13 @@ class ApotikController extends GetxController {
   RxString dateBuyDetailPurchaseReport = ''.obs;
   RxString supplierBuyDetailPurchaseReport = ''.obs;
   RxString petugasBuyDetailPurchaseReport = ''.obs;
+  RxList<DateTime?> selectedDateRangeLetterSick = <DateTime?>[].obs;
+
   var isLightOn = false.obs;
   var isAddMedicineView = false.obs;
+  var isAddLetterView = false.obs;
+  var isAddMailSickView = false.obs;
+  var isAddMailHealtView = false.obs;
   var isAddUnitMedicineView = false.obs;
   var isEditMedicineView = false.obs;
   var isEditUnitMedicineView = false.obs;
@@ -198,6 +238,8 @@ class ApotikController extends GetxController {
   final namePasienSearch = ''.obs;
   final noInvSearch = ''.obs;
   final noRmeSearch = ''.obs;
+  final noLetterSickSearch = ''.obs;
+  final noLetterHealtSearch = ''.obs;
   RxString selectedUnitId = ''.obs;
   RxString idMedicine = ''.obs;
   RxString idUnitMedicine = ''.obs;
@@ -210,6 +252,15 @@ class ApotikController extends GetxController {
   RxString noRekamMedis = ''.obs;
   RxString alamatPasien = ''.obs;
   RxInt grandTotalSell = 0.obs;
+
+  RxString noRekamMedisLetter = ''.obs;
+  RxString idPasienLetter = ''.obs;
+  RxString namePasienLetter = ''.obs;
+  RxString jenisKelaminLetter = ''.obs;
+  RxString alamatLetter = ''.obs;
+  RxString jobLetter = ''.obs;
+  RxString periodLatter = ''.obs;
+  RxString idLatter = ''.obs;
 
   RxList<ChartDataPie> dailyChartDatas = <ChartDataPie>[].obs;
   RxList<ChartDataPie> dailyChartMedineIn = <ChartDataPie>[].obs;
@@ -230,6 +281,19 @@ class ApotikController extends GetxController {
 
   void showAddMedicine() {
     isAddMedicineView.value = true;
+  }
+
+  void showAddLetter() {
+    selectedIndexMail.value = 0;
+    isAddLetterView.value = true;
+  }
+
+  void showAddMailSick() {
+    isAddMailSickView.value = true;
+  }
+
+  void showAddMailHealt() {
+    isAddMailHealtView.value = true;
   }
 
   void showAddUnitMedicine() {
@@ -266,6 +330,20 @@ class ApotikController extends GetxController {
 
   void backToAddMedicine() {
     isAddMedicineView.value = false;
+  }
+
+  void backToLetter() {
+    isAddMailSickView.value = false;
+    isAddMailHealtView.value = false;
+    isAddLetterView.value = false;
+  }
+
+  void backToAddMailSick() {
+    isAddMailSickView.value = false;
+  }
+
+  void backToAddMailHealt() {
+    isAddMailHealtView.value = false;
   }
 
   void backToAddUnitMedicine() {
@@ -305,6 +383,8 @@ class ApotikController extends GetxController {
     getUnit();
     getSaleReportMedicine();
     getInOutReportMedicine();
+    getLetterSick();
+    getLetterHealt();
     purchaseNumber.value = generatePurchaseNumber();
     tooltipBehavior = TooltipBehavior(enable: true);
   }
@@ -410,6 +490,10 @@ class ApotikController extends GetxController {
     backToListSell();
     backToList();
     selectedIndexReport.value = index;
+  }
+
+  void selectTabMail(int index) {
+    selectedIndexMail.value = index;
   }
 
   void selectTabMedicine(int index) {
@@ -1087,6 +1171,8 @@ class ApotikController extends GetxController {
         (response) async {
           reportPurchaseMedicineList.clear();
           reportPurchaseMedicineList.addAll(response.data.data);
+          dailyChartDataBuy.value =
+              chartDataHppTrend(reportPurchaseMedicineList);
           totalPurchaseReport.value = response.data.totalKeseluruhan;
           numberOfPageReportPurchase.value =
               response.data.pagination.totalPages;
@@ -1681,5 +1767,367 @@ class ApotikController extends GetxController {
         isDailyDataAvailable ? reportInOutMedicineList[index].keluar : 0,
       );
     });
+  }
+
+  RxList<DailyReportChart> dailyChartDataBuy = <DailyReportChart>[].obs;
+
+  List<DailyReportChart> chartDataHppTrend(
+      List<DatumReportPurchase> listCommodityGrafilDailys) {
+    return List<DailyReportChart>.generate(reportPurchaseMedicineList.length,
+        (index) {
+      bool isDailyDataAvailable = listCommodityGrafilDailys.isNotEmpty &&
+          index < reportPurchaseMedicineList.length;
+      return DailyReportChart(
+        x: index,
+        y: isDailyDataAvailable
+            ? reportPurchaseMedicineList[index].total.toInt()
+            : 0,
+        time: reportPurchaseMedicineList[index].tanggalPembelian,
+      );
+    });
+  }
+
+  ////////////////////////// LETTER SICK /////////////////////////
+  Future<void> getLetterSick({
+    int page = 1,
+    int limit = 10,
+    String no_latter = "",
+  }) async {
+    isLoadingSickLetter.value = true;
+    try {
+      final response = await apotikRepository.getLetterSick(
+          page: page, limit: limit, no_latter: no_latter);
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          sickLetterList.clear();
+          sickLetterList.addAll(response.data.data);
+
+          numberOfPageLetterSick.value = response.data.pagination.totalPages;
+        },
+      );
+      isLoadingSickLetter.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingSickLetter.value = false;
+    }
+  }
+
+  Future<void> postLatterSick() async {
+    isLoadingPostSickLetter.value = true;
+    try {
+      var data = PostLetterSickRequest(
+        job: jobController.text,
+        complaint: keluhanController.text,
+        diagnosa: diagnosaController.text,
+        startDate: selectedDateRangeLetterSick[0]!,
+        endDate: selectedDateRangeLetterSick[1]!,
+        restPeriod: periodLatter.value,
+        idPasien: idPasienLetter.value,
+      );
+
+      final response = await apotikRepository.postLetterSick(data: data);
+
+      response.fold(
+        (failures) async {
+          await Future.delayed(Duration(seconds: 3));
+
+          isLoadingPostSickLetter.value = false;
+          final Map<String, String>? messages = failures.message;
+
+          final errorText =
+              messages!.values.map((e) => e.toString()).join('\n');
+
+          Get.snackbar(
+            "Gagal Melakukan Penambahakan Surat Sakit",
+            errorText,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red.withOpacity(0.9),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+          Get.back();
+        },
+        (response) async {
+          postLetterSickResponse.value = response;
+          await Future.delayed(Duration(seconds: 2));
+          alamatLetter.value = '';
+          namePasienLetter.value = '';
+          idPasienLetter.value = '';
+          jenisKelaminLetter.value = '';
+          noRekamMedisLetter.value = '';
+          jobController.text = '';
+          diagnosaController.text = '';
+          keluhanController.text = '';
+          selectedDateRangeLetterSick.value = [];
+          periodLatter.value = '';
+          idLatter.value = '';
+          getLetterSick();
+          isLoadingPostSickLetter.value = false;
+          Get.back();
+          backToAddMailSick();
+          backToLetter();
+          Get.snackbar(
+            "Berhasil Melakukan Penambahan Surat Sakit",
+            '',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+      );
+    } catch (e) {
+      isLoadingPostSickLetter.value = true;
+    }
+  }
+
+  Future<void> putLatterSick() async {
+    isLoadingPostSickLetter.value = true;
+    try {
+      var data = PostLetterSickRequest(
+        job: jobController.text,
+        complaint: keluhanController.text,
+        diagnosa: diagnosaController.text,
+        startDate: selectedDateRangeLetterSick[0]!,
+        endDate: selectedDateRangeLetterSick[1]!,
+        restPeriod: periodLatter.value,
+      );
+      print(idLatter.value);
+
+      final response =
+          await apotikRepository.putLetterSick(data: data, id: idLatter.value);
+
+      response.fold(
+        (failures) async {
+          await Future.delayed(Duration(seconds: 3));
+
+          isLoadingPostSickLetter.value = false;
+          final Map<String, String>? messages = failures.message;
+
+          final errorText =
+              messages!.values.map((e) => e.toString()).join('\n');
+
+          Get.snackbar(
+            "Gagal Melakukan Pengeditan Surat Sakit",
+            errorText,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red.withOpacity(0.9),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+          Get.back();
+        },
+        (response) async {
+          putLetterSickResponse.value = response;
+          await Future.delayed(Duration(seconds: 2));
+          alamatLetter.value = '';
+          namePasienLetter.value = '';
+          idPasienLetter.value = '';
+          jenisKelaminLetter.value = '';
+          noRekamMedisLetter.value = '';
+          jobController.text = '';
+          diagnosaController.text = '';
+          keluhanController.text = '';
+          selectedDateRangeLetterSick.value = [];
+          periodLatter.value = '';
+          idLatter.value = '';
+          getLetterSick();
+          isLoadingPostSickLetter.value = false;
+          Get.back();
+          backToAddMailSick();
+          backToLetter();
+          Get.snackbar(
+            "Berhasil Melakukan Pengeditan Surat Sakit",
+            '',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+      );
+    } catch (e) {
+      isLoadingPostSickLetter.value = true;
+    }
+  }
+
+  ////////////////////////// LETTER HEALT /////////////////////////
+  Future<void> getLetterHealt({
+    int page = 1,
+    int limit = 10,
+    String no_latter = "",
+  }) async {
+    isLoadingHealtLetter.value = true;
+    try {
+      final response = await apotikRepository.getLetterHealt(
+          page: page, limit: limit, no_latter: no_latter);
+
+      response.fold(
+        (failure) {
+          inspect(failure.code);
+        },
+        (response) async {
+          healtLetterList.clear();
+          healtLetterList.addAll(response.data.data);
+          numberOfPageLetterHealt.value = response.data.pagination.totalPages;
+        },
+      );
+      isLoadingHealtLetter.value = false;
+    } catch (e) {
+      print('e:$e');
+      isLoadingHealtLetter.value = false;
+    }
+  }
+
+  Future<void> postLatterHealt() async {
+    isLoadingPostHealtLetter.value = true;
+    try {
+      var data = PostLetterHealtRequest(
+        job: jobController.text,
+        complaint: keluhanController.text,
+        perihal: perihalController.text,
+        td: tdController.text,
+        n: nController.text,
+        s: sController.text,
+        idPasien: idPasienLetter.value,
+      );
+
+      final response = await apotikRepository.postLetterHealt(data: data);
+
+      response.fold(
+        (failures) async {
+          await Future.delayed(Duration(seconds: 3));
+
+          isLoadingPostHealtLetter.value = false;
+          final Map<String, String>? messages = failures.message;
+
+          final errorText =
+              messages!.values.map((e) => e.toString()).join('\n');
+
+          Get.snackbar(
+            "Gagal Melakukan Penambahakan Surat Sakit",
+            errorText,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red.withOpacity(0.9),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+          Get.back();
+        },
+        (response) async {
+          postLetterHealtResponse.value = response;
+          await Future.delayed(Duration(seconds: 2));
+          perihalController.text = '';
+          keluhanController.text = '';
+          tdController.text = '';
+          nController.text = '';
+          sController.text = '';
+          alamatLetter.value = '';
+          namePasienLetter.value = '';
+          idPasienLetter.value = '';
+          jenisKelaminLetter.value = '';
+          noRekamMedisLetter.value = '';
+          jobController.text = '';
+          diagnosaController.text = '';
+          keluhanController.text = '';
+          selectedDateRangeLetterSick.value = [];
+          periodLatter.value = '';
+          idLatter.value = '';
+          getLetterHealt();
+          isLoadingPostHealtLetter.value = false;
+          Get.back();
+          backToAddMailSick();
+          backToLetter();
+          Get.snackbar(
+            "Berhasil Melakukan Penambahan Surat Sakit",
+            '',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+      );
+    } catch (e) {
+      isLoadingPostHealtLetter.value = true;
+    }
+  }
+
+  Future<void> putLatterHealt() async {
+    isLoadingUpdateHealtLetter.value = true;
+    try {
+      var data = PostLetterHealtRequest(
+        job: jobController.text,
+        complaint: keluhanController.text,
+        perihal: perihalController.text,
+        td: tdController.text,
+        n: nController.text,
+        s: sController.text,
+      );
+
+      final response =
+          await apotikRepository.putLetterHealt(data: data, id: idLatter.value);
+
+      response.fold(
+        (failures) async {
+          await Future.delayed(Duration(seconds: 3));
+
+          isLoadingUpdateHealtLetter.value = false;
+          final Map<String, String>? messages = failures.message;
+
+          final errorText =
+              messages!.values.map((e) => e.toString()).join('\n');
+
+          Get.snackbar(
+            "Gagal Melakukan Pengeditan Surat Sakit",
+            errorText,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red.withOpacity(0.9),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+          Get.back();
+        },
+        (response) async {
+          putLetterHealtResponse.value = response;
+          await Future.delayed(Duration(seconds: 2));
+          perihalController.text = '';
+          keluhanController.text = '';
+          tdController.text = '';
+          nController.text = '';
+          sController.text = '';
+          alamatLetter.value = '';
+          namePasienLetter.value = '';
+          idPasienLetter.value = '';
+          jenisKelaminLetter.value = '';
+          noRekamMedisLetter.value = '';
+          jobController.text = '';
+          diagnosaController.text = '';
+          keluhanController.text = '';
+          selectedDateRangeLetterSick.value = [];
+          periodLatter.value = '';
+          idLatter.value = '';
+          getLetterHealt();
+          isLoadingUpdateHealtLetter.value = false;
+          Get.back();
+          backToAddMailSick();
+          backToLetter();
+          Get.snackbar(
+            "Berhasil Melakukan Pengeditan Surat Sakit",
+            '',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+      );
+    } catch (e) {
+      isLoadingUpdateHealtLetter.value = true;
+    }
   }
 }

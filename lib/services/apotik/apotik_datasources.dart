@@ -5,6 +5,8 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medicine_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/request/post_letter_healt_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/request/post_letter_sick_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
@@ -13,6 +15,8 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_in_out_report_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_letter_healt_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_monthly_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
@@ -22,11 +26,15 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_latter_healt_resposne.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post/post_unit_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put/put_letter_healt_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put/put_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/lib/api_services.dart';
 import 'package:klinik_web_responsif/services/lib/network_constants.dart';
 
@@ -597,6 +605,158 @@ class ApotikDatasources extends ApiService {
       return response.fold(
         (failures) => Left(failures),
         (response) => Right(DeleteMedicineResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+////////////////////////// LETTER SICK /////////////////////////
+  Future<Either<Failure, GetLetterSickResponse>> getAllLetterSick(
+      {required int page,
+      required int limit,
+      required String no_latter}) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response = await get(
+          NetworkConstants.GET_LETTER_SICK_URL(page, limit, no_latter),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+
+      return Right(GetLetterSickResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failures, PostLetterSickResponse>> postLetterSick({
+    required PostLetterSickRequest data,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await post(NetworkConstants.POST_LETTER_SICK_URL(), body: {
+        "job": data.job,
+        "complaint": data.complaint,
+        "diagnosa": data.diagnosa,
+        "rest_period": data.restPeriod,
+        "start_date": data.startDate.toString(),
+        "end_date": data.endDate.toString(),
+        "id_pasien": data.idPasien
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PostLetterSickResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, PutLetterSickResponse>> putLetterSick(
+      {required PostLetterSickRequest data, required String id}) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await put(NetworkConstants.PUT_LETTER_SICK_URL(id), body: {
+        "job": data.job,
+        "complaint": data.complaint,
+        "diagnosa": data.diagnosa,
+        "rest_period": data.restPeriod,
+        "start_date": data.startDate.toString(),
+        "end_date": data.endDate.toString(),
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+      inspect(response);
+
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PutLetterSickResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+////////////////////////// LETTER SICK /////////////////////////
+  Future<Either<Failure, GetLetterHealtResponse>> getAllLetterHealt(
+      {required int page,
+      required int limit,
+      required String no_latter}) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response = await get(
+          NetworkConstants.GET_LETTER_HEALT_URL(page, limit, no_latter),
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+
+      return Right(GetLetterHealtResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failures, PostLetterHealtResponse>> postLetterHealt({
+    required PostLetterHealtRequest data,
+  }) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await post(NetworkConstants.POST_LETTER_HEALT_URL(), body: {
+        "job": data.job,
+        "complaint": data.complaint,
+        "perihal": data.perihal,
+        "td": data.td,
+        "n": data.n,
+        "s": data.s,
+        "id_pasien": data.idPasien
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PostLetterHealtResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return left(Failures(false, 400, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, PutLetterHealtResponse>> putLetterHealt(
+      {required PostLetterHealtRequest data, required String id}) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+    try {
+      final response =
+          await put(NetworkConstants.PUT_LETTER_HEALT_URL(id), body: {
+        "job": data.job,
+        "complaint": data.complaint,
+        "perihal": data.perihal,
+        "td": data.td,
+        "n": data.n,
+        "s": data.s
+      }, header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+      inspect(response);
+
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(PutLetterHealtResponse.fromJson(response)),
       );
     } catch (e) {
       return left(Failures(false, 400, {"api": "Server Not Connection!"}));

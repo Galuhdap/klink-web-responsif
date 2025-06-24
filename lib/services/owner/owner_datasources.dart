@@ -13,13 +13,12 @@ class OwnerDatasources extends ApiService {
     required int page,
     required int limit,
     required String name,
-    required String nik,
   }) async {
     final prefs = await SharedPreferencesUtils.getAuthToken();
 
     try {
       final response = await get(
-          NetworkConstants.GET_USER_URL(page, limit, name, nik),
+          NetworkConstants.GET_USER_URL(page, limit, name),
           header: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${prefs}",

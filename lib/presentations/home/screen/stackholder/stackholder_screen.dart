@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:klinik_web_responsif/core/components/card_dashboard_component.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
+import 'package:klinik_web_responsif/presentations/home/widgets/card_apotik_dashboard_widget.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
+import 'package:klinik_web_responsif/presentations/report/controller/report_controller.dart';
+import 'package:klinik_web_responsif/presentations/report/widget/graphic_widget.dart';
+import 'package:klinik_web_responsif/services/report/model/response/chart/daily_report_chart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StackholderScreen extends StatefulWidget {
@@ -19,16 +25,15 @@ class StackholderScreen extends StatefulWidget {
 }
 
 class _StackholderScreenState extends State<StackholderScreen> {
-  late TooltipBehavior _tooltipBehavior;
-
   @override
   void initState() {
     super.initState();
-    _tooltipBehavior = TooltipBehavior(enable: true);
   }
 
   @override
   Widget build(BuildContext context) {
+    var controllerApotik = Get.put(ApotikController());
+    var controllerReport = Get.put(ReportController());
     return GetBuilder<HomeController>(
         init: HomeController(),
         builder: (controller) {
@@ -62,363 +67,163 @@ class _StackholderScreenState extends State<StackholderScreen> {
                                             .pasienBaruBulanIni
                                             .toString(),
                               )),
-                          Obx(() => CardDashbordComponent(
-                                title: AppConstants.LABEL_PASIEN_TERDAFTAR,
-                                count: controller.isLoadingTotal.value
-                                    ? 'Load...'
-                                    : controller.totalPasien.value == ''
-                                        ? '-'
-                                        : controller
-                                            .totalPasien.value!.data.totalPasien
-                                            .toString(),
-                              )),
+                          Obx(
+                            () => CardDashbordComponent(
+                              title: AppConstants.LABEL_PASIEN_TERDAFTAR,
+                              count: controller.isLoadingTotal.value
+                                  ? 'Load...'
+                                  : controller.totalPasien.value == ''
+                                      ? '-'
+                                      : controller
+                                          .totalPasien.value!.data.totalPasien
+                                          .toString(),
+                            ),
+                          ),
                         ],
                       )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        spacing: AppSizes.s16,
+                    : Column(
                         children: [
-                          Flexible(
-                            child: Obx(() => CardDashbordComponent(
-                                  title: AppConstants.LABEL_PASIEN_BULAN_INI,
-                                  count: controller.isLoadingTotal.value
-                                      ? 'Load...'
-                                      : controller.totalPasien.value == ''
-                                          ? '-'
-                                          : controller.totalPasien.value!.data
-                                              .pasienBaruBulanIni
-                                              .toString(),
-                                )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            spacing: AppSizes.s16,
+                            children: [
+                              Flexible(
+                                child: Obx(() => CardDashbordComponent(
+                                      title:
+                                          AppConstants.LABEL_PASIEN_BULAN_INI,
+                                      count: controller.isLoadingTotal.value
+                                          ? 'Load...'
+                                          : controller.totalPasien.value == ''
+                                              ? '-'
+                                              : controller.totalPasien.value!
+                                                  .data.pasienBaruBulanIni
+                                                  .toString(),
+                                    )),
+                              ),
+                              Flexible(
+                                child: Obx(() => CardDashbordComponent(
+                                      title:
+                                          AppConstants.LABEL_PASIEN_TERDAFTAR,
+                                      count: controller.isLoadingTotal.value
+                                          ? 'Load...'
+                                          : controller.totalPasien.value == ''
+                                              ? '-'
+                                              : controller.totalPasien.value!
+                                                  .data.totalPasien
+                                                  .toString(),
+                                    )),
+                              ),
+                            ],
                           ),
-                          Flexible(
-                            child: Obx(() => CardDashbordComponent(
-                                  title: AppConstants.LABEL_PASIEN_TERDAFTAR,
-                                  count: controller.isLoadingTotal.value
-                                      ? 'Load...'
-                                      : controller.totalPasien.value == ''
-                                          ? '-'
-                                          : controller.totalPasien.value!.data
-                                              .totalPasien
-                                              .toString(),
-                                )),
+                          AppSizes.s20.height,
+                          CardApotikDashbordWidget(
+                            controller: controllerApotik,
+                            owner: true,
                           ),
                         ],
                       ),
                 AppSizes.s32.height,
-                Container(
-                  width: double.infinity,
-                  padding: AppSizes.symmetricPadding(
-                      vertical: AppSizes.s35, horizontal: AppSizes.s41),
-                  decoration: BoxDecoration(
-                    color: AppColors.colorBaseWhite,
-                    borderRadius: BorderRadius.circular(AppSizes.s4),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (Responsive.isMobile(context)) ...[
-                        Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AppConstants.LABEL_TOTAL_PASIEN,
-                                style: Get.textTheme.labelMedium!.copyWith(
-                                    fontSize: AppSizes.s22,
-                                    color: AppColors.colorBaseBlack,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                AppConstants.LABEL_STATISTIC,
-                                style: Get.textTheme.labelMedium!.copyWith(
-                                  fontSize: AppSizes.s18,
-                                  color: AppColors.colorBaseBlack,
-                                ),
-                              ),
-                              AppSizes.s10.height,
-                            ],
-                          ),
-                        ),
-                      ],
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (Responsive.isDesktop(context)) ...[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppConstants.LABEL_STATISTIC,
-                                  style: Get.textTheme.labelMedium!.copyWith(
-                                    fontSize: AppSizes.s18,
-                                    color: AppColors.colorBaseBlack,
-                                  ),
-                                ),
-                                AppSizes.s5.height,
-                                Text(
-                                  AppConstants.LABEL_TOTAL_PASIEN,
-                                  style: Get.textTheme.labelMedium!.copyWith(
-                                      fontSize: AppSizes.s22,
-                                      color: AppColors.colorBaseBlack,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )
-                          ],
-                          Row(
-                            children: [
-                              if (Responsive.isDesktop(context)) ...[
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            AppSizes.s100),
-                                        color: AppColors.colorBasePrimary,
-                                      ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: GraphicWidget(
+                        label: 'Pasien Periksa per Hari',
+                        content: Obx(
+                          () {
+                            return controllerReport.getCountPatientList.isEmpty
+                                ? Center(
+                                    child: Text('Data Kosong'),
+                                  )
+                                : SfCartesianChart(
+                                    tooltipBehavior:
+                                        controllerReport.tooltipBehavior,
+                                    primaryXAxis: DateTimeAxis(
+                                      majorGridLines: MajorGridLines(
+                                          width: 0, color: Colors.transparent),
+                                      axisLine:
+                                          AxisLine(color: Colors.transparent),
+                                      labelStyle: Get.textTheme.labelMedium,
+                                      intervalType: DateTimeIntervalType.days,
+                                      dateFormat: DateFormat(
+                                          'd MMM'), // butuh import intl
+                                      majorTickLines:
+                                          MajorTickLines(width: 0, size: 10),
                                     ),
-                                    AppSizes.s8.width,
-                                    Text(
-                                      AppConstants.LABEL_LAKI_LAKI,
-                                      style: Get.textTheme.bodyMedium!.copyWith(
-                                          fontSize: AppSizes.s14,
-                                          color: AppColors.colorBaseBlack),
+                                    primaryYAxis: NumericAxis(
+                                      majorGridLines: MajorGridLines(
+                                          width: AppSizes.s1,
+                                          color: Color(0xfffE5E5EF)),
+                                      axisLine: AxisLine(
+                                          width: AppSizes.s0,
+                                          color: Colors.transparent),
+                                      isVisible: true,
+                                      majorTickLines: MajorTickLines(
+                                          width: AppSizes.s0, size: 5),
                                     ),
-                                  ],
-                                ),
-                                AppSizes.s70.width,
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            AppSizes.s100),
-                                        color: Color(0xfffC893FD),
-                                      ),
-                                    ),
-                                    AppSizes.s8.width,
-                                    Text(
-                                      AppConstants.LABEL_PEREMPUAN,
-                                      style: Get.textTheme.bodyMedium!.copyWith(
-                                          fontSize: AppSizes.s14,
-                                          color: AppColors.colorBaseBlack),
-                                    ),
-                                  ],
-                                ),
-                                AppSizes.s27.width,
-                                Container(
-                                  width: 281,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(AppSizes.s4),
-                                    border:
-                                        Border.all(color: Color(0xfffF0F0F0)),
-                                    color: AppColors.colorBaseWhite,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        offset: const Offset(0, 0),
-                                        blurRadius: 15,
-                                        spreadRadius: 0,
-                                        color: AppColors.colorNeutrals300
-                                            .withAlpha(40),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    spacing: 20,
-                                    children: [
-                                      AppSizes.s10.width,
-                                      Icon(Icons.calendar_month_rounded),
-                                      Text(
-                                        'Februari 2024',
-                                        style:
-                                            Get.textTheme.labelMedium!.copyWith(
-                                          fontSize: AppSizes.s16,
-                                          color: AppColors.colorBaseBlack,
+                                    series: <LineSeries<DailyReportChart,
+                                        DateTime>>[
+                                      LineSeries<DailyReportChart, DateTime>(
+                                        // Bind data source
+                                        name: 'Paseint',
+                                        dataSource:
+                                            controllerReport.getCountPatient,
+                                        xValueMapper:
+                                            (DailyReportChart sales, _) =>
+                                                sales.time,
+                                        yValueMapper:
+                                            (DailyReportChart sales, _) =>
+                                                sales.y,
+                                        markerSettings: MarkerSettings(
+                                          isVisible:
+                                              true, // Aktifkan titik (dot)
+                                          shape: DataMarkerType
+                                              .circle, // Bentuk dot (bisa square, diamond, dll)
+                                          width: 10, // Ukuran dot
+                                          height: 10,
+                                          borderColor:
+                                              AppColors.colorBaseSuccess,
+                                          borderWidth: 2,
                                         ),
                                       ),
                                     ],
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ],
+                                  );
+                          },
+                        ),
                       ),
-                      if (Responsive.isMobile(context)) ...[
-                        AppSizes.s10.height,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(AppSizes.s100),
-                                    color: AppColors.colorBasePrimary,
-                                  ),
-                                ),
-                                AppSizes.s8.width,
-                                Text(
-                                  AppConstants.LABEL_LAKI_LAKI,
-                                  style: Get.textTheme.bodyMedium!.copyWith(
-                                      fontSize: AppSizes.s14,
-                                      color: AppColors.colorBaseBlack),
-                                ),
-                              ],
-                            ),
-                            AppSizes.s17.width,
-                            Row(
-                              children: [
-                                Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(AppSizes.s100),
-                                    color: Color(0xfffC893FD),
-                                  ),
-                                ),
-                                AppSizes.s8.width,
-                                Text(
-                                  AppConstants.LABEL_PEREMPUAN,
-                                  style: Get.textTheme.bodyMedium!.copyWith(
-                                      fontSize: AppSizes.s14,
-                                      color: AppColors.colorBaseBlack),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        AppSizes.s17.height,
-                        Center(
-                          child: Container(
-                            width: 281,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(AppSizes.s4),
-                              border: Border.all(color: Color(0xfffF0F0F0)),
-                              color: AppColors.colorBaseWhite,
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(0, 0),
-                                  blurRadius: 15,
-                                  spreadRadius: 0,
-                                  color:
-                                      AppColors.colorNeutrals300.withAlpha(40),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              spacing: 20,
-                              children: [
-                                AppSizes.s10.width,
-                                Icon(Icons.calendar_month_rounded),
-                                Text(
-                                  'Februari 2024',
-                                  style: Get.textTheme.labelMedium!.copyWith(
-                                    fontSize: AppSizes.s16,
-                                    color: AppColors.colorBaseBlack,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    width: double.infinity,
-                    height: 500,
-                    color: AppColors.colorBaseWhite,
-                    child: SfCartesianChart(
-                      tooltipBehavior: _tooltipBehavior,
-                      primaryXAxis: NumericAxis(
-                        majorGridLines: MajorGridLines(
-                            width: AppSizes.s0, color: Colors.transparent),
-                        axisLine: AxisLine(color: Colors.transparent),
-                        labelStyle: Get.textTheme.labelMedium,
-                        rangePadding: ChartRangePadding.additional,
-                        interval: AppSizes.s1,
-                        minimum: 0,
-                        maximum: 30,
-                        plotOffset: 20,
-                        majorTickLines:
-                            MajorTickLines(width: AppSizes.s0, size: 10),
-                      ),
-                      primaryYAxis: NumericAxis(
-                        majorGridLines: MajorGridLines(
-                            width: AppSizes.s1, color: Color(0xfffE5E5EF)),
-                        axisLine: AxisLine(
-                            width: AppSizes.s0, color: Colors.transparent),
-                        isVisible: true,
-                        majorTickLines:
-                            MajorTickLines(width: AppSizes.s0, size: 5),
-                      ),
-                      series: <LineSeries<SalesData, int>>[
-                        LineSeries<SalesData, int>(
-                          // Bind data source
-                          name: 'Laki-Laki',
-                          dataSource: <SalesData>[
-                            SalesData(0, 40),
-                            SalesData(1, 35),
-                            SalesData(2, 28),
-                            SalesData(3, 34),
-                            SalesData(4, 32),
-                            SalesData(5, 20),
-                            SalesData(6, 90),
-                          ],
-                          xValueMapper: (SalesData sales, _) => sales.year,
-                          yValueMapper: (SalesData sales, _) => sales.sales,
-                          markerSettings: MarkerSettings(
-                            isVisible: true, // Aktifkan titik (dot)
-                            shape: DataMarkerType
-                                .circle, // Bentuk dot (bisa square, diamond, dll)
-                            width: 10, // Ukuran dot
-                            height: 10,
-                            borderColor: AppColors.colorBasePrimary,
-                            borderWidth: 2,
-                          ),
-                        ),
-                        LineSeries<SalesData, int>(
-                          // Bind data source
-                          name: 'Perempuan',
-                          dataSource: <SalesData>[
-                            SalesData(0, 20),
-                            SalesData(1, 20),
-                            SalesData(2, 40),
-                            SalesData(3, 24),
-                            SalesData(4, 80),
-                            SalesData(5, 40),
-                            SalesData(6, 20),
-                          ],
-                          xValueMapper: (SalesData sales, _) => sales.year,
-                          yValueMapper: (SalesData sales, _) => sales.sales,
-                          markerSettings: MarkerSettings(
-                            isVisible: true, // Aktifkan titik (dot)
-                            shape: DataMarkerType
-                                .circle, // Bentuk dot (bisa square, diamond, dll)
-                            width: 10, // Ukuran dot
-                            height: 10,
-                            borderColor: Color(0xfffC893FD),
-                            borderWidth: 2,
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
+                    AppSizes.s20.width,
+                    Flexible(
+                      child: GraphicWidget(
+                        label: 'Top 5 Obat Paling Laris',
+                        content: Obx(
+                          () {
+                            return controllerApotik.topFiveMedicineList.isEmpty
+                                ? Center(
+                                    child: Text('asdsad'),
+                                  )
+                                : SfCircularChart(
+                                    tooltipBehavior:
+                                        controllerApotik.tooltipBehavior,
+                                    series: <CircularSeries>[
+                                      // Render pie chart
+                                      PieSeries<ChartDataPie, String>(
+                                        dataSource:
+                                            controllerApotik.dailyChartDatas,
+                                        pointColorMapper:
+                                            (ChartDataPie data, _) =>
+                                                data.color,
+                                        xValueMapper: (ChartDataPie data, _) =>
+                                            data.x,
+                                        yValueMapper: (ChartDataPie data, _) =>
+                                            data.y,
+                                      )
+                                    ],
+                                  );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ).paddingSymmetric(

@@ -46,7 +46,9 @@ class PatientScreen extends StatelessWidget {
                 searchController: TextEditingController(),
                 searchHint: 'Cari Pasien',
                 searchChanged: (_) {},
-                isMake: homeController.role.value == "DOKTER" ? false : true,
+                isMake: homeController.role.value == "DOKTER" 
+                    ? false
+                    : true,
                 onTapButton: () {
                   showModalCenter(
                     context,
@@ -322,7 +324,7 @@ class PatientScreen extends StatelessWidget {
               () {
                 return ListView(
                   children: [
-                    Responsive.isDesktop(context)
+                  Responsive.isDesktop(context)
                         ? CustomTabelComponent(
                             label: AppConstants.LABEL_DATA_PASIEN,
                             sizeRowTabel:

@@ -2,6 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
 import 'package:klinik_web_responsif/services/apotik/apotik_datasources.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_buy_medicine_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/request/post_letter_healt_request.dart';
+import 'package:klinik_web_responsif/services/apotik/model/request/post_letter_sick_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_medicine_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/delete/delete_medicine_response.dart';
@@ -10,6 +12,8 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_expired_
 import 'package:klinik_web_responsif/services/apotik/model/response/get_group_stock_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_has_expired_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_in_out_report_medicine_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_letter_healt_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/get_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_monthly_summary_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_new_medicine_response.dart';
@@ -19,11 +23,15 @@ import 'package:klinik_web_responsif/services/apotik/model/response/get_top_five
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_pasien_id_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_transaction_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/get_unit_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_latter_healt_resposne.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/post/post_letter_sick_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post/post_unit_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_buy_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_new_medicine_response.dart';
 import 'package:klinik_web_responsif/services/apotik/model/response/post_transaction_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put/put_letter_healt_response.dart';
+import 'package:klinik_web_responsif/services/apotik/model/response/put/put_letter_sick_response.dart';
 
 class ApotikRepository {
   final ApotikDatasources source;
@@ -107,6 +115,7 @@ class ApotikRepository {
       getMonthlySummaryMedicine() async {
     return source.getMonthlySummaryMedicine();
   }
+
   Future<Either<Failure, GetDailySummaryMedicineResponse>>
       getDailySummaryMedicine() async {
     return source.getDailySummaryMedicine();
@@ -153,14 +162,14 @@ class ApotikRepository {
     required String name,
   }) async {
     return source.getSaleReportMedicine(
-        page: page,
-        limit: limit,
-        start_date: start_date,
-        end_date: end_date,
-        invoice: invoice,
-        no_rekam_medis: no_rekam_medis,
-        name: name,
-        );
+      page: page,
+      limit: limit,
+      start_date: start_date,
+      end_date: end_date,
+      invoice: invoice,
+      no_rekam_medis: no_rekam_medis,
+      name: name,
+    );
   }
 
   Future<Either<Failure, GetInOutReportMedicineResponse>>
@@ -247,5 +256,49 @@ class ApotikRepository {
   Future<Either<Failures, PostUnitMedicineResponse>> putUnitNewMedicine(
       {required String name, required String id}) async {
     return source.putUnitNewMedicine(name: name, id: id);
+  }
+
+////////////////////////// LETTER SICK /////////////////////////
+  Future<Either<Failure, GetLetterSickResponse>> getLetterSick(
+      {required int page,
+      required int limit,
+      required String no_latter}) async {
+    return source.getAllLetterSick(
+        page: page, limit: limit, no_latter: no_latter);
+  }
+
+  Future<Either<Failures, PostLetterSickResponse>> postLetterSick({
+    required PostLetterSickRequest data,
+  }) async {
+    return source.postLetterSick(data: data);
+  }
+
+  Future<Either<Failures, PutLetterSickResponse>> putLetterSick({
+    required PostLetterSickRequest data,
+    required String id,
+  }) async {
+    return source.putLetterSick(data: data, id: id);
+  }
+
+////////////////////////// LETTER Healt /////////////////////////
+  Future<Either<Failure, GetLetterHealtResponse>> getLetterHealt(
+      {required int page,
+      required int limit,
+      required String no_latter}) async {
+    return source.getAllLetterHealt(
+        page: page, limit: limit, no_latter: no_latter);
+  }
+
+  Future<Either<Failures, PostLetterHealtResponse>> postLetterHealt({
+    required PostLetterHealtRequest data,
+  }) async {
+    return source.postLetterHealt(data: data);
+  }
+
+  Future<Either<Failures, PutLetterHealtResponse>> putLetterHealt({
+    required PostLetterHealtRequest data,
+    required String id,
+  }) async {
+    return source.putLetterHealt(data: data, id: id);
   }
 }
