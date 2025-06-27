@@ -44,6 +44,10 @@ class PatientController extends GetxController {
   RxBool readOnly = true.obs;
   RxInt numberOfPageGetPasien = 1.obs;
 
+  RxString selectedYear = ''.obs;
+  RxString selectedDateString = ''.obs;
+  Rx<DateTime> selectedDate = DateTime.now().obs;
+
   final formKey = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
   var hasMore = true.obs;
@@ -86,6 +90,8 @@ class PatientController extends GetxController {
     String nik = '',
     String umur = '',
     String norme = '',
+    String tahun_lahir = '',
+    String tgl_lahir = '',
   }) async {
     isLoading.value = true;
     try {
@@ -95,20 +101,23 @@ class PatientController extends GetxController {
           name: name,
           nik: nik,
           umur: umur,
-          norme: norme);
+          norme: norme,
+          tahun_lahir: tahun_lahir,
+          tgl_lahir: tgl_lahir);
       inspect(response);
       response.fold(
         (failure) {
           inspect(failure.code);
         },
         (response) async {
+          await Future.delayed(Duration(seconds: 1));
+          isLoading.value = false;
           pasienList.clear();
-          numberOfPageGetPasien.value = 0;
+          // numberOfPageGetPasien.value = 0;
           pasienList.addAll(response.data.data);
           numberOfPageGetPasien.value = response.data.pagination.totalPages;
         },
       );
-      isLoading.value = false;
     } catch (e) {
       print('e:$e');
       isLoading.value = false;
@@ -133,6 +142,7 @@ class PatientController extends GetxController {
         },
         (response) async {
           inspect(response.data);
+          dataPasien.value = null;
           dataPasien.value = response.data;
         },
       );
@@ -186,6 +196,7 @@ class PatientController extends GetxController {
         },
         (response) async {
           inspect(response.data);
+          createPasien.value = null;
           createPasien.value = response;
           await postAntrianPasien(response.data.id);
           nameController.clear();
@@ -300,6 +311,7 @@ class PatientController extends GetxController {
         },
         (response) async {
           //  inspect(response.data);
+          postPasiens.value = null;
           postPasiens.value = response;
           await Future.delayed(Duration(seconds: 3));
           isLoadingCreate.value = false;

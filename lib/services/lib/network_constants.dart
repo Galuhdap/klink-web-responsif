@@ -2,7 +2,7 @@ class NetworkConstants {
   //static const String BASE_URL = "https://dev.api.banksampah.techlinesolution.site/";
   // static const String BASE_URL = "http://192.168.1.2:3000/api/v1";
   //static const String BASE_URL = "http://192.168.23.144:3000/api/v1";
-  static const String BASE_URL = "http://localhost:3000/api/v1";
+  static const String BASE_URL = "http://127.0.0.1:3000/api/v1";
   //static const String BASE_URL_DEV = "https://localhost:3000/";
   //static const String BASE_URL_PROD = "https://dev.api.enthusias.id";
 
@@ -11,9 +11,17 @@ class NetworkConstants {
 
   // static const String GET_PASIEN_URL = BASE_URL + "/admin/pasien?page=1&limit=10&search=";
   static String GET_PASIEN_URL(
-      int page, int limit, String name, String nik, String umur, String norme) {
+    int page,
+    int limit,
+    String name,
+    String nik,
+    String umur,
+    String norme,
+    String tahun_lahir,
+    String tgl_lahir,
+  ) {
     return BASE_URL +
-        "/admin/pasien?page=${page}&limit=${limit}&name=${name}&nik=${nik}&umur=${umur}&no_rekam_medis=${norme}";
+        "/admin/pasien?page=${page}&limit=${limit}&name=${name}&nik=${nik}&umur=${umur}&no_rekam_medis=${norme}&tahun_lahir=${tahun_lahir}&tgl_lahir=${tgl_lahir}";
   }
 
   static String GET_STATISTIC_TOTAL_PASIEN_URL() {
@@ -26,6 +34,10 @@ class NetworkConstants {
 
   static String GET_PASIEN_BYID_URL(String id) {
     return BASE_URL + "/admin/pasien/${id}";
+  }
+
+  static String POST_ARCHIVE_QUEUE_URL() {
+    return BASE_URL + "/queue/pasien/archived";
   }
 
   static String POST_PASIEN_URL() {
@@ -60,6 +72,10 @@ class NetworkConstants {
 
   static String PUT_ANTRIAN_PASIEN_URL(String id) {
     return BASE_URL + "/queue/pasien/${id}";
+  }
+
+  static String PUT_ANTRIAN_PASIEN_SOCKTER_URL(String id) {
+    return BASE_URL + "/queue/status/${id}";
   }
 
   static String GET_RME_ID_URL(int page, int limit, String start_date,
@@ -281,5 +297,27 @@ class NetworkConstants {
 
   static String PUT_LETTER_HEALT_URL(String id) {
     return BASE_URL + "/apotik/letter/healt/${id}";
+  }
+
+  static String GET_LETTER_RME_URL(
+      int page, int limit, String no_letter, String id) {
+    return BASE_URL +
+        "/doctor/letter/rme/docter/${id}?page=${page}&limit=${limit}&no_letter=${no_letter}";
+  }
+
+  static String POST_LETTER_RME_URL() {
+    return BASE_URL + "/doctor/letter/rme";
+  }
+
+  static String PUT_LETTER_RME_URL(String id) {
+    return BASE_URL + "/doctor/letter/rme/${id}";
+  }
+
+  static String PUT_RESET_PASSWORD_USER_URL(String id) {
+    return BASE_URL + "/owner/user/reset/${id}";
+  }
+
+  static String GET_USER_ID_URL(String id) {
+    return BASE_URL + "/owner/user/${id}";
   }
 }

@@ -69,6 +69,7 @@ class PatientListMobile extends StatelessWidget {
                           AddQueuePatientAction(
                             datas: datas,
                             controller: controller,
+                            namePasien: datas.name,
                           ),
                         );
                       },

@@ -76,6 +76,16 @@ class MenuReportScreen extends StatelessWidget {
                             onTap: () => controller.selectTabReport(2),
                           ),
                         ),
+                        Flexible(
+                          child: TabMedicineWidget(
+                            label: 'Stock Obat',
+                            controller: controller,
+                            index: 3,
+                            indexSelect:
+                                controller.selectedIndexReport.value.obs,
+                            onTap: () => controller.selectTabReport(3),
+                          ),
+                        ),
                         // Obx(() {
                         //   return controller.role.value == "PEMILIK"
                         //       ? Flexible(

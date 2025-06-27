@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:klinik_web_responsif/core/assets/assets.gen.dart';
+import 'package:klinik_web_responsif/core/components/modal/show_modal_tanda_tanya_component.dart';
+import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
 import 'package:klinik_web_responsif/core/resources/enum/role_user_enum.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
@@ -18,6 +20,7 @@ import 'package:klinik_web_responsif/presentations/home/screen/staff/apotik_dash
 import 'package:klinik_web_responsif/presentations/home/screen/staff/queue_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/patient_screen.dart';
 import 'package:klinik_web_responsif/presentations/user/screen/user_manajemen_screen.dart';
+import 'package:klinik_web_responsif/presentations/user/screen/user_setting_screen.dart';
 import 'package:klinik_web_responsif/routes/app_routes.dart';
 
 import '../widget/nav_item.dart';
@@ -39,6 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return [
           const QueueScreen(),
           const PatientScreen(),
+          const UserSettingScreen(),
           // const DataPatientScreen(),
           // const DocterScreen(),
         ];
@@ -47,6 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const QueueScreen(),
           const PatientScreen(),
           const SummeryDoctorScreen(),
+          const UserSettingScreen(),
         ];
       case UserRole.APOTEKER:
         return [
@@ -56,12 +61,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const MenuTransaksiScreen(),
           const MenuReportScreen(),
           const LetterScreen(),
+          const UserSettingScreen(),
         ];
       case UserRole.PEMILIK:
         return [
           const StackholderScreen(),
           const UserManajemenScreen(),
           const MenuReportScreen(),
+          const UserSettingScreen(),
         ];
     }
   }
@@ -113,6 +120,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isActive: _selectedIndex == 1,
                 onTap: () => _onItemTapped(1),
               ),
+              NavItem(
+                iconPath: Assets.icons.pasienIcon.path,
+                isActive: _selectedIndex == 2,
+                onTap: () => _onItemTapped(2),
+              ),
+
               // NavItem(
               //   iconPath: Assets.icons.doctor.path,
               //   isActive: _selectedIndex == 2,
@@ -122,8 +135,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           IconButton(
             onPressed: () async {
-              await SharedPreferencesUtils.deleteAuthToken();
-              Get.offAllNamed(AppRoutes.login);
+              showModalCenter(
+                context,
+                ShowModalTandaTanyaComponent(
+                  label: 'Apakah Anda Yakin Untuk Logout ?',
+                  onTapNo: () {
+                    Get.back();
+                  },
+                  onTapYes: () async {
+                    await SharedPreferencesUtils.deleteAuthToken();
+                    Get.offAllNamed(AppRoutes.login);
+                  },
+                ),
+              );
             },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
@@ -149,6 +173,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isActive: _selectedIndex == 2,
                 onTap: () => _onItemTapped(2),
               ),
+              NavItem(
+                iconPath: Assets.icons.pasienIcon.path,
+                isActive: _selectedIndex == 3,
+                onTap: () => _onItemTapped(3),
+              ),
               // NavItem(
               //   iconPath: Assets.icons.pasien.path,
               //   isActive: _selectedIndex == 1,
@@ -158,9 +187,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           IconButton(
             onPressed: () async {
-              await SharedPreferencesUtils.deleteAuthToken();
-              Get.delete<HomeController>();
-              Get.offAllNamed(AppRoutes.login);
+              showModalCenter(
+                context,
+                ShowModalTandaTanyaComponent(
+                  label: 'Apakah Anda Yakin Untuk Logout ?',
+                  onTapNo: () {
+                    Get.back();
+                  },
+                  onTapYes: () async {
+                    await SharedPreferencesUtils.deleteAuthToken();
+                    Get.delete<HomeController>();
+                    Get.offAllNamed(AppRoutes.login);
+                  },
+                ),
+              );
             },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
@@ -201,6 +241,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isActive: _selectedIndex == 5,
                 onTap: () => _onItemTapped(5),
               ),
+              NavItem(
+                iconPath: Assets.icons.pasienIcon.path,
+                isActive: _selectedIndex == 6,
+                onTap: () => _onItemTapped(6),
+              ),
               // NavItem(
               //   iconPath: Assets.icons.chartPie.path,
               //   isActive: _selectedIndex == 3,
@@ -210,8 +255,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           IconButton(
             onPressed: () async {
-              await SharedPreferencesUtils.deleteAuthToken();
-              Get.offAllNamed(AppRoutes.login);
+              showModalCenter(
+                context,
+                ShowModalTandaTanyaComponent(
+                  label: 'Apakah Anda Yakin Untuk Logout ?',
+                  onTapNo: () {
+                    Get.back();
+                  },
+                  onTapYes: () async {
+                    await SharedPreferencesUtils.deleteAuthToken();
+                    Get.offAllNamed(AppRoutes.login);
+                  },
+                ),
+              );
             },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(
@@ -237,12 +293,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isActive: _selectedIndex == 2,
                 onTap: () => _onItemTapped(2),
               ),
+              NavItem(
+                iconPath: Assets.icons.pasienIcon.path,
+                isActive: _selectedIndex == 3,
+                onTap: () => _onItemTapped(3),
+              ),
             ],
           ),
           IconButton(
             onPressed: () async {
-              await SharedPreferencesUtils.deleteAuthToken();
-              Get.offAllNamed(AppRoutes.login);
+              showModalCenter(
+                  context,
+                  ShowModalTandaTanyaComponent(
+                    label: 'Apakah Anda Yakin Untuk Logout ?',
+                    onTapNo: () {
+                      Get.back();
+                    },
+                    onTapYes: () async {
+                      await SharedPreferencesUtils.deleteAuthToken();
+                      Get.offAllNamed(AppRoutes.login);
+                    },
+                  ));
             },
             icon: SvgPicture.asset(Assets.icons.logOut.path),
           ).paddingOnly(

@@ -63,6 +63,7 @@ class ApotikController extends GetxController {
   Rx<PasienIdTransaction?> dataPasienIdRme = Rx<PasienIdTransaction?>(null);
   Rx<PostTransactionResponse?> createTransaction =
       Rx<PostTransactionResponse?>(null);
+  RxList<Obat> createTransactionList = <Obat>[].obs;
   Rx<PosMedicineResponse?> createMedicine = Rx<PosMedicineResponse?>(null);
 
   //new system apotik
@@ -267,10 +268,12 @@ class ApotikController extends GetxController {
   RxList<ChartDataPie> dailyChartMedineOut = <ChartDataPie>[].obs;
 
   RxList<DetailObat> showDetailSellList = <DetailObat>[].obs;
+  RxList<DetailReportBuy> showDetailReportBuyList = <DetailReportBuy>[].obs;
 
   // Simpan data detail yang diklik
 
-  void showDetail() {
+  void showDetail(List<DetailReportBuy> detailReportBuy) {
+    showDetailReportBuyList.value = detailReportBuy;
     isDetailView.value = true;
   }
 
@@ -670,11 +673,12 @@ class ApotikController extends GetxController {
       }, (response) async {
         inspect(response);
         createTransaction.value = response;
-        nominalController.text = "";
-        selectedPaymentMethod.value = null;
+        createTransactionList.addAll(response.data.obat);
+        // nominalController.text = "";
+        // selectedPaymentMethod.value = null;
         await Future.delayed(Duration(seconds: 3));
         isLoadingPostTransaction.value = false;
-        //Get.back();
+        // Get.back();
         // Get.snackbar(
         //   "Berhasil Menambah Obat",
         //   'Obat berhasil ditambahkan !',

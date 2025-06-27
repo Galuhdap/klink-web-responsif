@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
+import 'package:klinik_web_responsif/services/lib/message_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/del_antrian_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_antrian_pasien_response.dart';
+import 'package:klinik_web_responsif/services/pasien/model/response/get_archive_queue_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_statistic_pasien_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/put_antrian_pasien_response.dart';
 import 'package:klinik_web_responsif/services/pasien/pasien_repository.dart';
@@ -20,9 +22,12 @@ class HomeController extends GetxController {
   RxList<AntrianData> finishedPatients = <AntrianData>[].obs;
   Rx<PutAntrianPasienResponse?> putPasiens =
       Rx<PutAntrianPasienResponse?>(null);
+  Rx<MessageResponse?> messageResponse = Rx<MessageResponse?>(null);
   Rx<DelAntrianResponse?> delAntrian = Rx<DelAntrianResponse?>(null);
   Rx<GetStatisticPasienResponse?> totalPasien =
       Rx<GetStatisticPasienResponse?>(null);
+  Rx<GetArchiveQueueResponse?> archiveQueue =
+      Rx<GetArchiveQueueResponse?>(null);
   RxList<AntrianData> processingPatients = <AntrianData>[].obs;
   RxList<AntrianData> takeMedicinePatients = <AntrianData>[].obs;
   RxList<AntrianData> waitingPatients = <AntrianData>[].obs;
@@ -40,8 +45,11 @@ class HomeController extends GetxController {
   RxBool isLoadingTotal = false.obs;
   RxBool isPutLoading = false.obs;
   RxBool isDelLoading = false.obs;
+  RxBool isLoadingArchiveQueue = false.obs;
+  RxBool isLoadingGetAntrian = false.obs;
   RxString role = ''.obs;
   RxInt numberOfPage = 1.obs;
+  RxInt numberOfPageGetAntrian = 1.obs;
   RxInt numberOfPageFinished = 1.obs;
   RxInt waitingTimeSecondss = 0.obs;
   RxBool queueActive = false.obs;
@@ -63,7 +71,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //connectSocket();
+    connectSocket();
     getStatisticTotalPasien();
     getRole();
     getAntrianPasien();
@@ -81,73 +89,78 @@ class HomeController extends GetxController {
     socket.connect();
 
     socket.onConnect((_) {
-      inspect('Conext');
       connectionStatus.value = 'Terhubung';
       connectionColor.value = Colors.green;
-      print('Connected to socket server');
       getAntrianPasien();
       getAntrianPasienFinished();
     });
 
     socket.onDisconnect((_) {
-      print('Socket disconnected');
       connectionStatus.value = 'Terputus';
       connectionColor.value = Colors.red;
     });
 
     socket.onConnectError((error) {
-      print('Socket connection error: $error');
       connectionStatus.value = 'Gagal Terhubung';
       connectionColor.value = Colors.red;
     });
 
-    socket.on(
-      "queue:status",
-      (data) => {
-        print("Queue status update: ${data}"),
-        queueActive.value = data['active'],
-        antrianPasienList.refresh(),
-        finishedPatients.refresh(),
-      },
-    );
+    socket.on("queue:status", (data) {
+      queueActive.value = data['active'];
+      antrianPasienList.refresh();
+      finishedPatients.refresh();
+    });
 
     socket.on("queue:status-change", (updatedItem) {
-      print("Queue status change ${updatedItem}");
-      final itemIndex =
-          antrianPasienList.indexWhere((item) => item.id == updatedItem['id']);
-      if (itemIndex != -1) {
-        antrianPasienList[itemIndex].status = updatedItem['status'];
-        antrianPasienList.refresh();
-      }
-    });
-
-    socket.on('queue:countdown', (data) {
-      final itemIndex =
-          antrianPasienList.indexWhere((item) => item.id == data['id']);
-      if (itemIndex != -1) {
-        antrianPasienList[itemIndex].waitingTimeSeconds =
-            data['waitingTimeSeconds'];
-        antrianPasienList[itemIndex].waitingTimeFormatted =
-            data['waitingTimeFormatted'];
+      final index =
+          antrianPasienList.indexWhere((e) => e.id == updatedItem['id']);
+      if (index != -1) {
+        antrianPasienList[index].status = updatedItem['status'];
         antrianPasienList.refresh();
       } else {
-        print("Item not found in queue data");
+        getAntrianPasien();
       }
     });
 
-    socket.on('queue:cleared', (_) {
-      print('Queue cleared event received');
-      antrianPasienList.clear();
-    });
+    // socket.on('queue:countdown', (data) {
+    //   final itemIndex =
+    //       antrianPasienList.indexWhere((item) => item.id == data['id']);
+    //   if (itemIndex != -1) {
+    //     antrianPasienList[itemIndex].waitingTimeSeconds =
+    //         data['waitingTimeSeconds'];
+    //     antrianPasienList[itemIndex].waitingTimeFormatted =
+    //         data['waitingTimeFormatted'];
+    //     antrianPasienList.refresh();
+    //   }
+    // });
+
+    socket.on('queue:cleared', (_) => antrianPasienList.clear());
 
     socket.on('queue:new-entry', (newEntry) {
-      print("New queue entry received: ${newEntry}");
       final newAntrian = AntrianData.fromJson(newEntry);
       antrianPasienList.add(newAntrian);
       antrianPasienList.sort((a, b) =>
           int.parse(a.nomerAntrian).compareTo(int.parse(b.nomerAntrian)));
       antrianPasienList.refresh();
     });
+  }
+
+  Future<void> updateStatusQueue(String id, String newStatus) async {
+    isPutLoading.value = true;
+    try {
+      print('Update queue...');
+      await Future.delayed(Duration(seconds: 3));
+      await Dio().patch(
+        'http://localhost:3000/api/v1/queue/status/${id}',
+        data: {"status": newStatus},
+      );
+
+      isPutLoading.value = false;
+      Get.back();
+    } catch (e) {
+      print('Error starting queue: $e');
+      isPutLoading.value = false;
+    }
   }
 
   Future<void> startQueue() async {
@@ -218,7 +231,7 @@ class HomeController extends GetxController {
     String nomer_antrian = '',
     String no_rme = '',
   }) async {
-    isLoading.value = true;
+    isLoadingGetAntrian.value = true;
     try {
       final response = await pasienRepository.getAntrianPasien(
           page: page,
@@ -283,14 +296,14 @@ class HomeController extends GetxController {
               });
 
             antrianPasienList.addAll(sortedData);
-            numberOfPage.value = response.data.pagination.totalPages;
+            numberOfPageGetAntrian.value = response.data.pagination.totalPages;
           }
         },
       );
-      isLoading.value = false;
+      isLoadingGetAntrian.value = false;
     } catch (e) {
       print('e:$e');
-      isLoading.value = false;
+      isLoadingGetAntrian.value = false;
     }
   }
 
@@ -323,6 +336,47 @@ class HomeController extends GetxController {
     } catch (e) {
       print('e:$e');
       isLoadingFinished.value = false;
+    }
+  }
+
+  Future<void> archivedQueue() async {
+    isLoadingArchiveQueue.value = true;
+    try {
+      final response = await pasienRepository.postArchiveQueue();
+
+      response.fold((failure) async {
+        inspect(failure.code);
+        await Future.delayed(Duration(seconds: 3));
+
+        getAntrianPasien();
+        isLoadingArchiveQueue.value = false;
+        Get.back();
+        Get.snackbar(
+          "Gagal Mengarsipkan Antrian",
+          '',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.withOpacity(0.9),
+          colorText: Colors.white,
+          duration: Duration(seconds: 2),
+        );
+      }, (response) async {
+        archiveQueue.value = response;
+        await Future.delayed(Duration(seconds: 3));
+        getAntrianPasien();
+        Get.back();
+        isLoadingArchiveQueue.value = false;
+        Get.snackbar(
+          "Antrian berhasil di hapus dan diarsipkan",
+          '',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.withOpacity(0.9),
+          colorText: Colors.white,
+          duration: Duration(seconds: 2),
+        );
+      });
+    } catch (e) {
+      print('e:$e');
+      isLoadingArchiveQueue.value = false;
     }
   }
 
@@ -372,32 +426,27 @@ class HomeController extends GetxController {
   Future<void> putAntrianPasien(String status, String id) async {
     isPutLoading.value = true;
     try {
-      final response = await pasienRepository.putAntrianPasien(status, id);
-
+      final response =
+          await pasienRepository.putAntrianPasienSocket(status, id);
       response.fold(
         (failures) async {
           inspect(failures);
-          await Future.delayed(Duration(seconds: 3));
-
           isPutLoading.value = false;
           Get.back();
         },
         (response) async {
-          inspect(response.data);
-          putPasiens.value = response;
-          await Future.delayed(Duration(seconds: 3));
-          final itemIndex = antrianPasienList.indexWhere(
-            (item) => item.id == id,
-          );
-          if (itemIndex != -1) {
-            antrianPasienList[itemIndex].status = status;
-            antrianPasienList.refresh();
-          } else {
-            getAntrianPasien();
-          }
+          messageResponse.value = response;
 
+          // final updated = response.data;
+          // final index = antrianPasienList.indexWhere((e) => e.id == id);
+          // if (index != -1) {
+          //   antrianPasienList[index].status = status;
+          //   antrianPasienList.refresh();
+          // } else {
+          //   getAntrianPasien();
+          // }
           isPutLoading.value = false;
-          Get.back();
+          await Future.delayed(Duration(seconds: 3));
           Get.back();
         },
       );

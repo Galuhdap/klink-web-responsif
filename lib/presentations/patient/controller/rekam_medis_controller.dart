@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/di/application_module.dart';
 import 'package:klinik_web_responsif/services/apotik/apotik_repository.dart';
@@ -23,6 +24,8 @@ class RekamMedisController extends GetxController {
   Rx<PostRmeResponse?> createRme = Rx<PostRmeResponse?>(null);
   RxList<DateTime?> selectedDateRange = <DateTime?>[].obs;
   RxList<DatumGroupStockNotEmptyMedicine> medicineGroupStockList =
+      <DatumGroupStockNotEmptyMedicine>[].obs;
+  RxList<DatumGroupStockNotEmptyMedicine> medicineGroupStockZeroList =
       <DatumGroupStockNotEmptyMedicine>[].obs;
 
   final TextEditingController keluhanController = TextEditingController();
@@ -51,7 +54,9 @@ class RekamMedisController extends GetxController {
   RxInt numberOfPage = 1.obs;
   RxString selectedObatId = ''.obs;
   RxBool isLoadingGroupStock = false.obs;
+  RxBool isLoadingGroupStockZero = false.obs;
   RxInt numberOfPageMedicineStock = 0.obs;
+  RxInt numberOfPageMedicineZero = 0.obs;
 
   final keluhanSearch = ''.obs;
   var isDetailView = false.obs;
@@ -101,9 +106,6 @@ class RekamMedisController extends GetxController {
           inspect(response.data.data);
           rmePasientList.addAll(response.data.data);
           numberOfPage.value = response.data.pagination.totalPages;
-          print(start_date);
-          print(end_date);
-          print(id);
         },
       );
       isLoadingRMEId.value = false;
@@ -170,6 +172,7 @@ class RekamMedisController extends GetxController {
           medicineList.clear();
           selectedMedicineListRme.clear();
           keluhanController.clear();
+          stockControllersRme.clear();
           terapiTindakanController.clear();
           dxController.clear();
           idPasienController.clear();
@@ -177,7 +180,16 @@ class RekamMedisController extends GetxController {
           isLoadingCreate.value = false;
           getRmePasien(id: response.data.idPasien);
           isLoadingCreate.value = false;
+
           Get.back();
+          Get.snackbar(
+            "Berhasil Mencatat Rekam Medis Pasien",
+            "",
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: AppColors.colorBaseSuccess,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
         },
       );
     } catch (e) {
@@ -223,7 +235,7 @@ class RekamMedisController extends GetxController {
     int limit = 5,
     String name_medicine = '',
   }) async {
-    isLoadingGroupStock.value = true;
+    isLoadingGroupStockZero.value = true;
     try {
       final response = await rmeRepository.getGroupStockMedicineZero(
           page: page, limit: limit, name_medicine: name_medicine);
@@ -233,15 +245,15 @@ class RekamMedisController extends GetxController {
           inspect(failure.code);
         },
         (response) async {
-          medicineGroupStockList.clear();
-          medicineGroupStockList.addAll(response.data.data);
-          numberOfPageMedicineStock.value = response.data.pagination.totalPages;
+          medicineGroupStockZeroList.clear();
+          medicineGroupStockZeroList.addAll(response.data.data);
+          numberOfPageMedicineZero.value = response.data.pagination.totalPages;
         },
       );
-      isLoadingGroupStock.value = false;
+      isLoadingGroupStockZero.value = false;
     } catch (e) {
       print('e:$e');
-      isLoadingGroupStock.value = false;
+      isLoadingGroupStockZero.value = false;
     }
   }
 
@@ -250,7 +262,7 @@ class RekamMedisController extends GetxController {
         selectedMedicineListRme.any((med) => med.id == medicineId);
     if (!isAlreadySelected) {
       final selected =
-          medicineGroupStockList.firstWhere((med) => med.id == medicineId);
+          medicineGroupStockZeroList.firstWhere((med) => med.id == medicineId);
       selectedMedicineListRme.add(selected);
 
       final stockController = TextEditingController(text: '1');

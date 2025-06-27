@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:klinik_web_responsif/core/assets/assets.gen.dart';
+import 'package:klinik_web_responsif/core/components/button_print_component.dart';
 import 'package:klinik_web_responsif/core/components/card_dashboard_component.dart';
 import 'package:klinik_web_responsif/core/components/custom_tabel_component.dart';
 import 'package:klinik_web_responsif/core/components/label_status_antrian_component.dart';
 import 'package:klinik_web_responsif/core/components/list_mobile_component.dart';
+import 'package:klinik_web_responsif/core/components/modal/show_modal_tanda_tanya_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
+import 'package:klinik_web_responsif/core/components/show_center_dialog.dart';
 import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
@@ -16,6 +20,7 @@ import 'package:klinik_web_responsif/presentations/home/screen/mobile/queue_list
 import 'package:klinik_web_responsif/presentations/home/screen/tabel/list_queue_tabel.dart';
 import 'package:klinik_web_responsif/presentations/menu_dashboard/widget/build_app_bar.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
+import 'package:lottie/lottie.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 class QueueScreen extends StatelessWidget {
@@ -189,6 +194,47 @@ class QueueScreen extends StatelessWidget {
                             children: [
                               CustomTabelComponent(
                                 label: AppConstants.LABEL_DAFTAR_ANTRIAN,
+                                customContentButton: controller.role.value ==
+                                        "ADMIN"
+                                    ? ButtonPrintComponent(
+                                        backgroundColor:
+                                            AppColors.colorPendingText,
+                                        label: 'Arsipkan Antrian',
+                                        icon: Icons.archive_rounded,
+                                        onTap: () async {
+                                          showModalCenter(
+                                            context,
+                                            Obx(
+                                              () {
+                                                return controller
+                                                        .isLoadingArchiveQueue
+                                                        .value
+                                                    ? Center(
+                                                        child: SizedBox(
+                                                          width: 400,
+                                                          height: 400,
+                                                          child: Lottie.asset(
+                                                              Assets.lottie
+                                                                  .hospital),
+                                                        ),
+                                                      )
+                                                    : ShowModalTandaTanyaComponent(
+                                                        label:
+                                                            'Antrian yang berstatus pending dan dibatalkan akan tersimpan ke Arsip Antrian, kemudian Antarian akan dihapus semua, Apakah anda yakin untuk melanjutkan ?',
+                                                        onTapNo: () {
+                                                          Get.back();
+                                                        },
+                                                        onTapYes: () async {
+                                                          controller
+                                                              .archivedQueue();
+                                                        },
+                                                      );
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : Container(),
                                 sizeRowTabel:
                                     MediaQuery.of(context).size.width / 1.1,
                                 sizeWidth:
@@ -214,7 +260,8 @@ class QueueScreen extends StatelessWidget {
                                               child: Obx(() {
                                                 return NumberPaginator(
                                                   numberPages: controller
-                                                      .numberOfPage.value,
+                                                      .numberOfPageGetAntrian
+                                                      .value,
                                                   onPageChange: (int index) {
                                                     final page = index + 1;
                                                     controller.getAntrianPasien(
@@ -296,7 +343,7 @@ class QueueScreen extends StatelessWidget {
                                             for (var part in parts) {
                                               if (part
                                                   .toUpperCase()
-                                                  .startsWith('RM-')) {
+                                                  .startsWith('0')) {
                                                 noRme = part;
                                               } else if (int.tryParse(part) !=
                                                   null) {

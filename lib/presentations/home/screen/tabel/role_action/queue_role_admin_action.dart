@@ -48,7 +48,11 @@ class QueueRoleAdminAction extends StatelessWidget {
                                 },
                                 onTapYes: () {
                                   controller.putAntrianPasien(
-                                      "PROCESSING", row.id);
+                                    "PROCESSING",
+                                    row.id,
+                                  );
+                                  // controller.putAntrianPasien(
+                                  //     "PROCESSING", row.id);
                                 },
                               );
                       },
@@ -80,7 +84,11 @@ class QueueRoleAdminAction extends StatelessWidget {
                             Get.back();
                           },
                           onTapYes: () {
-                            controller.putAntrianPasien("PENDING", row.id);
+                            controller.putAntrianPasien(
+                              "PENDING",
+                              row.id,
+                            );
+                            //controller.putAntrianPasien("PENDING", row.id);
                           },
                         );
                 },
@@ -112,7 +120,11 @@ class QueueRoleAdminAction extends StatelessWidget {
                             Get.back();
                           },
                           onTapYes: () {
-                            controller.putAntrianPasien("CANCEL", row.id);
+                            controller.putAntrianPasien(
+                              "CANCEL",
+                              row.id,
+                            );
+                            // controller.putAntrianPasien("CANCEL", row.id);
                           },
                         );
                 },

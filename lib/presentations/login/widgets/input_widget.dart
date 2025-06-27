@@ -50,6 +50,7 @@ class InputWidget extends StatelessWidget {
         // ),
         // AppSizes.s10.height,
         CustomTextField(
+          
           maxLines: maxLines,
           hintText: hintText,
           controller: controller,

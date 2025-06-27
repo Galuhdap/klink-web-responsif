@@ -2,6 +2,7 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:klinik_web_responsif/core/components/button_print_component.dart';
 import 'package:klinik_web_responsif/core/components/custom_tabel_component.dart';
 import 'package:klinik_web_responsif/core/components/search_new_component.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
@@ -11,6 +12,7 @@ import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/report/pdf_preview/pdf_priview_report_buy.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_report_buy_tabel.dart';
 import 'package:klinik_web_responsif/presentations/report/controller/report_controller.dart';
 import 'package:number_paginator/number_paginator.dart';
@@ -30,65 +32,20 @@ class ReportBuyValidasi extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // if (owner == true) ...[
-        //   GraphicWidget(
-        //       label: 'Penjualan, HPP & Laba Harian',
-        //       content: Obx(() {
-        //         return controllerReport.dailyTrendChartList.isEmpty
-        //             ? Center(
-        //                 child: Text('Data Kosong'),
-        //               )
-        //             : SfCartesianChart(
-        //                 tooltipBehavior: controller.tooltipBehavior,
-        //                 primaryXAxis: DateTimeAxis(
-        //                   interval: 1,
-        //                   majorGridLines: MajorGridLines(
-        //                       width: 0, color: Colors.transparent),
-        //                   axisLine: AxisLine(color: Colors.transparent),
-        //                   labelStyle: Get.textTheme.labelMedium,
-        //                   intervalType: DateTimeIntervalType.days,
-        //                   dateFormat: DateFormat('d MMM'), // butuh import intl
-        //                   majorTickLines: MajorTickLines(width: 0, size: 10),
-        //                 ),
-        //                 primaryYAxis: NumericAxis(
-        //                   majorGridLines: MajorGridLines(
-        //                       width: AppSizes.s1, color: Color(0xfffE5E5EF)),
-        //                   axisLine: AxisLine(
-        //                       width: AppSizes.s0, color: Colors.transparent),
-        //                   isVisible: true,
-        //                   majorTickLines:
-        //                       MajorTickLines(width: AppSizes.s0, size: 5),
-        //                 ),
-        //                 series: <LineSeries<DailyReportChart, DateTime>>[
-        //                   LineSeries<DailyReportChart, DateTime>(
-        //                     // Bind data source
-        //                     name: 'Pembelian',
-        //                     dataSource: controller.dailyChartDataBuy,
-        //                     xValueMapper: (DailyReportChart sales, _) =>
-        //                         sales.time,
-        //                     yValueMapper: (DailyReportChart sales, _) =>
-        //                         sales.y,
-        //                     markerSettings: MarkerSettings(
-        //                       isVisible: true, // Aktifkan titik (dot)
-        //                       shape: DataMarkerType
-        //                           .circle, // Bentuk dot (bisa square, diamond, dll)
-        //                       width: 10, // Ukuran dot
-        //                       height: 10,
-        //                       borderColor: AppColors.colorBaseSuccess,
-        //                       borderWidth: 2,
-        //                     ),
-        //                   ),
-        //                 ],
-        //               );
-        //       })),
-        //   AppSizes.s20.height,
-        // ],
         CustomTabelComponent(
           label: 'Laporan Pembelian',
           sizeRowTabel: MediaQuery.of(context).size.width / 1.1,
           sizeWidth: MediaQuery.of(context).size.width / 1,
           border: TableBorder.all(
             color: AppColors.colorBaseSecondary.withAlpha(50),
+          ),
+          customContentButton: ButtonPrintComponent(
+            backgroundColor: AppColors.colorPendingText,
+            label: 'Cetak Pdf',
+            icon: Icons.picture_as_pdf_rounded,
+            onTap: () {
+              Get.to(PdfPriviewReportBuy());
+            },
           ),
           customContentPagination:
               controller.numberOfPageReportPurchase.value == 0

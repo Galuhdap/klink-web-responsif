@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:klinik_web_responsif/core/styles/app_colors.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
+
+
+class MenuPrinterContent extends StatelessWidget {
+  final BluetoothInfo data;
+  final bool isSelected;
+  const MenuPrinterContent({
+    Key? key,
+    required this.data,
+    required this.isSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+      decoration: BoxDecoration(
+        border: Border.all(
+            width: isSelected ? 4.0 : 1.0,
+            color: isSelected ? AppColors.colorBaseSuccess : AppColors.colorPrimary900),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Name : ${data.name}',
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            'macAddress: ${data.macAdress}',
+            style: const TextStyle(
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

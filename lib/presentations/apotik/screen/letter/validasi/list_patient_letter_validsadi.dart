@@ -7,7 +7,10 @@ import 'package:klinik_web_responsif/core/config/responsive.dart';
 import 'package:klinik_web_responsif/core/resources/constans/app_constants.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/docter/controller/docter_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/patient_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
@@ -22,12 +25,18 @@ class ListPastientLatterValidation extends StatelessWidget {
     required this.controllerHome,
     required this.contollerApotik,
     required this.controllerRme,
+    required this.onPressed,
+    this.controllerDocter,
+    this.isMakeDokter,
   });
 
   final PatientController controllerPatient;
   final HomeController controllerHome;
   final RekamMedisController controllerRme;
   final ApotikController contollerApotik;
+  final DocterController? controllerDocter;
+  final bool? isMakeDokter;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +49,7 @@ class ListPastientLatterValidation extends StatelessWidget {
                 ? CustomTabelComponent(
                     label: AppConstants.LABEL_DATA_PASIEN,
                     arrowBack: IconButton(
-                      onPressed: () {
-                        contollerApotik.backToLetter();
-                      },
+                      onPressed: onPressed,
                       icon: Icon(
                         Icons.arrow_back,
                         color: AppColors.colorBaseWhite,
@@ -169,12 +176,208 @@ class ListPastientLatterValidation extends StatelessWidget {
                                     norme;
 
                                 controllerPatient.getPasien(
-                                  name: name.isNotEmpty ? name : '',
-                                  nik: nik.isNotEmpty ? nik : '',
-                                  umur: umur.isNotEmpty ? umur : '',
-                                  norme: norme.isNotEmpty ? norme : '',
-                                );
+                                    name: controllerPatient
+                                        .namesearchController.text,
+                                    nik: nik.isNotEmpty ? nik : '',
+                                    umur: umur.isNotEmpty ? umur : '',
+                                    norme: norme.isNotEmpty ? norme : '',
+                                    tahun_lahir:
+                                        controllerPatient.selectedYear.value,
+                                    tgl_lahir: controllerPatient
+                                        .selectedDateString.value);
                               },
+                            ),
+                          ),
+                          AppSizes.s10.width,
+                          InkWell(
+                            onTap: () async {
+                              controllerPatient.selectedYear.value = '';
+
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100),
+                                initialDatePickerMode: DatePickerMode
+                                    .day, // Buka langsung di Year Picker
+                              );
+
+                              if (picked != null) {
+                                controllerPatient.selectedDateString.value =
+                                    picked.toString();
+                                await controllerPatient.getPasien(
+                                    //page: page,
+                                    name: controllerPatient
+                                        .namesearchController.text,
+                                    nik: controllerPatient
+                                        .niksearchController.text,
+                                    umur: controllerPatient
+                                        .umursearchController.text,
+                                    norme: controllerPatient
+                                        .normeearchController.text,
+                                    tgl_lahir: controllerPatient
+                                        .selectedDateString.value);
+                              }
+                            },
+                            child: Container(
+                              // width: 250,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(AppSizes.s4),
+                                border: Border.all(color: Color(0xfffF0F0F0)),
+                                color: AppColors.colorBaseWhite,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(0, 0),
+                                    blurRadius: 15,
+                                    spreadRadius: 0,
+                                    color: AppColors.colorNeutrals300
+                                        .withAlpha(40),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                spacing: 20,
+                                children: [
+                                  AppSizes.s10.width,
+                                  Icon(Icons.calendar_month_rounded),
+                                  Text(
+                                    controllerPatient
+                                                .selectedDateString.value !=
+                                            ''
+                                        ? '${DateTime.parse(controllerPatient.selectedDateString.value).toDateddmmmyyyyFormattedString()}'
+                                        : 'Pilih Berdarakan Tanggal Lahir',
+                                    style: Get.textTheme.labelMedium!.copyWith(
+                                      fontSize: AppSizes.s14,
+                                      fontWeight: FontWeight.w100,
+                                      color: AppColors.colorBaseBlack,
+                                    ),
+                                  ),
+                                  AppSizes.s10.width,
+                                  controllerPatient.selectedDateString.value !=
+                                          ''
+                                      ? IconButton(
+                                          onPressed: () async {
+                                            controllerPatient
+                                                .selectedYear.value = '';
+                                            controllerPatient
+                                                .selectedDateString.value = '';
+                                            await controllerPatient.getPasien(
+                                                //page: page,
+                                                tahun_lahir: '',
+                                                tgl_lahir: '');
+                                          },
+                                          icon: Icon(
+                                            Icons.delete,
+                                          ))
+                                      : Container(),
+                                ],
+                              ),
+                            ),
+                          ),
+                          AppSizes.s10.width,
+                          InkWell(
+                            onTap: () async {
+                              controllerPatient.selectedDateString.value = '';
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Pilih Tahun Lahir'),
+                                    content: SizedBox(
+                                      width: 300,
+                                      height: 300,
+                                      child: YearPicker(
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2050),
+                                        selectedDate: DateTime.now(),
+                                        onChanged: (DateTime newYear) async {
+                                          controllerPatient.selectedYear.value =
+                                              newYear.year.toString();
+                                          await controllerPatient.getPasien(
+                                              //page: page,
+                                              name: controllerPatient
+                                                  .namesearchController.text,
+                                              nik: controllerPatient
+                                                  .niksearchController.text,
+                                              umur: controllerPatient
+                                                  .umursearchController.text,
+                                              norme: controllerPatient
+                                                  .normeearchController.text,
+                                              tahun_lahir: controllerPatient
+                                                  .selectedYear.value);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(AppSizes.s4),
+                                border: Border.all(color: Color(0xfffF0F0F0)),
+                                color: AppColors.colorBaseWhite,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(0, 0),
+                                    blurRadius: 15,
+                                    spreadRadius: 0,
+                                    color: AppColors.colorNeutrals300
+                                        .withAlpha(40),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                spacing: 20,
+                                children: [
+                                  AppSizes.s10.width,
+                                  Icon(Icons.calendar_month_rounded),
+                                  Text(
+                                    controllerPatient.selectedYear.value != ''
+                                        ? '${controllerPatient.selectedYear.value}'
+                                        : 'Pilih Berdasarkan Tahun Lahir',
+                                    style: Get.textTheme.labelMedium!.copyWith(
+                                      fontSize: AppSizes.s14,
+                                      fontWeight: FontWeight.w100,
+                                      color: AppColors.colorBaseBlack,
+                                    ),
+                                  ),
+                                  AppSizes.s10.width,
+                                  Obx(() {
+                                    return controllerPatient
+                                                .selectedYear.value !=
+                                            ''
+                                        ? IconButton(
+                                            onPressed: () async {
+                                              controllerPatient
+                                                  .selectedYear.value = '';
+                                              await controllerPatient.getPasien(
+                                                  name: controllerPatient
+                                                      .namesearchController
+                                                      .text,
+                                                  nik: controllerPatient
+                                                      .niksearchController.text,
+                                                  umur: controllerPatient
+                                                      .umursearchController
+                                                      .text,
+                                                  norme: controllerPatient
+                                                      .normeearchController
+                                                      .text,
+                                                  tahun_lahir: '',
+                                                  tgl_lahir: '');
+                                            },
+                                            icon: Icon(
+                                              Icons.delete,
+                                            ))
+                                        : Container();
+                                  })
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -182,14 +385,15 @@ class ListPastientLatterValidation extends StatelessWidget {
                     ),
                     listColumns: getListPatientColumns(),
                     listRows: getRowsPatient(
-                      context: context,
-                      controller: controllerPatient,
-                      apotikController: contollerApotik,
-                      homeController: controllerHome,
-                      rmeController: controllerRme,
-                      data: controllerPatient.pasienList,
-                      isLoading: controllerPatient.isLoading.value,
-                    ),
+                        context: context,
+                        controller: controllerPatient,
+                        apotikController: contollerApotik,
+                        homeController: controllerHome,
+                        rmeController: controllerRme,
+                        docterController: controllerDocter,
+                        data: controllerPatient.pasienList,
+                        isLoading: controllerPatient.isLoading.value,
+                        isMakeDokter: isMakeDokter),
                   )
                 : RefreshIndicator(
                     onRefresh: () async {

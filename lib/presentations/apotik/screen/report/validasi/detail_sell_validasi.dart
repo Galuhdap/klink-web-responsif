@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:klinik_web_responsif/core/components/button_print_component.dart';
 import 'package:klinik_web_responsif/core/components/custom_tabel_component.dart';
 import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/apotik/screen/report/pdf_preview/pdf_priview_report_detail_sale.dart';
 import 'package:klinik_web_responsif/presentations/apotik/screen/tabel/list_detail_report_sell_tabel.dart';
 
 class DetailSellValidasi extends StatelessWidget {
@@ -17,6 +19,14 @@ class DetailSellValidasi extends StatelessWidget {
       child: ListView(
         children: [
           CustomTabelComponent(
+            customContentButton: ButtonPrintComponent(
+              backgroundColor: AppColors.colorPendingText,
+              label: 'Cetak Pdf',
+              icon: Icons.picture_as_pdf_rounded,
+              onTap: () {
+                Get.to(PdfPriviewReportDetailSale());
+              },
+            ),
             arrowBack: IconButton(
               onPressed: () {
                 controller.backToListSell();

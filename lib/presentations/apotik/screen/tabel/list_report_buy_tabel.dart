@@ -150,11 +150,11 @@ List<DataRow> getRowsMedicineReportBuy({
               onTap: () {
                 controller.noPurchaseReport.value = row.no;
                 controller.noBuyDetailPurchaseReport.value = row.noPembelian;
-                controller.dateBuyDetailPurchaseReport.value = row.tanggalPembelian.toDateddmmmyyyyFormattedString();
+                controller.dateBuyDetailPurchaseReport.value =
+                    row.tanggalPembelian.toDateddmmmyyyyFormattedString();
                 controller.supplierBuyDetailPurchaseReport.value = row.supplier;
                 controller.petugasBuyDetailPurchaseReport.value = row.userInput;
-                controller.showDetail();
-                
+                controller.showDetail(row.detail);
               },
               child: Container(
                 width: 100,

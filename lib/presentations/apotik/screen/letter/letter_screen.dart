@@ -109,7 +109,11 @@ class LetterScreen extends StatelessWidget {
                                 controllerPatient: controllerPatient,
                                 controllerHome: controllerHome,
                                 contollerApotik: controller,
-                                controllerRme: controllerRme)
+                                controllerRme: controllerRme,
+                                onPressed: () {
+                                  controller.backToLetter();
+                                },
+                              )
                             : controller.selectedIndexMail.value == 0
                                 ? controller.isAddMailSickView.value
                                     ? AddLetterSickValidation(

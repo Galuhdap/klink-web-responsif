@@ -266,10 +266,7 @@ class ElectronicMedicalRecordScreen extends StatelessWidget {
                                               selectedDates;
                                           final dateFormat =
                                               DateFormat('yyyy-MM-dd');
-                                          print(dateFormat.format(controller
-                                              .selectedDateRange[0]!));
-                                          print(dateFormat.format(controller
-                                              .selectedDateRange[1]!));
+                                         
                                           await controller.getRmePasien(
                                               keluhan: controller
                                                   .keluhanSearch.value,

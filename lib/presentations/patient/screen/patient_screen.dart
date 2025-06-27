@@ -46,9 +46,7 @@ class PatientScreen extends StatelessWidget {
                 searchController: TextEditingController(),
                 searchHint: 'Cari Pasien',
                 searchChanged: (_) {},
-                isMake: homeController.role.value == "DOKTER" 
-                    ? false
-                    : true,
+                isMake: homeController.role.value == "DOKTER" ? false : true,
                 onTapButton: () {
                   showModalCenter(
                     context,
@@ -324,7 +322,7 @@ class PatientScreen extends StatelessWidget {
               () {
                 return ListView(
                   children: [
-                  Responsive.isDesktop(context)
+                    Responsive.isDesktop(context)
                         ? CustomTabelComponent(
                             label: AppConstants.LABEL_DATA_PASIEN,
                             sizeRowTabel:
@@ -358,19 +356,22 @@ class PatientScreen extends StatelessWidget {
                                                 final page = index + 1;
 
                                                 await controller.getPasien(
-                                                  page: page,
-                                                  name: controller
-                                                      .namesearchController
-                                                      .text,
-                                                  nik: controller
-                                                      .niksearchController.text,
-                                                  umur: controller
-                                                      .umursearchController
-                                                      .text,
-                                                  norme: controller
-                                                      .normeearchController
-                                                      .text,
-                                                );
+                                                    page: page,
+                                                    name: controller
+                                                        .namesearchController
+                                                        .text,
+                                                    nik: controller
+                                                        .niksearchController
+                                                        .text,
+                                                    umur: controller
+                                                        .umursearchController
+                                                        .text,
+                                                    norme: controller
+                                                        .normeearchController
+                                                        .text,
+                                                    tahun_lahir: controller
+                                                        .selectedYear.value
+                                                        .toString());
                                               },
                                               child: const SizedBox(
                                                 height: 48,
@@ -457,12 +458,221 @@ class PatientScreen extends StatelessWidget {
                                             norme;
 
                                         controller.getPasien(
-                                          name: name.isNotEmpty ? name : '',
-                                          nik: nik.isNotEmpty ? nik : '',
-                                          umur: umur.isNotEmpty ? umur : '',
-                                          norme: norme.isNotEmpty ? norme : '',
-                                        );
+                                            name: name.isNotEmpty ? name : '',
+                                            nik: nik.isNotEmpty ? nik : '',
+                                            umur: umur.isNotEmpty ? umur : '',
+                                            norme:
+                                                norme.isNotEmpty ? norme : '',
+                                            tahun_lahir: controller
+                                                .selectedYear.value
+                                                .toString());
                                       },
+                                    ),
+                                  ),
+                                  AppSizes.s10.width,
+                                  InkWell(
+                                    onTap: () async {
+                                      controller.selectedYear.value = '';
+
+                                      final DateTime? picked =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2100),
+                                        initialDatePickerMode: DatePickerMode
+                                            .day, // Buka langsung di Year Picker
+                                      );
+
+                                      if (picked != null) {
+                                        controller.selectedDateString.value =
+                                            picked.toString();
+                                        await controller.getPasien(
+                                            //page: page,
+                                            name: controller
+                                                .namesearchController.text,
+                                            nik: controller
+                                                .niksearchController.text,
+                                            umur: controller
+                                                .umursearchController.text,
+                                            norme: controller
+                                                .normeearchController.text,
+                                            tgl_lahir: controller
+                                                .selectedDateString.value);
+                                      }
+                                    },
+                                    child: Container(
+                                      // width: 250,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(AppSizes.s4),
+                                        border: Border.all(
+                                            color: Color(0xfffF0F0F0)),
+                                        color: AppColors.colorBaseWhite,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            offset: const Offset(0, 0),
+                                            blurRadius: 15,
+                                            spreadRadius: 0,
+                                            color: AppColors.colorNeutrals300
+                                                .withAlpha(40),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        spacing: 20,
+                                        children: [
+                                          AppSizes.s10.width,
+                                          Icon(Icons.calendar_month_rounded),
+                                          Text(
+                                            controller.selectedDateString
+                                                        .value !=
+                                                    ''
+                                                ? '${DateTime.parse(controller.selectedDateString.value).toDateddmmmyyyyFormattedString()}'
+                                                : 'Pilih Berdarakan Tanggal Lahir',
+                                            style: Get.textTheme.labelMedium!
+                                                .copyWith(
+                                              fontSize: AppSizes.s14,
+                                              fontWeight: FontWeight.w100,
+                                              color: AppColors.colorBaseBlack,
+                                            ),
+                                          ),
+                                          AppSizes.s10.width,
+                                          controller.selectedDateString.value !=
+                                                  ''
+                                              ? IconButton(
+                                                  onPressed: () async {
+                                                    controller.selectedYear
+                                                        .value = '';
+                                                    controller
+                                                        .selectedDateString
+                                                        .value = '';
+                                                    await controller.getPasien(
+                                                        //page: page,
+                                                        tahun_lahir: '',
+                                                        tgl_lahir: '');
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                  ))
+                                              : Container(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  AppSizes.s10.width,
+                                  InkWell(
+                                    onTap: () async {
+                                      controller.selectedDateString.value = '';
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text('Pilih Tahun Lahir'),
+                                            content: SizedBox(
+                                              width: 300,
+                                              height: 300,
+                                              child: YearPicker(
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime(2050),
+                                                selectedDate: DateTime.now(),
+                                                onChanged:
+                                                    (DateTime newYear) async {
+                                                  controller
+                                                          .selectedYear.value =
+                                                      newYear.year.toString();
+                                                  await controller.getPasien(
+                                                      //page: page,
+                                                      name: controller
+                                                          .namesearchController
+                                                          .text,
+                                                      nik: controller
+                                                          .niksearchController
+                                                          .text,
+                                                      umur: controller
+                                                          .umursearchController
+                                                          .text,
+                                                      norme: controller
+                                                          .normeearchController
+                                                          .text,
+                                                      tahun_lahir: controller
+                                                          .selectedYear.value);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(AppSizes.s4),
+                                        border: Border.all(
+                                            color: Color(0xfffF0F0F0)),
+                                        color: AppColors.colorBaseWhite,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            offset: const Offset(0, 0),
+                                            blurRadius: 15,
+                                            spreadRadius: 0,
+                                            color: AppColors.colorNeutrals300
+                                                .withAlpha(40),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        spacing: 20,
+                                        children: [
+                                          AppSizes.s10.width,
+                                          Icon(Icons.calendar_month_rounded),
+                                          Text(
+                                            controller.selectedYear.value != ''
+                                                ? '${controller.selectedYear.value}'
+                                                : 'Pilih Berdasarkan Tahun Lahir',
+                                            style: Get.textTheme.labelMedium!
+                                                .copyWith(
+                                              fontSize: AppSizes.s14,
+                                              fontWeight: FontWeight.w100,
+                                              color: AppColors.colorBaseBlack,
+                                            ),
+                                          ),
+                                          AppSizes.s10.width,
+                                          Obx(() {
+                                            return controller
+                                                        .selectedYear.value !=
+                                                    ''
+                                                ? IconButton(
+                                                    onPressed: () async {
+                                                      controller.selectedYear
+                                                          .value = '';
+                                                      await controller.getPasien(
+                                                          name: controller
+                                                              .namesearchController
+                                                              .text,
+                                                          nik: controller
+                                                              .niksearchController
+                                                              .text,
+                                                          umur: controller
+                                                              .umursearchController
+                                                              .text,
+                                                          norme: controller
+                                                              .normeearchController
+                                                              .text,
+                                                          tahun_lahir: '',
+                                                          tgl_lahir: '');
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.delete,
+                                                    ))
+                                                : Container();
+                                          })
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

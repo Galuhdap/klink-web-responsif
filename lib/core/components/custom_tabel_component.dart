@@ -96,7 +96,7 @@ class CustomTabelComponent extends StatelessWidget {
                     ]
                   ],
                 ),
-                if (customContentButton != null) ...[customContentButton!]
+              if (customContentButton != null) ...[customContentButton!]
               ],
             ),
           ),

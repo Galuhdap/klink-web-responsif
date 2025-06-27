@@ -11,6 +11,7 @@ import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/int_ext.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/sized_box_ext.dart';
+import 'package:klinik_web_responsif/core/utils/extensions/string_casing_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
 import 'package:klinik_web_responsif/presentations/apotik/widget/succes_payment_widget.dart';
 import 'package:klinik_web_responsif/services/apotik/model/request/post_transaction_request.dart';
@@ -409,11 +410,14 @@ class CompleteTransactionScreen extends StatelessWidget {
                                                       )
                                                     : Obx(() {
                                                         return SuccesPaymentWidget(
+                                                          datas: controller
+                                                              .createTransactionList,
                                                           paymentMethod: controller
                                                               .createTransaction
                                                               .value!
                                                               .data
-                                                              .paymentMethod,
+                                                              .paymentMethod
+                                                              .toTitleCase(),
                                                           invoice: controller
                                                               .createTransaction
                                                               .value!
@@ -438,6 +442,18 @@ class CompleteTransactionScreen extends StatelessWidget {
                                                               .data
                                                               .createdAt
                                                               .toDateddmmmyyyyFormattedString(),
+                                                          onPressed: () {
+                                                            () {
+                                                              controller
+                                                                  .nominalController
+                                                                  .text = "";
+                                                              controller
+                                                                  .selectedPaymentMethod
+                                                                  .value = null;
+                                                              Get.back();
+                                                              Get.back();
+                                                            };
+                                                          },
                                                           // paymentMethod: controllerApotik.createTransaction.value!.data.paymentMethod ,
                                                           // invoice: controllerApotik.createTransaction.value!.data.invoce,
                                                           // totalTagihan: controllerApotik.createTransaction.value!.data.nominalPayment.currencyFormatRp,

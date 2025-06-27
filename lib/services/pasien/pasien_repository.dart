@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
+import 'package:klinik_web_responsif/services/lib/message_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/request/post_pasient_request.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/del_antrian_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_antrian_pasien_response.dart';
+import 'package:klinik_web_responsif/services/pasien/model/response/get_archive_queue_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_pasien_by_id_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_pasien_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_statistic_pasien_response.dart';
@@ -22,6 +24,8 @@ class PasienRepository {
     required String nik,
     required String umur,
     required String norme,
+    required String tahun_lahir,
+    required String tgl_lahir,
   }) async {
     return source.getPasien(
       page: page,
@@ -30,6 +34,8 @@ class PasienRepository {
       nik: nik,
       umur: umur,
       norme: norme,
+      tahun_lahir: tahun_lahir,
+      tgl_lahir:tgl_lahir
     );
   }
 
@@ -41,6 +47,10 @@ class PasienRepository {
   Future<Either<Failure, GetPasienByIdResponse>> getPasienById(
       String id) async {
     return source.getPasienById(id);
+  }
+
+  Future<Either<Failure, GetArchiveQueueResponse>> postArchiveQueue() async {
+    return source.postArchiveQueue();
   }
 
   Future<Either<Failures, PostPasienResponse>> postPasien(
@@ -104,5 +114,10 @@ class PasienRepository {
   Future<Either<Failures, PutAntrianPasienResponse>> putAntrianPasien(
       String status, String id) async {
     return source.putAntrianPasien(status, id);
+  }
+
+  Future<Either<Failures, MessageResponse>> putAntrianPasienSocket(
+      String status, String id) async {
+    return source.putAntrianPasienSocket(status, id);
   }
 }

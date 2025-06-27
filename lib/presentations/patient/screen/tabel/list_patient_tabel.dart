@@ -6,10 +6,10 @@ import 'package:klinik_web_responsif/core/styles/app_colors.dart';
 import 'package:klinik_web_responsif/core/styles/app_sizes.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/date_ext.dart';
 import 'package:klinik_web_responsif/presentations/apotik/controller/apotik_controller.dart';
+import 'package:klinik_web_responsif/presentations/docter/controller/docter_controller.dart';
 import 'package:klinik_web_responsif/presentations/home/controllers/home_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/patient_controller.dart';
 import 'package:klinik_web_responsif/presentations/patient/controller/rekam_medis_controller.dart';
-import 'package:klinik_web_responsif/presentations/patient/screen/electronic_medical_record_screen.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/tabel/action/add_queue_patient_action.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/tabel/action/edit_patient_action.dart';
 import 'package:klinik_web_responsif/presentations/patient/screen/tabel/action/mobile/card_clinic_patient_action_mobile.dart';
@@ -50,7 +50,7 @@ List<DataColumn> getListPatientColumns() {
     DataColumn(
       headingRowAlignment: MainAxisAlignment.center,
       label: Text(
-        AppConstants.LABEL_UMUR,
+        'ALAMAT',
         style: Get.textTheme.labelLarge!.copyWith(
           fontSize: AppSizes.s14,
           color: AppColors.colorBaseBlack,
@@ -94,9 +94,11 @@ List<DataRow> getRowsPatient({
   required HomeController homeController,
   required RekamMedisController rmeController,
   ApotikController? apotikController,
+  DocterController? docterController,
   required BuildContext context,
   required List<ListPasien> data,
   required bool isLoading,
+  bool? isMakeDokter,
 }) {
   if (isLoading) {
     return [
@@ -157,7 +159,7 @@ List<DataRow> getRowsPatient({
         DataCell(Container(
           width: 120,
           child: Text(
-            row.name,
+            row.name.toUpperCase(),
             style: const TextStyle(fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -169,15 +171,22 @@ List<DataRow> getRowsPatient({
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         )),
-        DataCell(Center(
-          child: Text(
-            row.umur,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+        DataCell(Container(
+          width: 120,
+          child: Center(
+            child: Text(
+              row.alamat.toUpperCase(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
         )),
-        DataCell(Text(
-          row.jenisKelamin,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        DataCell(Center(
+          child: Text(
+            row.jenisKelamin,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         )),
         DataCell(Center(
           child: Text(
@@ -248,21 +257,37 @@ List<DataRow> getRowsPatient({
                           vertical: 10,
                           horizontal: 10,
                         ),
-                        PatientActionWidget(
-                          onTap: () {
-                            rmeController.getRmePasien(id: row.id);
-                            Get.to(ElectronicMedicalRecordScreen(
-                              name: row.name,
-                              rme: row.noRekamMedis,
-                              id_pasien: row.id,
-                              addRme: false,
-                            ));
-                          },
-                          colorBackground: AppColors.colorWarning300,
-                          label: 'Rekam Medis',
-                          vertical: 10,
-                          horizontal: 10,
-                        ),
+                        isMakeDokter == true
+                            ? PatientActionWidget(
+                                onTap: () async {
+                                  await rmeController.getRmePasien(id: row.id);
+                                  docterController!.alamatLetter.value =
+                                      row.alamat;
+                                  docterController.namePasienLetter.value =
+                                      row.name;
+                                  docterController.idPasienLetter.value =
+                                      row.id;
+                                  docterController.jenisKelaminLetter.value =
+                                      row.jenisKelamin;
+                                  docterController.noRekamMedisLetter.value =
+                                      row.noRekamMedis;
+                                  docterController.idPasienLetter.value =
+                                      row.id;
+                                  docterController.backPatient();
+                                  docterController.showAddLetterRme();
+                                  // Get.to(ElectronicMedicalRecordScreen(
+                                  //   name: row.name,
+                                  //   rme: row.noRekamMedis,
+                                  //   id_pasien: row.id,
+                                  //   addRme: false,
+                                  // ));
+                                },
+                                colorBackground: AppColors.colorWarning300,
+                                label: 'Terbit Rme',
+                                vertical: 10,
+                                horizontal: 10,
+                              )
+                            : Container()
                       ],
                     )
                   : Row(
@@ -294,6 +319,7 @@ List<DataRow> getRowsPatient({
                                         AddQueuePatientAction(
                                           datas: row,
                                           controller: controller,
+                                          namePasien: row.name,
                                         ),
                                       );
                                     },

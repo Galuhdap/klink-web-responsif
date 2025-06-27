@@ -2,10 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:klinik_web_responsif/core/utils/extensions/datasources/failure.dart';
 import 'package:klinik_web_responsif/core/utils/preferences/shared_preferences_utils.dart';
 import 'package:klinik_web_responsif/services/lib/api_services.dart';
+import 'package:klinik_web_responsif/services/lib/message_response.dart';
 import 'package:klinik_web_responsif/services/lib/network_constants.dart';
 import 'package:klinik_web_responsif/services/pasien/model/request/post_pasient_request.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/del_antrian_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_antrian_pasien_response.dart';
+import 'package:klinik_web_responsif/services/pasien/model/response/get_archive_queue_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_pasien_by_id_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_pasien_response.dart';
 import 'package:klinik_web_responsif/services/pasien/model/response/get_statistic_pasien_response.dart';
@@ -20,18 +22,37 @@ class PasienDatasources extends ApiService {
     required String nik,
     required String umur,
     required String norme,
+    required String tahun_lahir,
+    required String tgl_lahir,
   }) async {
     final prefs = await SharedPreferencesUtils.getAuthToken();
 
     try {
       final response = await get(
-          NetworkConstants.GET_PASIEN_URL(page, limit, name, nik, umur, norme),
+          NetworkConstants.GET_PASIEN_URL(
+              1, 10, name, nik, umur, norme, tahun_lahir, tgl_lahir),
           header: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${prefs}",
           });
 
       return Right(GetPasienResponse.fromJson(response));
+    } catch (e) {
+      return left(Failure(false, 400, 'Data Tidak Masuk'));
+    }
+  }
+
+  Future<Either<Failure, GetArchiveQueueResponse>> postArchiveQueue() async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response =
+          await get(NetworkConstants.POST_ARCHIVE_QUEUE_URL(), header: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${prefs}",
+      });
+      print(response);
+      return Right(GetArchiveQueueResponse.fromJson(response));
     } catch (e) {
       return left(Failure(false, 400, 'Data Tidak Masuk'));
     }
@@ -211,6 +232,29 @@ class PasienDatasources extends ApiService {
       return response.fold(
         (failures) => Left(failures),
         (response) => Right(PutAntrianPasienResponse.fromJson(response)),
+      );
+    } catch (e) {
+      return Left(Failures(false, 500, {"api": "Server Not Connection!"}));
+    }
+  }
+
+  Future<Either<Failures, MessageResponse>> putAntrianPasienSocket(
+      String status, String id) async {
+    final prefs = await SharedPreferencesUtils.getAuthToken();
+
+    try {
+      final response = await patch(
+          NetworkConstants.PUT_ANTRIAN_PASIEN_SOCKTER_URL(id),
+          body: {
+            "status": status
+          },
+          header: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs}",
+          });
+      return response.fold(
+        (failures) => Left(failures),
+        (response) => Right(MessageResponse.fromJson(response)),
       );
     } catch (e) {
       return Left(Failures(false, 500, {"api": "Server Not Connection!"}));
